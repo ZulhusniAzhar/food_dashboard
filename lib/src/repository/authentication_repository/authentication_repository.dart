@@ -102,55 +102,115 @@ class AuthenticationRepository extends GetxController {
     return downloadUrl;
   }
 
+  // void registerUser(
+  //     String fullName,
+  //     String email,
+  //     String matricNo,
+  //     String gender,
+  //     String phoneNo,
+  //     String password,
+  //     String block,
+  //     String college,
+  //     String role,
+  //     File? image) async {
+  //   try {
+  //     if (fullName.isNotEmpty &&
+  //         email.isNotEmpty &&
+  //         matricNo.isNotEmpty &&
+  //         gender.isNotEmpty &&
+  //         phoneNo.isNotEmpty &&
+  //         password.isNotEmpty &&
+  //         image != null) {
+  //       //save user into auth and firestore
+  //       UserCredential cred = await firebaseAuth.createUserWithEmailAndPassword(
+  //         email: email,
+  //         password: password,
+  //       );
+  //       String downloadUrl = await _uploadToStorage(image);
+  //       model.UserModel user = model.UserModel(
+  //         uid: cred.user!.uid,
+  //         profilePhoto: downloadUrl,
+  //         fullName: fullName,
+  //         matricNo: matricNo,
+  //         gender: gender,
+  //         email: email,
+  //         phoneNo: phoneNo,
+  //         password: password,
+  //         block: block,
+  //         college: college,
+  //         role: role,
+  //       );
+  //       firestore.collection('Users').doc(cred.user!.uid).set(user.toJson());
+  //     } else {
+  //       Get.snackbar("Error", "Please enter all the fields");
+  //     }
+  //   } catch (e) {
+  //     Get.snackbar(
+  //       "Error",
+  //       e.toString(),
+  //     );
+  //   }
+  // }
+
   void registerUser(
-      String fullName,
-      String email,
-      String matricNo,
-      String gender,
-      String phoneNo,
-      String password,
-      String block,
-      String college,
-      String role,
-      File? image) async {
-    try {
-      if (fullName.isNotEmpty &&
-          email.isNotEmpty &&
-          matricNo.isNotEmpty &&
-          gender.isNotEmpty &&
-          phoneNo.isNotEmpty &&
-          password.isNotEmpty &&
-          image != null) {
-        //save user into auth and firestore
-        UserCredential cred = await firebaseAuth.createUserWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
-        String downloadUrl = await _uploadToStorage(image);
-        model.UserModel user = model.UserModel(
-          uid: cred.user!.uid,
-          profilePhoto: downloadUrl,
-          fullName: fullName,
-          matricNo: matricNo,
-          gender: gender,
-          email: email,
-          phoneNo: phoneNo,
-          password: password,
-          block: block,
-          college: college,
-          role: role,
-        );
-        firestore.collection('Users').doc(cred.user!.uid).set(user.toJson());
-      } else {
-        Get.snackbar("Error", "Please enter all the fields");
-      }
-    } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-      );
-    }
+  String fullName,
+  String email,
+  String matricNo,
+  String gender,
+  String phoneNo,
+  String password,
+  String block,
+  String college,
+  String role,
+  File? image,
+) async {
+  try {
+    // Pre-conditions
+    assert(fullName.isNotEmpty);
+    assert(email.isNotEmpty);
+    assert(matricNo.isNotEmpty);
+    assert(gender.isNotEmpty);
+    assert(phoneNo.isNotEmpty);
+    assert(password.isNotEmpty);
+    assert(image != null);
+
+    // Invariants
+    // assert(role == 'admin');
+    assert(block.isNotEmpty);
+    assert(college.isNotEmpty);
+
+    // Process
+    // Save user into auth and firestore
+    UserCredential cred = await firebaseAuth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    String downloadUrl = await _uploadToStorage(image!);
+    model.UserModel user = model.UserModel(
+      uid: cred.user!.uid,
+      profilePhoto: downloadUrl,
+      fullName: fullName,
+      matricNo: matricNo,
+      gender: gender,
+      email: email,
+      phoneNo: phoneNo,
+      password: password,
+      block: block,
+      college: college,
+      role: role,
+    );
+    firestore.collection('Users').doc(cred.user!.uid).set(user.toJson());
+
+    // Post-conditions
+    assert(await firebaseAuth.currentUser != null);
+    firestore.collection('Users').doc(cred.user!.uid).set(user.toJson());
+  } catch (e) {
+    Get.snackbar(
+      "Error",
+      e.toString(),
+    );
   }
+}
 
   void loginUser(String email, String password) async {
     try {

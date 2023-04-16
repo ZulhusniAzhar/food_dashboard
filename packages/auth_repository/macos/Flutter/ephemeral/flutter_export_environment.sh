@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=C:\flutter"
-export "FLUTTER_APPLICATION_PATH=D:\FYP Dev\food_dashboard\packages\auth_repository"
+export "FLUTTER_ROOT=C:\Users\hasifhafifi\Tools\flutter"
+export "FLUTTER_APPLICATION_PATH=C:\Users\hasifhafifi\Desktop\Sem 8\SC\projek snai\food_dashboard\packages\auth_repository"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=0.0.1"
