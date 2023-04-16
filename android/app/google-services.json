@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "683285069037",
+    "project_id": "food-dashboard-72850",
+    "storage_bucket": "food-dashboard-72850.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683285069037:android:cdb9a8449b44a3e793e0e4",
+        "android_client_info": {
+          "package_name": "com.example.food_dashboard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "683285069037-26f3eqrkk01am0acqi29lla9e3oo8jmu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEKhsf9wwXxBdkrBGianhyMXLpwaSBbvY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "683285069037-26f3eqrkk01am0acqi29lla9e3oo8jmu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
