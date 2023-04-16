@@ -212,9 +212,11 @@ class AddItemForm extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  if (controller.itemImage == null) {
-                    Get.snackbar('Error', "Please choose image");
-                  } else {
+                  // if (controller.itemImage == null) {
+                  //   Get.snackbar('Error', "Please choose image");
+                  // } else {
+                  // print(await controller.itemImage);
+                  try {
                     double? parsedPrice =
                         double.tryParse(controller.price.text);
                     controller.createItem(
@@ -233,7 +235,13 @@ class AddItemForm extends StatelessWidget {
                           .toList(),
                       controller.itemImage,
                     );
+                  } catch (e) {
+                    Get.snackbar(
+                      'Error',
+                      "Please Select Image",
+                    );
                   }
+                  // }
                 },
                 child: Text("Create".toUpperCase()),
                 style: ElevatedButton.styleFrom(

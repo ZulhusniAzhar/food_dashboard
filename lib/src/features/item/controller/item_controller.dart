@@ -18,6 +18,7 @@ class ItemController extends GetxController {
   late Rx<File?> _pickedImage;
   File? get itemImage => _pickedImage.value;
   var chooseImage = false.obs;
+  late FirebaseFirestore _db;
 
   final name = TextEditingController();
   final category = TextEditingController();
@@ -59,6 +60,49 @@ class ItemController extends GetxController {
     return downloadUrl;
   }
 
+  // void createItem(
+  //   String itemName,
+  //   double? price,
+  //   String category,
+  //   List<String> ingredient,
+  //   List<String> sideDishes,
+  //   File? image,
+  // ) async {
+  //   try {
+  //     if (itemName.isNotEmpty &&
+  //         category.isNotEmpty &&
+  //         price != null &&
+  //         image != null) {
+  //       String downloadUrl = await _uploadToStorage(image);
+  //       model.ItemModel item = model.ItemModel(
+  //         uid: getCurrentUserId(),
+  //         itemPhoto: downloadUrl,
+  //         itemName: itemName,
+  //         price: price,
+  //         ingredient: ingredient,
+  //         sideDish: sideDishes,
+  //         // itemId: getCurrentUserId(),
+  //       );
+  //       firestore.collection('items').doc().set(item.toJson());
+  //       Get.until((route) => route.isFirst);
+  //       Get.to(() => ItemListScreen());
+  //       Get.snackbar(
+  //         'Success',
+  //         'Successfully created item',
+  //         backgroundColor: Colors.green,
+  //         colorText: Colors.white,
+  //       );
+  //     } else {
+  //       Get.snackbar("Error", "Please enter all the fields");
+  //     }
+  //   } catch (e) {
+  //     Get.snackbar(
+  //       "Error",
+  //       e.toString(),
+  //     );
+  //   }
+  // }
+
   void createItem(
     String itemName,
     double? price,
@@ -68,37 +112,66 @@ class ItemController extends GetxController {
     File? image,
   ) async {
     try {
-      if (itemName.isNotEmpty &&
+      //precondition (assert)
+      assert(itemName.isNotEmpty, 'Item name must not be empty');
+      assert(category.isNotEmpty, 'Category must not be empty');
+      assert(price != null, 'Price must not be null');
+      assert(image != null, 'Image must not be null');
+
+      final allFieldsEntered = itemName.isNotEmpty &&
           category.isNotEmpty &&
           price != null &&
-          image != null) {
-        String downloadUrl = await _uploadToStorage(image);
-        model.ItemModel item = model.ItemModel(
-          uid: getCurrentUserId(),
-          itemPhoto: downloadUrl,
-          itemName: itemName,
-          price: price,
-          ingredient: ingredient,
-          sideDish: sideDishes,
-          // itemId: getCurrentUserId(),
-        );
-        firestore.collection('items').doc().set(item.toJson());
-        Get.until((route) => route.isFirst);
-        Get.to(() => ItemListScreen());
-        Get.snackbar(
-          'Success',
-          'Successfully created item',
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
-      } else {
-        Get.snackbar("Error", "Please enter all the fields");
-      }
+          image != null;
+
+      //invariant (make sure the item never exist before)
+      final existingItem = await firestore
+          .collection('items')
+          .where('itemName', isEqualTo: itemName)
+          .get();
+
+      Invariant(existingItem.docs.isNotEmpty, 'Item already exists');
+
+      final downloadUrl = await _uploadToStorage(image!);
+
+      final item = model.ItemModel(
+        uid: getCurrentUserId(),
+        itemPhoto: downloadUrl,
+        itemName: itemName,
+        price: price!,
+        ingredient: ingredient,
+        sideDish: sideDishes,
+        // itemId: getCurrentUserId(),
+      );
+
+      await firestore.collection('items').doc().set(item.toJson());
+
+      //post condition (check wether the item already saved in database by checking the name of the item)
+      final existingItemAfter = await firestore
+          .collection('items')
+          .where('itemName', isEqualTo: itemName)
+          .get();
+      assert(!existingItemAfter.docs.isNotEmpty);
+
+      Get.until((route) => route.isFirst);
+      Get.to(() => ItemListScreen());
+
+      Get.snackbar(
+        'Success',
+        'Successfully created item',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
     } catch (e) {
       Get.snackbar(
-        "Error",
+        'Error',
         e.toString(),
       );
+    }
+  }
+
+  void Invariant(bool condition, String message) {
+    if (!condition) {
+      throw Exception(message);
     }
   }
 }
