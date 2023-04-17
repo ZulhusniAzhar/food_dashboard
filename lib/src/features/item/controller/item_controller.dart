@@ -150,7 +150,8 @@ class ItemController extends GetxController {
           .collection('items')
           .where('itemName', isEqualTo: itemName)
           .get();
-      assert(!existingItemAfter.docs.isNotEmpty);
+      assert(!existingItemAfter.docs.isNotEmpty,
+          'Item does not saved into the database sucessfully');
 
       Get.until((route) => route.isFirst);
       Get.to(() => ItemListScreen());
