@@ -173,11 +173,16 @@ class AuthenticationRepository extends GetxController {
     assert(phoneNo.isNotEmpty);
     assert(password.isNotEmpty);
     assert(image != null);
-
-    // Invariants
-    // assert(role == 'admin');
     assert(block.isNotEmpty);
     assert(college.isNotEmpty);
+
+    //invariant (make sure the email has not registered before)
+      final existingUser = await firestore
+          .collection('Users')
+          .where('email', isEqualTo: email)
+          .get();
+
+      Invariant(!existingUser.docs.isNotEmpty, 'User already exists');
 
     // Process
     // Save user into auth and firestore
@@ -201,9 +206,8 @@ class AuthenticationRepository extends GetxController {
     );
     firestore.collection('Users').doc(cred.user!.uid).set(user.toJson());
 
-    // Post-conditions
+    // Post-conditions (make sure current user exist)
     assert(await firebaseAuth.currentUser != null);
-    firestore.collection('Users').doc(cred.user!.uid).set(user.toJson());
   } catch (e) {
     Get.snackbar(
       "Error",
@@ -211,6 +215,12 @@ class AuthenticationRepository extends GetxController {
     );
   }
 }
+
+void Invariant(bool condition, String message) {
+    if (!condition) {
+      throw Exception(message);
+    }
+  }
 
   void loginUser(String email, String password) async {
     try {
