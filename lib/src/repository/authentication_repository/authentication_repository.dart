@@ -153,80 +153,89 @@ class AuthenticationRepository extends GetxController {
   // }
 
   void registerUser(
-  String fullName,
-  String email,
-  String matricNo,
-  String gender,
-  String phoneNo,
-  String password,
-  String block,
-  String college,
-  String role,
-  File? image,
-) async {
-  try {
-    // Pre-conditions
-    assert(fullName.isNotEmpty);
-    assert(email.isNotEmpty);
-    assert(matricNo.isNotEmpty);
-    assert(gender.isNotEmpty);
-    assert(phoneNo.isNotEmpty);
-    assert(password.isNotEmpty);
-    assert(image != null);
-    assert(block.isNotEmpty);
-    assert(college.isNotEmpty);
+    String fullName,
+    String email,
+    String matricNo,
+    String gender,
+    String phoneNo,
+    String password,
+    String block,
+    String college,
+    String role,
+    File? image,
+  ) async {
+    try {
+      // Pre-conditions
+      assert(fullName.isNotEmpty);
+      assert(email.isNotEmpty);
+      assert(matricNo.isNotEmpty);
+      assert(gender.isNotEmpty);
+      assert(phoneNo.isNotEmpty);
+      assert(password.isNotEmpty);
+      assert(image != null);
+      assert(block.isNotEmpty);
+      assert(college.isNotEmpty);
 
-    //invariant (make sure the email has not registered before)
+      //invariant (make sure the email has not registered before)
       final existingUser = await firestore
           .collection('Users')
           .where('email', isEqualTo: email)
           .get();
 
-      Invariant(!existingUser.docs.isNotEmpty, 'User already exists');
+      invariant(!existingUser.docs.isNotEmpty, 'User already exists');
 
-    // Process
-    // Save user into auth and firestore
-    UserCredential cred = await firebaseAuth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    String downloadUrl = await _uploadToStorage(image!);
-    model.UserModel user = model.UserModel(
-      uid: cred.user!.uid,
-      profilePhoto: downloadUrl,
-      fullName: fullName,
-      matricNo: matricNo,
-      gender: gender,
-      email: email,
-      phoneNo: phoneNo,
-      password: password,
-      block: block,
-      college: college,
-      role: role,
-    );
-    firestore.collection('Users').doc(cred.user!.uid).set(user.toJson());
+      // Process
+      // Save user into auth and firestore
+      UserCredential cred = await firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      String downloadUrl = await _uploadToStorage(image!);
+      model.UserModel user = model.UserModel(
+        uid: cred.user!.uid,
+        profilePhoto: downloadUrl,
+        fullName: fullName,
+        matricNo: matricNo,
+        gender: gender,
+        email: email,
+        phoneNo: phoneNo,
+        password: password,
+        block: block,
+        college: college,
+        role: role,
+      );
+      firestore.collection('Users').doc(cred.user!.uid).set(user.toJson());
 
-    // Post-conditions (make sure current user exist)
-    assert(await firebaseAuth.currentUser != null);
-  } catch (e) {
-    Get.snackbar(
-      "Error",
-      e.toString(),
-    );
-  }
-}
-
-void Invariant(bool condition, String message) {
-    if (!condition) {
-      throw Exception(message);
+      // Post-conditions (make sure current user exist)
+      assert(await firebaseAuth.currentUser != null);
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        e.toString(),
+      );
     }
   }
 
   void loginUser(String email, String password) async {
+    // Preconditions
+    assert(email.isNotEmpty);
+    assert(password.isNotEmpty);
+
+    // Invariant (Make sure that the email is already registered to the database)
+    final existingUser = await firestore
+        .collection('Users')
+        .where('email', isEqualTo: email)
+        .get();
+
+    invariant(existingUser.docs.isNotEmpty, 'User not exist!');
+
     try {
+      // Process (Signing into firebase)
       if (email.isNotEmpty && password.isNotEmpty) {
         await firebaseAuth.signInWithEmailAndPassword(
             email: email, password: password);
+        // Postconditions (Make sure the user has logged into the system)
+        assert(firebaseAuth.currentUser != null);
       } else {
         Get.snackbar(
           'Error Logging in',
@@ -242,4 +251,10 @@ void Invariant(bool condition, String message) {
   }
 
   Future<void> logout() async => await firebaseAuth.signOut();
+
+  void invariant(bool condition, String message) {
+    if (!condition) {
+      throw Exception(message);
+    }
+  }
 }
