@@ -234,7 +234,7 @@ class AuthenticationRepository extends GetxController {
       if (email.isNotEmpty && password.isNotEmpty) {
         await firebaseAuth.signInWithEmailAndPassword(
             email: email, password: password);
-        // Postconditions (Make sure the user has logged into the system)
+        // Postconditions (Make sure the user has logged into the system)t
         assert(firebaseAuth.currentUser != null);
       } else {
         Get.snackbar(
