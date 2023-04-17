@@ -53,7 +53,7 @@ class ItemCard extends StatelessWidget {
                           Flexible(
                             child: Image(
                               image: AssetImage(list[index].image),
-                              height: 110,
+                              height: 100,
                             ),
                           ),
                         ],
@@ -76,20 +76,6 @@ class ItemCard extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(width: tDashboardCardPadding * 4),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                            ),
-                            onPressed: () {},
-                            child: Text(
-                              "Details",
-                              style: txtTheme.bodyText2
-                                  ?.apply(color: Colors.white),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
                         ],
                       ),
                     ],

@@ -84,7 +84,7 @@ class ItemController extends GetxController {
         );
         firestore.collection('items').doc().set(item.toJson());
         Get.until((route) => route.isFirst);
-        Get.to(() => ItemListScreen());
+        Get.to(() => const ItemListScreen());
         Get.snackbar(
           'Success',
           'Successfully created item',
@@ -100,5 +100,9 @@ class ItemController extends GetxController {
         e.toString(),
       );
     }
+  }
+
+  Stream<QuerySnapshot> getItemsListwithUid() {
+    return collection.where('uid', isEqualTo: getCurrentUserId()).snapshots();
   }
 }
