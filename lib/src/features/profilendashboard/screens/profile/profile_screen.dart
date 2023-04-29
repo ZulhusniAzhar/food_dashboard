@@ -10,6 +10,7 @@ import '../../../../constants/colors.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../../repository/authentication_repository/authentication_repository.dart';
 import '../../../authentication/models/user_model.dart';
+import '../../../post/screens/post_list_screen.dart';
 import '../../controllers/profile_controller.dart';
 import 'widgets/profile_menu.dart';
 
@@ -157,7 +158,9 @@ class ProfileScreen extends StatelessWidget {
                         ProfileMenuWidget(
                           title: tMenu3,
                           icon: LineAwesomeIcons.user_check,
-                          onPress: () {},
+                          onPress: () {
+                            Get.to(() => const PostListScreen());
+                          },
                         ),
                         const Divider(
                           color: Colors.grey,

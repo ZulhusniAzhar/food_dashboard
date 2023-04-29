@@ -74,7 +74,7 @@ class ProfileController extends GetxController {
   //tak pakai------------------------------------------------------------------------
   final Rx<Map<String, dynamic>> _user = Rx<Map<String, dynamic>>({});
   Map<String, dynamic> get user => _user.value;
-  Rx<String> _uid = "".obs;
+  final Rx<String> _uid = "".obs;
   Future<void> updateUserData(Map<String, dynamic> userData) async {
     UserModel? user = FirebaseAuth.instance.currentUser as UserModel?;
     DocumentReference userDocRef = _db.collection('Users').doc(user?.uid);

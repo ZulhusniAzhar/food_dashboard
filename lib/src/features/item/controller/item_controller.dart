@@ -102,7 +102,14 @@ class ItemController extends GetxController {
     }
   }
 
-  Stream<QuerySnapshot> getItemsListwithUid() {
-    return collection.where('uid', isEqualTo: getCurrentUserId()).snapshots();
+  Stream<List<Map<String, dynamic>>> getItemsListwithUid() {
+    return collection
+        .where('uid', isEqualTo: getCurrentUserId())
+        .snapshots()
+        .map((querySnapshot) {
+      return querySnapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
+    });
   }
 }

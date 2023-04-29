@@ -3,14 +3,16 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
-import '../../controller/item_controller.dart';
+import '../../controller/post_controller.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'date_picker.dart';
 
-class AddItemForm extends StatelessWidget {
-  AddItemForm({super.key});
+class AddPostForm extends StatelessWidget {
+  AddPostForm({super.key});
 
-  final controller = Get.put(ItemController());
+  String? selectedItem;
+  final controller = Get.put(PostController());
   static final _formKey = GlobalKey<FormState>();
-  // bool chooseImage = false;
 
   showOptionsDialog(BuildContext context) {
     return showDialog(
@@ -88,7 +90,6 @@ class AddItemForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
-    // final controller = Get.put(ItemController());
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: tFormHeight),
@@ -115,7 +116,7 @@ class AddItemForm extends StatelessWidget {
                   child: Obx(
                     () => Text(
                       controller.chooseImage.value == false
-                          ? "Add Item's Image"
+                          ? "Add Venue Image"
                           : "Image Added",
                       style: const TextStyle(color: tDarkColor),
                     ),
@@ -126,10 +127,65 @@ class AddItemForm extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
+            // StreamBuilder<List<Map<String, dynamic>>>(
+            //   stream: controller.getItemsListwithUid(),
+            //   builder: ((context, snapshot) {
+            //     if (snapshot.hasError) {
+            //       return const Center(
+            //         child: Text("Error while fetching list"),
+            //       );
+            //     }
+            //     if (!snapshot.hasData) {
+            //       return const Center(
+            //         child: CircularProgressIndicator(),
+            //       );
+            //     }
+            //     final itemDocs = snapshot.data!;
+            //     return DropdownButton(
+            //         value: selectedItem,
+            //         items: itemDocs.map((item) {
+            //           final itemData = item;
+            //           final itemId = itemData['id'].toString();
+
+            //           final itemName = itemData['itemName'].toString();
+            //           // final itemPhoto = itemData['itemPhoto'].toString();
+            //           // final price = itemData['price'];
+            //           // final category = itemData['category'].toString();
+            //           return DropdownMenuItem<Map<String, dynamic>>(
+            //             value: item,
+            //             child: Text(itemName),
+            //           );
+            //         }).toList(),
+            //         onChanged: (value) {
+            //           controller.addPost(value!);
+            //         });
+            //   }),
+            // ),
+            const SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+              height: 100.0,
+              child: TextFormField(
+                maxLines: 7,
+                controller: controller.caption,
+                decoration: const InputDecoration(
+                  label: Text("Caption"),
+                  // prefixIcon: Icon(Icons.person_outline_rounded)
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Field is required.';
+                  }
+                  return null;
+                },
+              ),
+            ),
+            const SizedBox(height: tFormHeight),
             TextFormField(
-              controller: controller.name,
+              controller: controller.caption,
               decoration: const InputDecoration(
-                label: Text("Name"),
+                label: Text("Item Stock"),
                 // prefixIcon: Icon(Icons.person_outline_rounded)
               ),
               validator: (value) {
@@ -141,100 +197,64 @@ class AddItemForm extends StatelessWidget {
             ),
             const SizedBox(height: tFormHeight),
             TextFormField(
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
-              controller: controller.price,
+              controller: controller.caption,
+              decoration: const InputDecoration(
+                label: Text("Venue Block"),
+                // prefixIcon: Icon(Icons.person_outline_rounded)
+              ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Field is required.';
                 }
                 return null;
               },
-              decoration: const InputDecoration(
-                label: Text("Price"),
-                // prefixIcon: Icon(Icons.numbers_rounded)
-              ),
             ),
             const SizedBox(height: tFormHeight),
             TextFormField(
-              controller: controller.category,
+              controller: controller.caption,
+              decoration: const InputDecoration(
+                label: Text("Venue College"),
+                // prefixIcon: Icon(Icons.person_outline_rounded)
+              ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Field is required.';
                 }
                 return null;
               },
-              decoration: const InputDecoration(
-                label: Text("Category (Food/Drink)"),
-                // prefixIcon: Icon(Icons.boy_rounded)
-              ),
             ),
             const SizedBox(height: tFormHeight),
-            TextFormField(
-              controller: controller.ingredient,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Field is required.';
-                }
-                return null;
-              },
-              decoration: const InputDecoration(
-                label: Text("Ingredients (separated by commas)"),
-                // prefixIcon: Icon(Icons.numbers)
-              ),
-              // onSaved: (value) {
-              //   controller
-              //       .setNumbersIngredient(controller.ingredient.text.trim());
-              // },
-            ),
-            const SizedBox(height: tFormHeight),
-            TextFormField(
-              controller: controller.sideDish,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Field is required.';
-                }
-                return null;
-              },
-              decoration: const InputDecoration(
-                label: Text("Side Dishes (separated by commas)"),
-                // prefixIcon: Icon(Icons.fingerprint)
-              ),
-              // onSaved: (value) {
-              //   controller
-              //       .setNumbersSideDish(controller.ingredient.text.trim());
-              // },
-            ),
+            DateRangePickerWidget(),
             const SizedBox(height: tFormHeight),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  try {
-                    double? parsedPrice =
-                        double.tryParse(controller.price.text);
-                    controller.createItem(
-                      controller.name.text.trim(),
-                      parsedPrice,
-                      controller.category.text.trim(),
-                      controller.ingredient.text
-                          .trim()
-                          .split(',')
-                          .map((e) => (e.trim()))
-                          .toList(),
-                      controller.sideDish.text
-                          .trim()
-                          .split(',')
-                          .map((e) => (e.trim()))
-                          .toList(),
-                      controller.itemImage,
-                    );
-                  } catch (e) {
-                    Get.snackbar(
-                      'Error',
-                      "Please Select Image",
-                    );
-                  }
+                  //   try {
+                  //     double? parsedPrice =
+                  //         double.tryParse(controller.price.text);
+                  //     controller.createItem(
+                  //       controller.name.text.trim(),
+                  //       parsedPrice,
+                  //       controller.category.text.trim(),
+                  //       controller.ingredient.text
+                  //           .trim()
+                  //           .split(',')
+                  //           .map((e) => (e.trim()))
+                  //           .toList(),
+                  //       controller.sideDish.text
+                  //           .trim()
+                  //           .split(',')
+                  //           .map((e) => (e.trim()))
+                  //           .toList(),
+                  //       controller.itemImage,
+                  //     );
+                  //   } catch (e) {
+                  //     Get.snackbar(
+                  //       'Error',
+                  //       "Please Select Image",
+                  //     );
+                  //   }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,

@@ -44,6 +44,7 @@ dependencies:
   email_validator: ^2.1.17
   firebase_storage: ^11.1.0
   image_picker: ^0.8.7+1
+  syncfusion_flutter_datepicker: ^21.1.41
 
 dev_dependencies:
   flutter_test:

@@ -1,33 +1,23 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
-import 'widget/item_form.dart';
+import '../controller/post_controller.dart';
+import 'widgets/post_form.dart';
 
-class ItemConfirmScreen extends StatefulWidget {
-  final File imageFile;
-  final String imagePath;
-  const ItemConfirmScreen({
-    Key? key,
-    required this.imageFile,
-    required this.imagePath,
-  }) : super(key: key);
+class AddPostScreen extends StatelessWidget {
+  const AddPostScreen({
+    required this.itemID,
+  });
 
-  @override
-  State<ItemConfirmScreen> createState() => _ItemConfirmScreenState();
-}
+  final String itemID;
 
-class _ItemConfirmScreenState extends State<ItemConfirmScreen> {
   @override
   Widget build(BuildContext context) {
+    final postController = Get.put(PostController());
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
-
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -39,7 +29,7 @@ class _ItemConfirmScreenState extends State<ItemConfirmScreen> {
               icon: Icon(LineAwesomeIcons.angle_left,
                   color: isDark ? tWhiteColor : tDarkColor)),
           title: Text(
-            "New Item (Image)",
+            "Create Post of Item",
             style: Theme.of(context).textTheme.headline4,
           ),
           centerTitle: true,
@@ -57,7 +47,7 @@ class _ItemConfirmScreenState extends State<ItemConfirmScreen> {
           child: Container(
             // padding: const EdgeInsets.symmetric(vertical: tFormHeight),
             padding: const EdgeInsets.all(tDefaultSize),
-            child: AddItemForm(),
+            child: AddPostForm(),
           ),
         ),
       ),
