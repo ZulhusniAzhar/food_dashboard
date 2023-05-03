@@ -5,14 +5,17 @@ import 'package:food_dashboard/src/features/profilendashboard/screens/dashboard/
 import '../../../../constants/page.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({super.key});
-
+  Dashboard({
+    Key? key,
+    required this.pageIdx,
+  }) : super(key: key);
+  int pageIdx;
   @override
   State<Dashboard> createState() => _DashboardState();
 }
 
 class _DashboardState extends State<Dashboard> {
-  int pageIdx = 0;
+  // int pageIdx = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +28,7 @@ class _DashboardState extends State<Dashboard> {
       appBar: DashboardAppBar(
         isDark: isDark,
       ),
-      body: pages[pageIdx],
+      body: pages[widget.pageIdx],
       // body: SafeArea(
       //   child: IndexedStack(
       //     index: controller.tabIndex,
@@ -44,10 +47,10 @@ class _DashboardState extends State<Dashboard> {
           selectedItemColor: Colors.orangeAccent,
           onTap: (idx) {
             setState(() {
-              pageIdx = idx;
+              widget.pageIdx = idx;
             });
           },
-          currentIndex: pageIdx,
+          currentIndex: widget.pageIdx,
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home_filled, size: 30),

@@ -1,17 +1,21 @@
+import 'package:cloud_firestore_platform_interface/src/timestamp.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
+import '../../../item/controller/item_controller.dart';
 import '../../controller/post_controller.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'date_picker.dart';
 
 class AddPostForm extends StatelessWidget {
-  AddPostForm({super.key});
+  AddPostForm({required this.itemID, super.key});
 
-  String? selectedItem;
-  final controller = Get.put(PostController());
+  final String itemID;
+  final postController = Get.put(PostController());
+  final itemController = Get.put(ItemController());
   static final _formKey = GlobalKey<FormState>();
 
   showOptionsDialog(BuildContext context) {
@@ -21,12 +25,12 @@ class AddPostForm extends StatelessWidget {
         children: [
           SimpleDialogOption(
             onPressed: () {
-              controller.pickImage(ImageSource.gallery);
+              postController.pickImage(ImageSource.gallery);
               Navigator.of(context).pop();
               Future.delayed(
                 const Duration(seconds: 2),
                 () {
-                  controller.chooseImage.value = true;
+                  postController.chooseImage.value = true;
                 },
               );
             },
@@ -45,12 +49,12 @@ class AddPostForm extends StatelessWidget {
           ),
           SimpleDialogOption(
             onPressed: () {
-              controller.pickImage(ImageSource.camera);
+              postController.pickImage(ImageSource.camera);
               Navigator.of(context).pop();
               Future.delayed(
                 const Duration(seconds: 2),
                 () {
-                  controller.chooseImage.value = true;
+                  postController.chooseImage.value = true;
                 },
               );
             },
@@ -90,7 +94,9 @@ class AddPostForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
-
+    final DateRangePickerController dateController =
+        Get.put(DateRangePickerController());
+    // itemController.getData(itemID);
     return Container(
       padding: const EdgeInsets.symmetric(vertical: tFormHeight),
       child: Form(
@@ -115,7 +121,7 @@ class AddPostForm extends StatelessWidget {
                   ),
                   child: Obx(
                     () => Text(
-                      controller.chooseImage.value == false
+                      postController.chooseImage.value == false
                           ? "Add Venue Image"
                           : "Image Added",
                       style: const TextStyle(color: tDarkColor),
@@ -168,7 +174,7 @@ class AddPostForm extends StatelessWidget {
               height: 100.0,
               child: TextFormField(
                 maxLines: 7,
-                controller: controller.caption,
+                controller: postController.caption,
                 decoration: const InputDecoration(
                   label: Text("Caption"),
                   // prefixIcon: Icon(Icons.person_outline_rounded)
@@ -183,7 +189,11 @@ class AddPostForm extends StatelessWidget {
             ),
             const SizedBox(height: tFormHeight),
             TextFormField(
-              controller: controller.caption,
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+              ],
+              controller: postController.itemStock,
               decoration: const InputDecoration(
                 label: Text("Item Stock"),
                 // prefixIcon: Icon(Icons.person_outline_rounded)
@@ -197,7 +207,7 @@ class AddPostForm extends StatelessWidget {
             ),
             const SizedBox(height: tFormHeight),
             TextFormField(
-              controller: controller.caption,
+              controller: postController.venueBlock,
               decoration: const InputDecoration(
                 label: Text("Venue Block"),
                 // prefixIcon: Icon(Icons.person_outline_rounded)
@@ -211,7 +221,7 @@ class AddPostForm extends StatelessWidget {
             ),
             const SizedBox(height: tFormHeight),
             TextFormField(
-              controller: controller.caption,
+              controller: postController.venueCollege,
               decoration: const InputDecoration(
                 label: Text("Venue College"),
                 // prefixIcon: Icon(Icons.person_outline_rounded)
@@ -225,36 +235,57 @@ class AddPostForm extends StatelessWidget {
             ),
             const SizedBox(height: tFormHeight),
             DateRangePickerWidget(),
+            // TextFormField(
+            //   decoration: const InputDecoration(
+            //     labelText: 'Date',
+            //     hintText: 'Select a date',
+            //     prefixIcon: Icon(Icons.calendar_today),
+            //   ),
+            //   keyboardType: TextInputType.datetime,
+            //   validator: (value) {
+            //     if (value==null) {
+            //       return 'Please enter a date';
+            //     }
+            //     return null;
+            //   },
+            //   onTap: () async {
+            //     DateTime selectedDate = await showDatePicker(
+            //       context: context,
+            //       initialDate: DateTime.now(),
+            //       firstDate: DateTime(2000),
+            //       lastDate: DateTime(2100),
+            //     );
+            //     if (selectedDate != null) {
+            //       // Do something with the selected date
+            //     }
+            //   },
+            // ),
             const SizedBox(height: tFormHeight),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  //   try {
-                  //     double? parsedPrice =
-                  //         double.tryParse(controller.price.text);
-                  //     controller.createItem(
-                  //       controller.name.text.trim(),
-                  //       parsedPrice,
-                  //       controller.category.text.trim(),
-                  //       controller.ingredient.text
-                  //           .trim()
-                  //           .split(',')
-                  //           .map((e) => (e.trim()))
-                  //           .toList(),
-                  //       controller.sideDish.text
-                  //           .trim()
-                  //           .split(',')
-                  //           .map((e) => (e.trim()))
-                  //           .toList(),
-                  //       controller.itemImage,
-                  //     );
-                  //   } catch (e) {
-                  //     Get.snackbar(
-                  //       'Error',
-                  //       "Please Select Image",
-                  //     );
-                  //   }
+                  try {
+                    int? parsedStock =
+                        int.tryParse(postController.itemStock.text);
+                    DateTime now = DateTime.now();
+                    postController.createPost(
+                      itemID,
+                      postController.caption.text.trim(),
+                      parsedStock!,
+                      // dateController.startDate,
+                      // postController.endDate,
+                      postController.venueBlock.text.trim(),
+                      postController.venueCollege.text.trim(),
+                      now,
+                      postController.postImage,
+                    );
+                  } catch (e) {
+                    Get.snackbar(
+                      'Error',
+                      e.toString(),
+                    );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,

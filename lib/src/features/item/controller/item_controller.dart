@@ -8,16 +8,19 @@ import 'package:image_picker/image_picker.dart';
 import 'package:food_dashboard/src/features/item/model/item_model.dart'
     as model;
 import '../../../constants/auth.dart';
+import '../model/item_model.dart';
 import '../screens/item_list_screen.dart';
 
 class ItemController extends GetxController {
   static ItemController get instance => Get.find();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final CollectionReference collection =
+  final CollectionReference itemCollection =
       FirebaseFirestore.instance.collection('items');
   late Rx<File?> _pickedImage;
   File? get itemImage => _pickedImage.value;
+  late final DocumentReference documentReference = itemCollection.doc();
   var chooseImage = false.obs;
+  var isLoading = true.obs;
 
   final name = TextEditingController();
   final category = TextEditingController();
@@ -59,7 +62,7 @@ class ItemController extends GetxController {
     return downloadUrl;
   }
 
-  void createItem(
+  Future<void> createItem(
     String itemName,
     double? price,
     String category,
@@ -67,6 +70,9 @@ class ItemController extends GetxController {
     List<String> sideDishes,
     File? image,
   ) async {
+    CollectionReference collectionReferencess =
+        FirebaseFirestore.instance.collection('items');
+    DocumentReference documentReferencess = collectionReferencess.doc();
     try {
       if (itemName.isNotEmpty &&
           category.isNotEmpty &&
@@ -75,14 +81,20 @@ class ItemController extends GetxController {
         String downloadUrl = await _uploadToStorage(image);
         model.ItemModel item = model.ItemModel(
           uid: getCurrentUserId(),
+          itemID: documentReferencess.id,
           itemPhoto: downloadUrl,
           itemName: itemName,
           price: price,
           ingredient: ingredient,
           sideDish: sideDishes,
+          category: category,
           // itemId: getCurrentUserId(),
         );
-        firestore.collection('items').doc().set(item.toJson());
+
+        await documentReferencess.set(item.toJson());
+
+        String documentId = documentReferencess.id;
+        await documentReferencess.update({'itemID': documentId});
         Get.until((route) => route.isFirst);
         Get.to(() => const ItemListScreen());
         Get.snackbar(
@@ -103,7 +115,7 @@ class ItemController extends GetxController {
   }
 
   Stream<List<Map<String, dynamic>>> getItemsListwithUid() {
-    return collection
+    return itemCollection
         .where('uid', isEqualTo: getCurrentUserId())
         .snapshots()
         .map((querySnapshot) {
@@ -111,5 +123,31 @@ class ItemController extends GetxController {
           .map((doc) => doc.data() as Map<String, dynamic>)
           .toList();
     });
+  }
+
+  Future<DocumentSnapshot> getItemDetail(String docID) async {
+    // DocumentSnapshot userData = await _usersCollection.doc(user.uid).get();
+    return await itemCollection.doc(docID).get();
+    // return userData.data();
+  }
+
+  Future<void> deleteItem(String docID) async {
+    //kena del skali post yang berkaitan ngn item
+    try {
+      final docRef = await itemCollection.doc(docID).delete();
+      Get.until((route) => route.isFirst);
+      Get.to(() => const ItemListScreen());
+      Get.snackbar(
+        'Success',
+        'Successfully deleted item',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        e.toString(),
+      );
+    }
   }
 }

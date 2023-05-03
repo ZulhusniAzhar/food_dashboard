@@ -6,13 +6,13 @@ class PostModel {
   final String itemID;
   final String caption;
   final int stockItem;
-  final String imgLink;
-  final Timestamp timeStart;
-  final Timestamp timeEnd;
+  final String postPhoto;
+  final DateTime timeStart;
+  final DateTime timeEnd;
   final String venueBlock;
   final String venueCollege;
-  final Timestamp createdAt;
-  final Timestamp? deletedAt;
+  final DateTime createdAt;
+  final DateTime? deletedAt;
 
   PostModel({
     required this.uid,
@@ -20,7 +20,7 @@ class PostModel {
     required this.itemID,
     required this.caption,
     required this.stockItem,
-    required this.imgLink,
+    required this.postPhoto,
     required this.timeStart,
     required this.timeEnd,
     required this.venueBlock,
@@ -36,7 +36,7 @@ class PostModel {
       "itemID": itemID,
       "caption": caption,
       "stockItem": stockItem,
-      "imgLink": imgLink,
+      "postPhoto": postPhoto,
       "timeStart": timeStart,
       "timeEnd": timeEnd,
       "venueBlock": venueBlock,
@@ -54,7 +54,7 @@ class PostModel {
       itemID: snapshot['itemID'],
       caption: snapshot['caption'],
       stockItem: snapshot['stockItem'],
-      imgLink: snapshot['imgLink'],
+      postPhoto: snapshot['postPhoto'],
       timeStart: snapshot['timeStart'],
       timeEnd: snapshot['timeEnd'],
       venueBlock: snapshot['venueBlock'],
@@ -72,7 +72,7 @@ class PostModel {
       itemID: map['itemID'],
       caption: map['caption'],
       stockItem: map['stockItem'],
-      imgLink: map['imgLink'],
+      postPhoto: map['postPhoto'],
       timeStart: map['timeStart'],
       timeEnd: map['timeEnd'],
       venueBlock: map['venueBlock'],
@@ -88,7 +88,7 @@ class PostModel {
       "itemID": itemID,
       "caption": caption,
       "stockItem": stockItem,
-      "imgLink": imgLink,
+      "postPhoto": postPhoto,
       "timeStart": timeStart,
       "timeEnd": timeEnd,
       "venueBlock": venueBlock,

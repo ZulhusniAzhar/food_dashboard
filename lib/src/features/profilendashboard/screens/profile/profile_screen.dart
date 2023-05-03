@@ -5,6 +5,7 @@ import 'package:food_dashboard/src/constants/sizes.dart';
 import 'package:food_dashboard/src/features/item/screens/item_list_screen.dart';
 import 'package:food_dashboard/src/features/profilendashboard/screens/profile/update1_profile_screen.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/text_strings.dart';
@@ -15,7 +16,83 @@ import '../../controllers/profile_controller.dart';
 import 'widgets/profile_menu.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+  ProfileScreen({super.key});
+
+  final controller = Get.put(ProfileController());
+  showOptionsDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) => SimpleDialog(
+        children: [
+          SimpleDialogOption(
+            onPressed: () {
+              controller.pickImage(ImageSource.gallery);
+              // controller.updateUserImage(controller.profileImage);
+              Navigator.of(context).pop();
+              Future.delayed(
+                const Duration(seconds: 2),
+                () {
+                  controller.chooseImage.value = true;
+                },
+              );
+            },
+            child: Row(
+              children: const [
+                Icon(Icons.image),
+                Padding(
+                  padding: EdgeInsets.all(7.0),
+                  child: Text(
+                    'Gallery',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SimpleDialogOption(
+            onPressed: () {
+              controller.pickImage(ImageSource.camera);
+              // controller.updateUserImage(controller.profileImage);
+              Navigator.of(context).pop();
+              Future.delayed(
+                const Duration(seconds: 2),
+                () {
+                  controller.chooseImage.value = true;
+                },
+              );
+            },
+            child: Row(
+              children: const [
+                Icon(Icons.camera_alt),
+                Padding(
+                  padding: EdgeInsets.all(7.0),
+                  child: Text(
+                    'Camera',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SimpleDialogOption(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Row(
+              children: const [
+                Icon(Icons.cancel),
+                Padding(
+                  padding: EdgeInsets.all(7.0),
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,9 +130,7 @@ class ProfileScreen extends StatelessWidget {
                 builder: (context, AsyncSnapshot<UserModel?> snapshot) {
                   if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
-                  } else if (!snapshot.hasData || snapshot.data == null) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else {
+                  } else if (snapshot.hasData) {
                     return Column(
                       children: [
                         Stack(
@@ -70,24 +145,31 @@ class ProfileScreen extends StatelessWidget {
                                         snapshot.data!.profilePhoto)),
                               ),
                             ),
-                            // Positioned(
-                            //   bottom: 0,
-                            //   right: 0,
-                            //   child: Container(
-                            //     width: 35,
-                            //     height: 35,
-                            //     decoration: BoxDecoration(
-                            //         borderRadius: BorderRadius.circular(100),
-                            //         color: tPrimaryColor),
-                            //     child: const Icon(
-                            //       LineAwesomeIcons.alternate_pencil,
-                            //       color: Colors.black,
-                            //       size: 20,
-                            //     ),
-                            //   ),
-                            // ),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                width: 35,
+                                height: 35,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    color: tPrimaryColor),
+                                child: IconButton(
+                                  onPressed: () {
+                                    showOptionsDialog(context);
+                                  },
+                                  icon: const Icon(
+                                    LineAwesomeIcons.pen,
+                                    size: 20,
+                                  ),
+                                  color: Colors.black,
+                                  // size: 20,
+                                ),
+                              ),
+                            ),
                           ],
                         ),
+
                         const SizedBox(
                           height: 10,
                         ),
@@ -184,6 +266,8 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ],
                     );
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
                   }
                 }),
           ),

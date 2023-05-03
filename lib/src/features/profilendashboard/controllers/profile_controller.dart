@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:food_dashboard/src/features/authentication/models/user_model.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../../constants/auth.dart';
@@ -11,6 +16,9 @@ class ProfileController extends GetxController {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final CollectionReference collection =
       FirebaseFirestore.instance.collection('Users');
+  late Rx<File?> _pickedImage;
+  File? get profileImage => _pickedImage.value;
+  var chooseImage = false.obs;
 
   Future<UserModel?> getUserDetail() async {
     User? user = _auth.currentUser;
@@ -71,128 +79,63 @@ class ProfileController extends GetxController {
     }
   }
 
-  //tak pakai------------------------------------------------------------------------
-  final Rx<Map<String, dynamic>> _user = Rx<Map<String, dynamic>>({});
-  Map<String, dynamic> get user => _user.value;
-  final Rx<String> _uid = "".obs;
-  Future<void> updateUserData(Map<String, dynamic> userData) async {
-    UserModel? user = FirebaseAuth.instance.currentUser as UserModel?;
-    DocumentReference userDocRef = _db.collection('Users').doc(user?.uid);
-    await userDocRef.update(userData);
-  }
-
-  updateUserId(String uid) {
-    _uid.value = uid;
-    getUserData();
-  }
-
-  getUserData() async {
-    List<String> thumbnails = [];
-    var myVideos = await firestore
-        .collection('videos')
-        .where('uid', isEqualTo: _uid.value)
-        .get();
-
-    for (int i = 0; i < myVideos.docs.length; i++) {
-      thumbnails.add((myVideos.docs[i].data() as dynamic)['thumbnail']);
-    }
-
-    DocumentSnapshot userDoc =
-        await firestore.collection('users').doc(_uid.value).get();
-    final userData = userDoc.data()! as dynamic;
-    String name = userData['name'];
-    String profilePhoto = userData['profilePhoto'];
-    int likes = 0;
-    int followers = 0;
-    int following = 0;
-    bool isFollowing = false;
-
-    for (var item in myVideos.docs) {
-      likes += (item.data()['likes'] as List).length;
-    }
-    var followerDoc = await firestore
-        .collection('users')
-        .doc(_uid.value)
-        .collection('followers')
-        .get();
-    var followingDoc = await firestore
-        .collection('users')
-        .doc(_uid.value)
-        .collection('following')
-        .get();
-    followers = followerDoc.docs.length;
-    following = followingDoc.docs.length;
-
-    firestore
-        .collection('users')
-        .doc(_uid.value)
-        .collection('followers')
-        .doc(authRepo.user.uid)
-        .get()
-        .then((value) {
-      if (value.exists) {
-        isFollowing = true;
-      } else {
-        isFollowing = false;
-      }
-    });
-
-    _user.value = {
-      'followers': followers.toString(),
-      'following': following.toString(),
-      'isFollowing': isFollowing,
-      'likes': likes.toString(),
-      'profilePhoto': profilePhoto,
-      'name': name,
-      'thumbnails': thumbnails,
-    };
-    update();
-  }
-
-  followUser() async {
-    var doc = await firestore
-        .collection('users')
-        .doc(_uid.value)
-        .collection('followers')
-        .doc(authRepo.user.uid)
-        .get();
-
-    if (!doc.exists) {
-      await firestore
-          .collection('users')
-          .doc(_uid.value)
-          .collection('followers')
-          .doc(authRepo.user.uid)
-          .set({});
-      await firestore
-          .collection('users')
-          .doc(authRepo.user.uid)
-          .collection('following')
-          .doc(_uid.value)
-          .set({});
-      _user.value.update(
-        'followers',
-        (value) => (int.parse(value) + 1).toString(),
-      );
+  String? getCurrentUserId() {
+    final user = _auth.currentUser;
+    if (user != null) {
+      return user.uid;
     } else {
-      await firestore
-          .collection('users')
-          .doc(_uid.value)
-          .collection('followers')
-          .doc(authRepo.user.uid)
-          .delete();
-      await firestore
-          .collection('users')
-          .doc(authRepo.user.uid)
-          .collection('following')
-          .doc(_uid.value)
-          .delete();
-      _user.value.update(
-        'followers',
-        (value) => (int.parse(value) - 1).toString(),
+      return null;
+    }
+  }
+
+  void pickImage(ImageSource src) async {
+    final pickedImage = await ImagePicker().pickImage(source: src);
+    if (pickedImage != null) {
+      // Get.snackbar(
+      //   'Success',
+      //   'Successfully picked the image.',
+      //   backgroundColor: Colors.green,
+      //   colorText: Colors.white,
+      // );
+
+      // Navigator.pop(context);
+    }
+    _pickedImage = Rx<File?>(File(pickedImage!.path));
+    updateUserImage(profileImage);
+  }
+
+  Future<String> _uploadToStorage(File image) async {
+    Reference ref = firebaseStorage
+        .ref()
+        .child('profilePics')
+        .child(firebaseAuth.currentUser!.uid);
+    UploadTask uploadTask = ref.putFile(image);
+    TaskSnapshot snap = await uploadTask;
+    String downloadUrl = await snap.ref.getDownloadURL();
+    return downloadUrl;
+  }
+
+  Future<void> updateUserImage(File? image) async {
+    final userCollection = FirebaseFirestore.instance.collection("Users");
+    final docRef = userCollection.doc(getCurrentUserId());
+    String downloadUrl = await _uploadToStorage(image!);
+    try {
+      await docRef.update({'profilePhoto': downloadUrl});
+      Get.snackbar(
+        'Success',
+        'Successfully update the image.',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Image update is not successfull',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
       );
     }
-    _user.value.update('isFollowing', (value) => !value);
+
     update();
   }
 }

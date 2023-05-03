@@ -2,10 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:food_dashboard/src/features/post/screens/choose_item_screen.dart';
+import 'package:food_dashboard/src/features/post/screens/widgets/post_card.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 import '../../../constants/colors.dart';
+import '../../../constants/sizes.dart';
 import '../controller/post_controller.dart';
 import 'add_post_screen.dart';
 
@@ -14,6 +16,7 @@ class PostListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final txtTheme = Theme.of(context).textTheme;
     final postController = Get.put(PostController());
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Scaffold(
@@ -40,8 +43,65 @@ class PostListScreen extends StatelessWidget {
           // ),
         ],
       ),
-      body: const Center(
-        child: Text("List"),
+      body: StreamBuilder<List<Map<String, dynamic>>>(
+        stream: postController.getPostListwithUid(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text("Error while fetching list"),
+            );
+          }
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          final postDocs = snapshot.data!;
+
+          return ListView.builder(
+            itemCount: postDocs.length,
+            itemBuilder: ((context, index) {
+              final postData = postDocs[index];
+              final postId = postData['postID'].toString();
+              final itemId = postData['itemID'].toString();
+              final caption = postData['caption'].toString();
+              final postPhoto = postData['postPhoto'].toString();
+              final stockItem = postData['stockItem'];
+              DateTime timeStartdt = postData['timeStart'].toDate();
+              DateTime timeEnddt = postData['timeEnd'].toDate();
+              final timeStart = timeStartdt;
+              final timeEnd = timeEnddt;
+              final venueBlock = postData['venueBlock'].toString();
+              final venueCollege = postData['venueCollege'].toString();
+              DateTime createdAtdt = postData['createdAt'].toDate();
+              final createdAt = createdAtdt;
+
+              // final sideDish = itemData['sideDish'];
+
+              return SingleChildScrollView(
+                child: Container(
+                  padding: const EdgeInsets.all(tDashboardPadding),
+                  child: Center(
+                    child: PostCard(
+                      txtTheme: txtTheme,
+                      postID: postId,
+                      itemID: itemId,
+                      caption: caption,
+                      stockItem: stockItem,
+                      postPhoto: postPhoto,
+                      timeStart: timeStart,
+                      timeEnd: timeEnd,
+                      venueBlock: venueBlock,
+                      venueCollege: venueCollege,
+                      createdAt: createdAt,
+                    ),
+                  ),
+                ),
+              );
+            }),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

@@ -5,17 +5,21 @@
 import 'package:flutter/material.dart';
 import 'package:food_dashboard/src/constants/sizes.dart';
 import 'package:food_dashboard/src/features/profilendashboard/controllers/profile_controller.dart';
+import 'package:food_dashboard/src/features/profilendashboard/screens/dashboard/dashboard.dart';
 import 'package:food_dashboard/src/features/profilendashboard/screens/profile/profile_screen.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
+import '../../../../constants/auth.dart';
 import '../../../../constants/colors.dart';
+import '../../../../constants/page.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/models/user_model.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   final UserModel user;
-  const UpdateProfileScreen({
+  UpdateProfileScreen({
     Key? key,
     required this.user,
   }) : super(key: key);
@@ -97,26 +101,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       borderRadius: BorderRadius.circular(100),
                       child:
                           Image(image: NetworkImage(widget.user.profilePhoto)),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: tPrimaryColor),
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          LineAwesomeIcons.pen,
-                          size: 20,
-                        ),
-                        color: Colors.black,
-                        // size: 20,
-                      ),
                     ),
                   ),
                 ],
@@ -219,8 +203,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                   college: collegeController.text.trim(),
                                   profilePhoto: widget.user.profilePhoto,
                                   role: widget.user.role))
-                              .then((value) =>
-                                  Get.to(() => const ProfileScreen()));
+                              .then((value) => Get.to(() => Dashboard(
+                                    pageIdx: 3,
+                                  )));
+                          // Get.back());
+
                           Get.snackbar("Success", "Data Successfully updated");
                         },
                         style: ElevatedButton.styleFrom(

@@ -34,7 +34,9 @@ class AuthenticationRepository extends GetxController {
     if (user == null) {
       Get.offAll(() => const LoginScreen());
     } else {
-      Get.offAll(() => const Dashboard());
+      Get.offAll(() => Dashboard(
+            pageIdx: 0,
+          ));
     }
   }
 

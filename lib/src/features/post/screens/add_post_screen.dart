@@ -47,7 +47,9 @@ class AddPostScreen extends StatelessWidget {
           child: Container(
             // padding: const EdgeInsets.symmetric(vertical: tFormHeight),
             padding: const EdgeInsets.all(tDefaultSize),
-            child: AddPostForm(),
+            child: AddPostForm(
+              itemID: itemID,
+            ),
           ),
         ),
       ),

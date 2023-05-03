@@ -2,9 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:food_dashboard/src/features/profilendashboard/screens/dashboard/widget/posts_card.dart';
+import 'package:get/get.dart';
 
 import '../../../../../constants/sizes.dart';
 import '../../../../../constants/text_strings.dart';
+import '../../../../post/controller/post_controller.dart';
 import 'categories.dart';
 
 class HomeScreenWidget extends StatelessWidget {
@@ -17,6 +19,7 @@ class HomeScreenWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final PostController postController = Get.put(PostController());
     return SingleChildScrollView(
       child: Container(
         padding: const EdgeInsets.all(tDashboardPadding),
@@ -231,12 +234,67 @@ class HomeScreenWidget extends StatelessWidget {
             //   ),
             // ),
 
-            //Post List
-            // Text(
-            //   tDashboardFamousListing,
-            //   style: txtTheme.headline4?.apply(fontSizeFactor: 1.2),
-            // ),
-            DashboardPostCard(txtTheme: txtTheme),
+            StreamBuilder<List<Map<String, dynamic>>>(
+              stream: postController.getPostListDashboard(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return const Center(
+                    child: Text("Error while fetching list"),
+                  );
+                } else if (snapshot.hasData) {
+                  final postDashboardDocs = snapshot.data!;
+                  return SizedBox(
+                    height: 400,
+                    child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: postDashboardDocs.length,
+                      itemBuilder: ((context, index) {
+                        final postData = postDashboardDocs[index];
+                        final uid = postData['uid'].toString();
+                        final postId = postData['postID'].toString();
+                        final itemId = postData['itemID'].toString();
+                        final caption = postData['caption'].toString();
+                        final postPhoto = postData['postPhoto'].toString();
+                        // final stockItem = postData['stockItem'];
+                        // final timeStart = postData['timeStart'];
+                        // final timeEnd = postData['timeEnd'];
+                        final venueBlock = postData['venueBlock'].toString();
+                        final venueCollege =
+                            postData['venueCollege'].toString();
+                        // final createdAt = postData['createdAt'];
+
+                        return SingleChildScrollView(
+                          child: Container(
+                            padding: const EdgeInsets.all(tDashboardPadding),
+                            child: Center(
+                              child: DashboardPostCard(
+                                txtTheme: txtTheme,
+                                uid: uid,
+                                postId: postId,
+                                itemID: itemId,
+                                caption: caption,
+                                postPhoto: postPhoto,
+                                // stockItem: stockItem as int,
+                                // timeStart: timeStart as DateTime,
+                                // timeEnd: timeEnd as DateTime,
+                                venueBlock: venueBlock,
+                                venueCollege: venueCollege,
+                                // createdAt: createdAt as DateTime,
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
+            ),
           ],
         ),
       ),

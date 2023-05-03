@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_dashboard/src/features/item/screens/item_detail_screen.dart';
 import 'package:food_dashboard/src/features/item/screens/widget/item_card.dart';
@@ -65,7 +66,7 @@ class ItemListScreen extends StatelessWidget {
             itemCount: itemDocs.length,
             itemBuilder: ((context, index) {
               final itemData = itemDocs[index];
-              final itemId = itemData['id'].toString();
+              final itemId = itemData['itemID'].toString();
               final itemName = itemData['itemName'].toString();
               final itemPhoto = itemData['itemPhoto'].toString();
               final price = itemData['price'];
