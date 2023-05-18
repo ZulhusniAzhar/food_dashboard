@@ -19,6 +19,22 @@ class ProfileController extends GetxController {
   late Rx<File?> _pickedImage;
   File? get profileImage => _pickedImage.value;
   var chooseImage = false.obs;
+  Rx<String> currentRole = Rx<String>('');
+
+  Future<String?> getUserRole() async {
+    User? user = _auth.currentUser;
+    if (user == null) {
+      return null;
+    }
+    // DocumentSnapshot userData = await _usersCollection.doc(user.uid).get();
+    DocumentSnapshot userData = await collection.doc(user.uid).get();
+    late String? role = userData.get('role');
+    return role;
+  }
+
+  void setRole(String role) {
+    currentRole.value = role;
+  }
 
   Future<UserModel?> getUserDetail() async {
     User? user = _auth.currentUser;
@@ -28,6 +44,8 @@ class ProfileController extends GetxController {
     // DocumentSnapshot userData = await _usersCollection.doc(user.uid).get();
     DocumentSnapshot userData = await collection.doc(user.uid).get();
     // return userData.data();
+    String role = userData.get('role');
+    setRole(role);
     return UserModel.fromSnap(userData);
   }
 

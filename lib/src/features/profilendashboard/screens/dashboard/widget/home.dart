@@ -8,6 +8,7 @@ import '../../../../../constants/sizes.dart';
 import '../../../../../constants/text_strings.dart';
 import '../../../../post/controller/post_controller.dart';
 import 'categories.dart';
+import 'posts_card1.dart';
 
 class HomeScreenWidget extends StatelessWidget {
   const HomeScreenWidget({
@@ -39,29 +40,29 @@ class HomeScreenWidget extends StatelessWidget {
             ),
 
             //search bar
-            Container(
-              decoration: const BoxDecoration(
-                border: Border(
-                    left: BorderSide(
-                  width: 4,
-                )),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(tDashboardSearch,
-                      style: txtTheme.headline2
-                          ?.apply(color: Colors.grey.withOpacity(0.5))),
-                  const Icon(
-                    Icons.search,
-                    size: 25,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: tDashboardPadding,
-            ),
+            // Container(
+            //   decoration: const BoxDecoration(
+            //     border: Border(
+            //         left: BorderSide(
+            //       width: 4,
+            //     )),
+            //   ),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       Text(tDashboardSearch,
+            //           style: txtTheme.headline2
+            //               ?.apply(color: Colors.grey.withOpacity(0.5))),
+            //       const Icon(
+            //         Icons.search,
+            //         size: 25,
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // const SizedBox(
+            //   height: tDashboardPadding,
+            // ),
 
             //Categories
             DashboardCategories(txtTheme: txtTheme),
@@ -244,7 +245,7 @@ class HomeScreenWidget extends StatelessWidget {
                 } else if (snapshot.hasData) {
                   final postDashboardDocs = snapshot.data!;
                   return SizedBox(
-                    height: 400,
+                    height: 430,
                     child: ListView.builder(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
@@ -268,7 +269,7 @@ class HomeScreenWidget extends StatelessWidget {
                           child: Container(
                             padding: const EdgeInsets.all(tDashboardPadding),
                             child: Center(
-                              child: DashboardPostCard(
+                              child: DashboardPostCard1(
                                 txtTheme: txtTheme,
                                 uid: uid,
                                 postId: postId,

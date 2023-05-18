@@ -190,6 +190,32 @@ class PostController extends GetxController {
     // return userData.data();
   }
 
+  Future<DocumentSnapshot> getPostNItemDetails(String docID) async {
+    // Get the Document Snapshot for the first document
+    DocumentSnapshot firstSnapshot = await postCollection.doc(docID).get();
+
+    // Get the attribute value from the first document
+
+    // String attributeValue =
+    //     (firstSnapshot as Map<String, dynamic>).['itemID'].toString();
+
+    // // Use the attribute value to get the second document
+    // DocumentSnapshot secondSnapshot = await FirebaseFirestore.instance
+    //     .collection('secondCollectionName')
+    //     .doc(attributeValue)
+    //     .get();
+
+    // Return the Document Snapshots
+    return firstSnapshot;
+  }
+
+  Future<DocumentSnapshot> getItemDetailsbyPost(String docID) async {
+    // Get the Document Snapshot for the first document
+    DocumentSnapshot firstSnapshot = await itemCollection.doc(docID).get();
+
+    return firstSnapshot;
+  }
+
   Future<void> deletePost(String docID) async {
     try {
       final docRef = await postCollection.doc(docID).delete();
@@ -207,5 +233,35 @@ class PostController extends GetxController {
         e.toString(),
       );
     }
+  }
+
+  Future<String?> itemImage(String postID) async {
+    final DocumentReference postReference =
+        FirebaseFirestore.instance.collection('posts').doc('postID');
+    postReference.get().then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        final Map<String, dynamic> data =
+            documentSnapshot.data() as Map<String, dynamic>;
+        final String itemID = data['itemID'].toString();
+        // print(attributeAsString);
+
+        final DocumentReference itemReference =
+            FirebaseFirestore.instance.collection('items').doc(itemID);
+        itemReference.get().then((DocumentSnapshot documentSnapshot) {
+          if (documentSnapshot.exists) {
+            final Map<String, dynamic> data =
+                documentSnapshot.data() as Map<String, dynamic>;
+            final String itemPhoto = data['itemPhoto'].toString();
+            return itemPhoto;
+          } else {
+            // print('Document does not exist on the database');
+            return '6QrXF5DPjFZ0RPigAah2';
+          }
+        });
+      } else {
+        // print('Document does not exist on the database');
+        return '6QrXF5DPjFZ0RPigAah2';
+      }
+    });
   }
 }

@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:food_dashboard/src/constants/auth.dart';
 import 'package:food_dashboard/src/features/authentication/screens/login/login_screen.dart';
+import 'package:food_dashboard/src/features/profilendashboard/controllers/profile_controller.dart';
 import 'package:food_dashboard/src/features/profilendashboard/screens/dashboard/dashboard.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,16 +12,21 @@ import 'package:food_dashboard/src/features/authentication/models/user_model.dar
     as model;
 import 'package:image_picker/image_picker.dart';
 
+import '../../features/authentication/models/user_model.dart';
+
 class AuthenticationRepository extends GetxController {
   static AuthenticationRepository get instance => Get.find();
 
   late Rx<User?> _firebaseUser;
   var verificationId = ''.obs;
-
-  // late Rx<User?> _user;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final CollectionReference collection =
+      FirebaseFirestore.instance.collection('Users');
   late Rx<File?> _pickedImage;
   File? get profilePhoto => _pickedImage.value;
   User get user => _firebaseUser.value!;
+  final profileController = Get.put(ProfileController());
 
   @override
   void onReady() {

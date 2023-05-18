@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:food_dashboard/src/features/post/controller/post_controller.dart';
+import 'package:food_dashboard/src/features/profilendashboard/screens/dashboard/postdashboard_detail.dart';
 import 'package:get/get.dart';
 
 import '../../../../../constants/colors.dart';
@@ -47,7 +48,9 @@ class DashboardPostCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(bottom: 10),
         child: GestureDetector(
-          onTap: () {},
+          onTap: () {
+            Get.to(() => PostDashboardDetail(postID: postId));
+          },
           child: Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10), color: tCardBgColor),
@@ -92,21 +95,7 @@ class DashboardPostCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(width: tDashboardCardPadding * 15),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.all(tDashboardCardPadding),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                      onPressed: () {},
-                      child: Text(
-                        "Manage",
-                        style: txtTheme.bodyText2?.apply(color: Colors.white),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
+                    const SizedBox(width: tDashboardCardPadding * 12),
                   ],
                 ),
               ],
