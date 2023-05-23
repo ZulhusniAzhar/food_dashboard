@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:food_dashboard/src/constants/colors.dart';
 import 'package:food_dashboard/src/features/profilendashboard/screens/dashboard/widget/appbar.dart';
+import 'package:get/get.dart';
 
 import '../../../../constants/page.dart';
+import '../../../authentication/models/user_model.dart';
+import '../../controllers/profile_controller.dart';
 
 class Dashboard extends StatefulWidget {
   Dashboard({
@@ -19,28 +22,20 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    // final txtTheme = Theme.of(context).textTheme;
-    final isDark = MediaQuery.of(context).platformBrightness ==
-        Brightness.dark; //Dark Mode
-    // final controller = Get.put(DashboardController());
+    String roleCurrent = 'General';
+    final isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
 
-    return Scaffold(
-      appBar: DashboardAppBar(
-        isDark: isDark,
-      ),
-      body: pages[widget.pageIdx],
-      // body: SafeArea(
-      //   child: IndexedStack(
-      //     index: controller.tabIndex,
-      //     children: [
-      //       HomeScreenWidget(txtTheme: txtTheme),
-      //       const BookmarkListScreen(),
-      //       const QrCodeScreen(),
-      //       const ProfileScreen(),
-      //     ],
-      //   ),
-      // ),
-      bottomNavigationBar: BottomNavigationBar(
+    return GetBuilder<ProfileController>(builder: (controller) {
+      final profileController = Get.put(ProfileController());
+      roleCurrent = profileController.currentRole.value;
+      return Scaffold(
+        appBar: DashboardAppBar(
+          isDark: isDark,
+        ),
+        body: roleCurrent != 'Admin'
+            ? pages[widget.pageIdx]
+            : pagesAdmin[widget.pageIdx],
+        bottomNavigationBar: BottomNavigationBar(
           backgroundColor: tDarkColor,
           type: BottomNavigationBarType.fixed,
           unselectedItemColor: Colors.white,
@@ -51,24 +46,37 @@ class _DashboardState extends State<Dashboard> {
             });
           },
           currentIndex: widget.pageIdx,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_filled, size: 30),
-              label: "Home",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.bookmark_border_rounded, size: 30),
-              label: "Bookmarks",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.qr_code_2_rounded, size: 30),
-              label: "QRCode",
-            ),
-            BottomNavigationBarItem(
+          items: [
+            roleCurrent != 'Admin'
+                ? const BottomNavigationBarItem(
+                    icon: Icon(Icons.home_filled, size: 30),
+                    label: "Home",
+                  )
+                : const BottomNavigationBarItem(
+                    icon: Icon(Icons.home_filled, size: 30),
+                    label: "Dashboard",
+                  ),
+            roleCurrent != 'Admin'
+                ? const BottomNavigationBarItem(
+                    icon: Icon(Icons.bookmark_border_rounded, size: 30),
+                    label: "Bookmarks",
+                  )
+                : const BottomNavigationBarItem(
+                    icon: Icon(Icons.home_filled, size: 30),
+                    label: "Role Change",
+                  ),
+            if (roleCurrent != 'Admin')
+              const BottomNavigationBarItem(
+                icon: Icon(Icons.qr_code_2_rounded, size: 30),
+                label: "QRCode",
+              ),
+            const BottomNavigationBarItem(
               icon: Icon(Icons.person_2_rounded, size: 30),
               label: "Profile",
             ),
-          ]),
-    );
+          ],
+        ),
+      );
+    });
   }
 }

@@ -142,9 +142,12 @@ class AddItemForm extends StatelessWidget {
             ),
             const SizedBox(height: tFormHeight),
             TextFormField(
-              keyboardType: TextInputType.number,
+              // keyboardType: TextInputType.number,
+              // inputFormatters: [
+              //   FilteringTextInputFormatter.digitsOnly,
+              // ],
               inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
+                FilteringTextInputFormatter.allow(RegExp(r'(^\d*\.?\d{0,2})'))
               ],
               controller: controller.price,
               validator: (value) {

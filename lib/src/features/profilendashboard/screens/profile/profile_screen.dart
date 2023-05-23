@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:food_dashboard/src/constants/image_strings.dart';
 import 'package:food_dashboard/src/constants/sizes.dart';
 import 'package:food_dashboard/src/features/item/screens/item_list_screen.dart';
 import 'package:food_dashboard/src/features/profilendashboard/screens/profile/update1_profile_screen.dart';
@@ -12,6 +13,7 @@ import '../../../../constants/text_strings.dart';
 import '../../../../repository/authentication_repository/authentication_repository.dart';
 import '../../../authentication/models/user_model.dart';
 import '../../../post/screens/post_list_screen.dart';
+import '../../../rolechange/screen/fill_role_form_screen.dart';
 import '../../controllers/profile_controller.dart';
 import 'widgets/profile_menu.dart';
 
@@ -139,87 +141,108 @@ class ProfileScreen extends StatelessWidget {
                         children: [
                           Stack(
                             children: [
-                              SizedBox(
-                                width: 120,
-                                height: 120,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(100),
-                                  child: Image(
-                                      image: NetworkImage(
-                                          snapshot.data!.profilePhoto)),
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: Container(
-                                  width: 35,
-                                  height: 35,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(100),
-                                      color: tPrimaryColor),
-                                  child: IconButton(
-                                    onPressed: () {
-                                      showOptionsDialog(context);
-                                    },
-                                    icon: const Icon(
-                                      LineAwesomeIcons.pen,
-                                      size: 20,
-                                    ),
-                                    color: Colors.black,
-                                    // size: 20,
+                              if (roleCurrent == 'Admin')
+                                SizedBox(
+                                  width: 120,
+                                  height: 120,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: const Image(
+                                        image: AssetImage(tAdminPhot)),
                                   ),
                                 ),
-                              ),
+                              if (roleCurrent != 'Admin')
+                                SizedBox(
+                                  width: 120,
+                                  height: 120,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: Image(
+                                        image: NetworkImage(
+                                            snapshot.data!.profilePhoto)),
+                                  ),
+                                ),
+                              if (roleCurrent != 'Admin')
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: Container(
+                                    width: 35,
+                                    height: 35,
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        color: tPrimaryColor),
+                                    child: IconButton(
+                                      onPressed: () {
+                                        showOptionsDialog(context);
+                                      },
+                                      icon: const Icon(
+                                        LineAwesomeIcons.pen,
+                                        size: 20,
+                                      ),
+                                      color: Colors.black,
+                                      // size: 20,
+                                    ),
+                                  ),
+                                ),
                             ],
                           ),
 
                           const SizedBox(
                             height: 10,
                           ),
-                          Text(
-                            '${snapshot.data?.fullName} (${snapshot.data?.role})',
-                            style: Theme.of(context).textTheme.headline4,
-                          ),
-                          Text(
-                            '${snapshot.data?.phoneNo}',
-                            style: Theme.of(context).textTheme.bodyText2,
-                          ),
+                          if (roleCurrent != 'Admin')
+                            Text(
+                              '${snapshot.data?.fullName} (${snapshot.data?.role})',
+                              style: Theme.of(context).textTheme.headline4,
+                            ),
+                          if (roleCurrent == 'Admin')
+                            Text(
+                              'College : ${snapshot.data?.college}',
+                              style: Theme.of(context).textTheme.headline4,
+                            ),
+                          if (roleCurrent != 'Admin')
+                            Text(
+                              '${snapshot.data?.phoneNo}',
+                              style: Theme.of(context).textTheme.bodyText2,
+                            ),
                           Text(
                             '${snapshot.data?.email}',
                             style: Theme.of(context).textTheme.bodyText2,
                           ),
                           const SizedBox(height: 20),
-                          SizedBox(
-                            width: 200,
-                            child: ElevatedButton(
-                              onPressed: () => Get.to(
-                                  // () => UpdateProfileScreen(uid: authRepo.user.uid)),
-                                  () => UpdateProfileScreen(
-                                      user: UserModel(
-                                          uid: snapshot.data!.uid,
-                                          fullName: snapshot.data!.fullName,
-                                          matricNo: snapshot.data!.matricNo,
-                                          gender: snapshot.data!.gender,
-                                          email: snapshot.data!.email,
-                                          phoneNo: snapshot.data!.phoneNo,
-                                          password: snapshot.data!.password,
-                                          block: snapshot.data!.block,
-                                          college: snapshot.data!.college,
-                                          profilePhoto:
-                                              snapshot.data!.profilePhoto,
-                                          role: snapshot.data!.role))),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: tPrimaryColor,
-                                side: BorderSide.none,
-                                shape: const StadiumBorder(),
-                              ),
-                              child: const Text(
-                                tEditProfile,
-                                style: TextStyle(color: tDarkColor),
+                          if (roleCurrent != 'Admin')
+                            SizedBox(
+                              width: 200,
+                              child: ElevatedButton(
+                                onPressed: () => Get.to(
+                                    // () => UpdateProfileScreen(uid: authRepo.user.uid)),
+                                    () => UpdateProfileScreen(
+                                        user: UserModel(
+                                            uid: snapshot.data!.uid,
+                                            fullName: snapshot.data!.fullName,
+                                            matricNo: snapshot.data!.matricNo,
+                                            gender: snapshot.data!.gender,
+                                            email: snapshot.data!.email,
+                                            phoneNo: snapshot.data!.phoneNo,
+                                            password: snapshot.data!.password,
+                                            block: snapshot.data!.block,
+                                            college: snapshot.data!.college,
+                                            profilePhoto:
+                                                snapshot.data!.profilePhoto,
+                                            role: snapshot.data!.role))),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: tPrimaryColor,
+                                  side: BorderSide.none,
+                                  shape: const StadiumBorder(),
+                                ),
+                                child: const Text(
+                                  tEditProfile,
+                                  style: TextStyle(color: tDarkColor),
+                                ),
                               ),
                             ),
-                          ),
                           const SizedBox(
                             height: 30,
                           ),
@@ -261,7 +284,9 @@ class ProfileScreen extends StatelessWidget {
                             ProfileMenuWidget(
                               title: tMenu4,
                               icon: LineAwesomeIcons.info,
-                              onPress: () {},
+                              onPress: () {
+                                Get.to(() => const FillRoleForm());
+                              },
                             ),
                           ProfileMenuWidget(
                             title: tMenu5,

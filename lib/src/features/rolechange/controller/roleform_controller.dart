@@ -1,0 +1,174 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:food_dashboard/src/features/rolechange/model/roleform_model.dart'
+    as model;
+
+import '../../authentication/models/user_model.dart';
+import '../../profilendashboard/screens/dashboard/dashboard.dart';
+import '../screen/list_role_form_screen.dart';
+
+class RoleFormController extends GetxController {
+  static RoleFormController get instance => Get.find();
+
+  //textfield
+  final itemSelling = TextEditingController();
+  final descriptionRF = TextEditingController();
+  final blockSelling = TextEditingController();
+  final collegeSelling = TextEditingController();
+  final statusforReject = TextEditingController();
+
+  //variable
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final CollectionReference roleFormCollection =
+      FirebaseFirestore.instance.collection('roleform');
+  final CollectionReference userCollection =
+      FirebaseFirestore.instance.collection('Users');
+  Rx<String> currentStatus = Rx<String>('');
+  String rfIDHolder = '';
+
+  String? getCurrentUserId() {
+    final user = _auth.currentUser;
+    if (user != null) {
+      return user.uid;
+    } else {
+      return null;
+    }
+  }
+
+  void createRoleForm(
+    DateTime createdAt,
+    String status,
+    List<String> itemsSelling,
+    String? descriptionRF,
+    String blockSelling,
+    String collegeSelling,
+  ) async {
+    CollectionReference collectionReferencess =
+        FirebaseFirestore.instance.collection('roleform');
+    DocumentReference documentReferencess = collectionReferencess.doc();
+    try {
+      if (status.isNotEmpty &&
+          collegeSelling.isNotEmpty &&
+          blockSelling.isNotEmpty &&
+          itemsSelling.isNotEmpty) {
+        model.RoleFormModel post = model.RoleFormModel(
+          rfID: documentReferencess.id,
+          userID: getCurrentUserId(),
+          createdAt: createdAt,
+          status: status,
+          itemsSelling: itemsSelling,
+          descriptionRF: descriptionRF,
+          blockSelling: blockSelling,
+          collegeSelling: collegeSelling,
+          deletedAt: null,
+        );
+        await documentReferencess.set(post.toJson());
+
+        String documentId = documentReferencess.id;
+        await documentReferencess.update({'rfID': documentId});
+        Get.until((route) => route.isFirst);
+        Get.to(() => Dashboard(pageIdx: 3));
+        Get.snackbar(
+          'Success',
+          'Successfully submitted the form for role change',
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+      } else {
+        Get.snackbar("Error", "Please enter all the fields");
+      }
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        e.toString(),
+      );
+    }
+  }
+
+  // Future<DocumentSnapshot> getRoleFormDetail() async {
+  //   // return await roleFormCollection.doc(docID).get();
+  //   DocumentSnapshot roleFormData = await getDocumentRoleForm();
+  //   return roleFormData;
+  // }
+
+  Future<DocumentSnapshot> getDocumentRoleFormDetail() async {
+    String documentId = '';
+    QuerySnapshot querySnapshot = await roleFormCollection
+        .where('userID', isEqualTo: getCurrentUserId())
+        .get();
+    List<QueryDocumentSnapshot> documents = querySnapshot.docs;
+    for (QueryDocumentSnapshot document in documents) {
+      documentId = document.id;
+    }
+    return await roleFormCollection.doc(documentId).get();
+  }
+
+  Future<int> checkDocumentExists() async {
+    String? id = getCurrentUserId();
+
+    final QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('roleform') // Replace with your collection name
+        .where('userID', isEqualTo: id)
+        .limit(1)
+        .get();
+    return snapshot.size;
+  }
+
+  void setStatus(String? status) {
+    currentStatus.value = status!;
+  }
+
+  Stream<List<Map<String, dynamic>>> getAllFormList() {
+    return roleFormCollection
+        .where('deletedAt', isEqualTo: '')
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((querySnapshot) {
+      return querySnapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
+    });
+  }
+
+  Future<UserModel?> getUserDetail(String id) async {
+    User? user = _auth.currentUser;
+    if (user == null) {
+      return null;
+    }
+    DocumentSnapshot userData = await userCollection.doc(id).get();
+    return UserModel.fromSnap(userData);
+  }
+
+  void changeRoleFormStatusReject(String documentId, String description) {
+    DocumentReference rfRef = roleFormCollection.doc(documentId);
+    String newStatus = "Rejected because $description";
+    rfRef.update({'status': newStatus});
+  }
+
+  Future<void> changeRoleFormStatusAccept(String documentId) async {
+    final rfRef = roleFormCollection.doc(documentId);
+    String newStatus = "Accepted";
+    DateTime now = DateTime.now();
+    try {
+      await rfRef.update({'status': newStatus});
+      await rfRef.update({'deletedAt': now});
+      // Get.until((route) => route.isFirst);
+      Get.to(() => RoleFormListScreen());
+      Get.back();
+      // update();
+      Get.snackbar(
+        'Success',
+        'Successfully updated status',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        e.toString(),
+      );
+    }
+  }
+}

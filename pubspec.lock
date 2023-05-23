@@ -238,6 +238,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_cards_reel:
+    dependency: "direct main"
+    description:
+      name: flutter_cards_reel
+      sha256: a77e6f4e4c154944cde080a8c84fff412978071daa20ac09d68ad3bbedbf8874
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
   flutter_lints:
     dependency: "direct dev"
     description:

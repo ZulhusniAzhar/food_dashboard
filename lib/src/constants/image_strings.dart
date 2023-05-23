@@ -20,3 +20,6 @@ const String tUserProfileImage = "assets/images/profile_images/tProfile.jpg";
 const String tImageBlank = "assets/images/profile_images/circleimage.png";
 const String tMakananRandom = "assets/images/dashboard/food1.png";
 const String tFoodIcon = "assets/images/items/foodimage.png";
+
+const String tRoleChange = "assets/images/rolechange.png";
+const String tAdminPhot = "assets/images/admin.png";

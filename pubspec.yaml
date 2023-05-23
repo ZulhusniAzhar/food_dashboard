@@ -46,6 +46,7 @@ dependencies:
   image_picker: ^0.8.7+1
   syncfusion_flutter_datepicker: ^21.1.41
   palette_generator: ^0.3.3+2
+  flutter_cards_reel: ^0.0.3
 
 dev_dependencies:
   flutter_test:

@@ -20,6 +20,12 @@ class ProfileController extends GetxController {
   File? get profileImage => _pickedImage.value;
   var chooseImage = false.obs;
   Rx<String> currentRole = Rx<String>('');
+  @override
+  void onInit() {
+    super.onInit();
+    // Call your desired function here
+    getUserDetail();
+  }
 
   Future<String?> getUserRole() async {
     User? user = _auth.currentUser;

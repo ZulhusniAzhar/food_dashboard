@@ -6,20 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:food_dashboard/src/constants/sizes.dart';
 import 'package:food_dashboard/src/features/profilendashboard/controllers/profile_controller.dart';
 import 'package:food_dashboard/src/features/profilendashboard/screens/dashboard/dashboard.dart';
-import 'package:food_dashboard/src/features/profilendashboard/screens/profile/profile_screen.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
-import '../../../../constants/auth.dart';
 import '../../../../constants/colors.dart';
-import '../../../../constants/page.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/models/user_model.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   final UserModel user;
-  UpdateProfileScreen({
+  const UpdateProfileScreen({
     Key? key,
     required this.user,
   }) : super(key: key);

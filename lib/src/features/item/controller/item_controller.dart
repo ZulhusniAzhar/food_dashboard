@@ -8,7 +8,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:food_dashboard/src/features/item/model/item_model.dart'
     as model;
 import '../../../constants/auth.dart';
-import '../model/item_model.dart';
 import '../screens/item_list_screen.dart';
 
 class ItemController extends GetxController {
@@ -134,7 +133,8 @@ class ItemController extends GetxController {
   Future<void> deleteItem(String docID) async {
     //kena del skali post yang berkaitan ngn item
     try {
-      final docRef = await itemCollection.doc(docID).delete();
+      // final docRef = await itemCollection.doc(docID).delete();
+      await itemCollection.doc(docID).delete();
       Get.until((route) => route.isFirst);
       Get.to(() => const ItemListScreen());
       Get.snackbar(

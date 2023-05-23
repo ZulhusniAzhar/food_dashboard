@@ -1,83 +1,82 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RoleFormModel {
-  final String? uid;
-  final String itemID;
-  final String itemName;
-  final double price;
-  final List<String> ingredient;
-  final List<String> sideDish;
-  final String itemPhoto;
-  final String category;
-  // final String itemId;
+  final String rfID;
+  final String? userID;
+  final DateTime createdAt;
+  final String status;
+  final List<String> itemsSelling;
+  final String? descriptionRF;
+  final String blockSelling;
+  final String collegeSelling;
+  final DateTime? deletedAt;
 
   RoleFormModel({
-    required this.uid,
-    required this.itemID,
-    required this.itemName,
-    required this.price,
-    required this.ingredient,
-    required this.sideDish,
-    required this.itemPhoto,
-    required this.category,
-    // required this.itemId,
+    required this.rfID,
+    required this.userID,
+    required this.createdAt,
+    required this.status,
+    required this.itemsSelling,
+    required this.descriptionRF,
+    required this.blockSelling,
+    required this.collegeSelling,
+    required this.deletedAt,
   });
 
   Map<String, dynamic> toJson() {
     return {
-      "uid": uid,
-      "itemID": itemID,
-      "itemPhoto": itemPhoto,
-      "itemName": itemName,
-      "price": price,
-      "ingredient": ingredient,
-      "sideDish": sideDish,
-      "category": category,
-      // "itemId": itemId,
+      "rfID": rfID,
+      "userID": userID,
+      "createdAt": createdAt,
+      "status": status,
+      "itemsSelling": itemsSelling,
+      "descriptionRF": descriptionRF,
+      "blockSelling": blockSelling,
+      "collegeSelling": collegeSelling,
+      "deletedAt": deletedAt,
     };
   }
 
   static RoleFormModel fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
     return RoleFormModel(
-      uid: snapshot['uid'],
-      itemID: snapshot['itemID'],
-      itemPhoto: snapshot['itemPhoto'],
-      itemName: snapshot['itemName'],
-      price: snapshot['price'],
-      ingredient: snapshot['ingredient'],
-      sideDish: snapshot['sideDish'],
-      category: snapshot['category'],
-      // itemId: snapshot['itemId'],
+      rfID: snapshot['rfID'],
+      userID: snapshot['userID'],
+      createdAt: snapshot['createdAt'],
+      status: snapshot['status'],
+      itemsSelling: snapshot['itemsSelling'],
+      descriptionRF: snapshot['descriptionRF'],
+      blockSelling: snapshot['blockSelling'],
+      collegeSelling: snapshot['collegeSelling'],
+      deletedAt: snapshot['deletedAt'],
     );
   }
 
   factory RoleFormModel.fromMap(Map<String, dynamic> map) {
     // var snapshot = snap.data() as Map<String, dynamic>;
     return RoleFormModel(
-      uid: map['uid'],
-      itemID: map['itemID'],
-      itemPhoto: map['itemPhoto'],
-      itemName: map['itemName'],
-      price: map['price'],
-      ingredient: map['ingredient'],
-      sideDish: map['sideDish'],
-      category: map['category'],
-
-      // itemId: map['itemId'],
+      rfID: map['rfID'],
+      userID: map['userID'],
+      createdAt: map['createdAt'],
+      status: map['status'],
+      itemsSelling: map['itemsSelling'],
+      descriptionRF: map['descriptionRF'],
+      blockSelling: map['blockSelling'],
+      collegeSelling: map['collegeSelling'],
+      deletedAt: map['deletedAt'],
     );
   }
   Map<String, dynamic> toMap() {
     return {
-      "uid": uid,
-      "itemID": itemID,
-      "itemPhoto": itemPhoto,
-      "itemName": itemName,
-      "price": price,
-      "ingredient": ingredient,
-      "sideDish": sideDish,
-      "category": category,
-      // "itemId": itemId,
+      "rfID": rfID,
+      "userID": userID,
+      "createdAt": createdAt,
+      "status": status,
+      "itemsSelling": itemsSelling,
+      "descriptionRF": descriptionRF,
+      "blockSelling": blockSelling,
+      "collegeSelling": collegeSelling,
+      "deletedAt": deletedAt,
     };
   }
 }
