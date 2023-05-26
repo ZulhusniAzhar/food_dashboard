@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:food_dashboard/src/features/qrcode/screens/generator/result_qr_generator.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -159,7 +160,7 @@ class PostDetailScreen extends StatelessWidget {
                             const SizedBox(height: 32.0),
                             GestureDetector(
                               onTap: () {
-                                // Navigate to another page when the box is clicked
+                                Get.to(ResultQRGeneratorScreen());
                               },
                               child: Container(
                                 width: double.infinity,

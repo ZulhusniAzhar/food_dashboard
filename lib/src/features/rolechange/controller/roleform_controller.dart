@@ -1,3 +1,5 @@
+// import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -26,7 +28,14 @@ class RoleFormController extends GetxController {
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection('Users');
   Rx<String> currentStatus = Rx<String>('');
+  late RxInt documentExistence = 0.obs;
+  int get docExistent => documentExistence.value;
   String rfIDHolder = '';
+  // @override
+  // void onReady() {
+  //   super.onReady();
+  //   checkDocumentExists();
+  // }
 
   String? getCurrentUserId() {
     final user = _auth.currentUser;
@@ -105,7 +114,7 @@ class RoleFormController extends GetxController {
     return await roleFormCollection.doc(documentId).get();
   }
 
-  Future<int> checkDocumentExists() async {
+  Future<void> checkDocumentExists() async {
     String? id = getCurrentUserId();
 
     final QuerySnapshot snapshot = await FirebaseFirestore.instance
@@ -113,7 +122,9 @@ class RoleFormController extends GetxController {
         .where('userID', isEqualTo: id)
         .limit(1)
         .get();
-    return snapshot.size;
+    documentExistence.value = snapshot.size;
+    // await Future.delayed(Duration(seconds: 2));
+    // return snapshot.size;
   }
 
   void setStatus(String? status) {
@@ -122,7 +133,7 @@ class RoleFormController extends GetxController {
 
   Stream<List<Map<String, dynamic>>> getAllFormList() {
     return roleFormCollection
-        .where('deletedAt', isEqualTo: '')
+        .where('deletedAt', isEqualTo: null)
         .orderBy('createdAt', descending: true)
         .snapshots()
         .map((querySnapshot) {
@@ -149,9 +160,18 @@ class RoleFormController extends GetxController {
 
   Future<void> changeRoleFormStatusAccept(String documentId) async {
     final rfRef = roleFormCollection.doc(documentId);
+
+    DocumentSnapshot snapshot = await rfRef.get();
+    var data = snapshot.data() as Map<String, dynamic>;
+    var userID = data['userID'].toString();
+
+    final userRef = userCollection.doc(userID);
+    String newRole = "Seller";
+
     String newStatus = "Accepted";
     DateTime now = DateTime.now();
     try {
+      await userRef.update({'role': newRole});
       await rfRef.update({'status': newStatus});
       await rfRef.update({'deletedAt': now});
       // Get.until((route) => route.isFirst);

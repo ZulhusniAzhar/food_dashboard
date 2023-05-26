@@ -9,11 +9,10 @@ class RoleFormWidget extends StatelessWidget {
   const RoleFormWidget({
     super.key,
   });
-
+  static final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     final roleFormcontroller = Get.put(RoleFormController());
-    final _formKey = GlobalKey<FormState>();
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: tFormHeight),

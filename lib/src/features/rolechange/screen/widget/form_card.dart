@@ -3,12 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:food_dashboard/src/features/rolechange/controller/roleform_controller.dart';
 import 'package:get/get.dart';
-
-import '../../../../constants/colors.dart';
+import '../../../..//constants/colors.dart';
 import '../../../authentication/models/user_model.dart';
-import '../../../authentication/screens/forget_password/forget_password_options/forget_password_model_bottom_sheet.dart';
-import '../../../profilendashboard/screens/dashboard/dashboard.dart';
-import '../list_role_form_screen.dart';
 import 'reject_note.dart';
 
 class FormCard extends StatefulWidget {

@@ -16,7 +16,6 @@ import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../constants/imageutil.dart';
-import '../../../post/screens/widgets/widget_detail/product_counter_widget.dart';
 
 class FirstPage extends StatefulWidget {
   final String postID;

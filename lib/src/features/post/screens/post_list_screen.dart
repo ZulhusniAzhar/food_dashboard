@@ -9,7 +9,6 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
 import '../controller/post_controller.dart';
-import 'add_post_screen.dart';
 
 class PostListScreen extends StatelessWidget {
   const PostListScreen({super.key});

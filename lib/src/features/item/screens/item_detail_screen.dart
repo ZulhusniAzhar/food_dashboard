@@ -3,7 +3,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_dashboard/src/features/item/controller/item_controller.dart';
-import 'package:food_dashboard/src/features/item/model/item_model.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
@@ -12,6 +11,7 @@ import '../../../constants/sizes.dart';
 
 class ItemDetailScreen extends StatelessWidget {
   ItemDetailScreen({
+    super.key,
     required this.itemID,
   });
 

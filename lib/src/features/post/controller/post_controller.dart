@@ -10,7 +10,6 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../constants/auth.dart';
-import '../../item/model/item_model.dart';
 import '../model/post_model.dart';
 
 class PostController extends GetxController {

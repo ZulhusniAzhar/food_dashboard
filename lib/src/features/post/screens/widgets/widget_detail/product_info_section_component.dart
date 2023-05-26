@@ -2,9 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_dashboard/src/features/post/controller/post_controller.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import '../../../../../constants/colors.dart';
 import 'line_product_info_widget.dart';
 
 class ProductInfoSectionComponent extends StatefulWidget {
@@ -31,7 +29,6 @@ class _ProductInfoSectionComponentState
       child: FutureBuilder(
           future: postController.getPostNItemDetails(widget.postID),
           builder: (context, AsyncSnapshot<DocumentSnapshot> postsnapshot) {
-            print(widget.postID);
             if (postsnapshot.hasError) {
               return Text('Error: ${postsnapshot.error}');
             } else if (postsnapshot.hasData) {

@@ -36,6 +36,7 @@ dependencies:
   get: ^4.6.5
   google_fonts: ^4.0.3
   cupertino_icons: ^1.0.2
+  eva_icons_flutter: ^3.1.0
   flutter_native_splash: ^2.2.19
   liquid_swipe: ^3.0.0
   smooth_page_indicator: ^1.0.1
@@ -47,6 +48,13 @@ dependencies:
   syncfusion_flutter_datepicker: ^21.1.41
   palette_generator: ^0.3.3+2
   flutter_cards_reel: ^0.0.3
+  qr_flutter: ^4.1.0
+  flutter_screenutil: ^5.6.0
+  gap: ^2.0.1
+  gallery_saver: ^2.3.2
+  path_provider: ^2.0.15
+  flutter_barcode_scanner: ^2.0.0
+  
 
 dev_dependencies:
   flutter_test:

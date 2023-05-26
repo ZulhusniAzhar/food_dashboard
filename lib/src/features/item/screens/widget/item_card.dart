@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../constants/sizes.dart';
-import '../item_detail_screen.dart';
 
 class ItemCard extends StatelessWidget {
   const ItemCard({

@@ -1,17 +1,14 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:food_dashboard/src/features/post/controller/post_controller.dart';
 import 'package:food_dashboard/src/features/profilendashboard/screens/dashboard/postdashboard_detail.dart';
 import 'package:get/get.dart';
 
 import '../../../../../constants/colors.dart';
 import '../../../../../constants/sizes.dart';
-import '../../../../item/model/item_model.dart';
-import '../../../models/dashboard/postscard_model.dart';
 
 class DashboardPostCard extends StatelessWidget {
-  DashboardPostCard({
+  const DashboardPostCard({
     super.key,
     required this.txtTheme,
     required this.uid,

@@ -1,7 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:food_dashboard/src/features/profilendashboard/screens/dashboard/widget/posts_card.dart';
 import 'package:get/get.dart';
 
 import '../../../../../constants/sizes.dart';

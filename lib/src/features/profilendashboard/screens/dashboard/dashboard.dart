@@ -4,7 +4,6 @@ import 'package:food_dashboard/src/features/profilendashboard/screens/dashboard/
 import 'package:get/get.dart';
 
 import '../../../../constants/page.dart';
-import '../../../authentication/models/user_model.dart';
 import '../../controllers/profile_controller.dart';
 
 class Dashboard extends StatefulWidget {

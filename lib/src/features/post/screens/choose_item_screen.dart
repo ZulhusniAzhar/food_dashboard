@@ -9,7 +9,6 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
 import '../../item/controller/item_controller.dart';
-import '../../item/screens/add_item_screen.dart';
 
 class ChooseItemScreen extends StatelessWidget {
   const ChooseItemScreen({

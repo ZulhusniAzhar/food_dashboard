@@ -17,6 +17,7 @@ class FillRoleForm extends StatelessWidget {
   Widget build(BuildContext context) {
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     final RoleFormController rfController = Get.put(RoleFormController());
+    rfController.checkDocumentExists();
 
     return SafeArea(
       child: Scaffold(
@@ -36,37 +37,28 @@ class FillRoleForm extends StatelessWidget {
           elevation: 0,
           backgroundColor: Colors.transparent,
         ),
-        body: FutureBuilder<int>(
-            future: rfController.checkDocumentExists(),
-            builder: (context, AsyncSnapshot<int> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else {
-                int? isSubmitForm = snapshot.data;
-                print(isSubmitForm);
-                return SingleChildScrollView(
-                  child: Container(
-                    padding: const EdgeInsets.all(tDefaultSize),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Center(
-                          child: FormHeaderWidget(
-                            image: tRoleChange,
-                            title: "Become a Seller!",
-                            subTitle: "Join us and gain side incomes",
-                          ),
-                        ),
-                        if (isSubmitForm == 0) const RoleFormWidget(),
-                        if (isSubmitForm == 1) const SubmittedRoleFormWidget(),
-                      ],
+        body: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(tDefaultSize),
+            child: Obx(
+              () => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Center(
+                    child: FormHeaderWidget(
+                      image: tRoleChange,
+                      title: "Become a Seller!",
+                      subTitle: "Join us and gain side incomes",
                     ),
                   ),
-                );
-              }
-            }),
+                  (rfController.documentExistence.value == 0)
+                      ? const RoleFormWidget()
+                      : const SubmittedRoleFormWidget(),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

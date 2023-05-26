@@ -5,7 +5,6 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 import '../../../../constants/colors.dart';
 import 'first_page_detail.dart';
-import 'second_page_detail.dart';
 
 class PostDashboardDetail extends StatelessWidget {
   PostDashboardDetail({required this.postID, super.key});
