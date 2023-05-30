@@ -10,11 +10,24 @@ import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
 import '../controller/post_controller.dart';
 
-class PostDetailScreen extends StatelessWidget {
+class PostDetailScreen extends StatefulWidget {
   PostDetailScreen({required this.postID, super.key});
 
   final String postID;
+
+  @override
+  State<PostDetailScreen> createState() => _PostDetailScreenState();
+}
+
+class _PostDetailScreenState extends State<PostDetailScreen> {
   final PostController postController = Get.put(PostController());
+  late TextEditingController _textEditingcontroller;
+  @override
+  void initState() {
+    _textEditingcontroller = TextEditingController();
+    super.initState();
+  }
+
   showOptionsDialog(BuildContext context) {
     return showDialog(
       context: context,
@@ -34,7 +47,7 @@ class PostDetailScreen extends StatelessWidget {
               child: const Text("Yes"),
               onPressed: () {
                 // Delete the document and close the dialog
-                postController.deletePost(postID);
+                postController.deletePost(widget.postID);
                 Navigator.of(context).pop();
               },
             ),
@@ -75,7 +88,7 @@ class PostDetailScreen extends StatelessWidget {
       body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: FutureBuilder(
-              future: postController.getPostDetail(postID),
+              future: postController.getPostDetail(widget.postID),
               builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                 if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
@@ -160,7 +173,9 @@ class PostDetailScreen extends StatelessWidget {
                             const SizedBox(height: 32.0),
                             GestureDetector(
                               onTap: () {
-                                Get.to(ResultQRGeneratorScreen());
+                                Get.to(ResultQRGeneratorScreen(
+                                  text: snapshot.data!['postID'],
+                                ));
                               },
                               child: Container(
                                 width: double.infinity,

@@ -9,7 +9,7 @@ import '../features/profilendashboard/screens/dashboard/analytical_dashboard.dar
 var pages = [
   const HomeScreen(),
   const BookmarkListScreen(),
-  const QrCodeScreen(),
+  QRCodeScreen(),
   ProfileScreen(),
 ];
 var pagesAdmin = [

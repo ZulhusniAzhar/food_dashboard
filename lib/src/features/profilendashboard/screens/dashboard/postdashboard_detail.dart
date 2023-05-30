@@ -45,24 +45,7 @@ class PostDashboardDetail extends StatelessWidget {
           FirstPage(
             postID: postID,
           ),
-          // SecondPage(),
         ],
-        // <Widget>[
-        //   CupertinoPageTransition(
-        //     primaryRouteAnimation: const AlwaysStoppedAnimation(0),
-        //     secondaryRouteAnimation: const AlwaysStoppedAnimation(1),
-        //     linearTransition: true,
-        //     child: FirstPage(
-        //       postID: '6QrXF5DPjFZ0RPigAah2',
-        //     ),
-        //   ),
-        //   CupertinoPageTransition(
-        //     primaryRouteAnimation: const AlwaysStoppedAnimation(0),
-        //     secondaryRouteAnimation: const AlwaysStoppedAnimation(1),
-        //     child: const SecondPage(),
-        //     linearTransition: true,
-        //   ),
-        // ],
       ),
     );
   }

@@ -39,7 +39,7 @@ class FirstPage extends StatefulWidget {
 class _FirstPageState extends State<FirstPage> {
   final DraggableScrollableController _scrollableController =
       DraggableScrollableController();
-  // final PostController postController = Get.put(PostController());
+  final PostController postController = Get.put(PostController());
   final ValueNotifier<double> _circleRadius = ValueNotifier<double>(180);
   final ValueNotifier<double> _imageHeight = ValueNotifier<double>(250);
   final double _minSize = 0.44;
@@ -52,6 +52,8 @@ class _FirstPageState extends State<FirstPage> {
   void initState() {
     super.initState();
     _scrollableController.addListener(_updateCircleRadius);
+    postController.fetchData(widget.postID);
+    postController.setSellerPhoneNo(widget.postID);
   }
 
   @override
@@ -96,9 +98,9 @@ class _FirstPageState extends State<FirstPage> {
   @override
   Widget build(BuildContext context) {
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
-    final postController = Get.put(PostController());
-
+    // final postController = Get.put(PostController());
     final size = MediaQuery.of(context).size;
+
     return Scaffold(
       // backgroundColor: tSecondaryColor,
       appBar: AppBar(
@@ -131,86 +133,75 @@ class _FirstPageState extends State<FirstPage> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  Positioned(
-                    top: 0,
-                    child: SizedBox(
-                      height: size.height * .5,
-                      width: size.width,
-                      child: Stack(
-                        children: [
-                          FutureBuilder(
-                            future: ImageUtil.extractDominantColors(
-                                // tOnBoardingImage2),
-                                tSplashTopIcon),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                final data = snapshot.data as List<Color>;
-                                return ValueListenableBuilder(
-                                    valueListenable: _circleRadius,
-                                    builder: (context, value, _) {
-                                      return Positioned(
-                                        left: 0,
-                                        right: 0,
-                                        child: CircleProductWidget(
-                                          radius: value,
-                                          colors: data,
-                                        ),
-                                      );
-                                    });
-                              } else {
-                                return const SizedBox();
-                              }
-                            },
-                          ),
-                          FutureBuilder(
-                              future:
-                                  postController.getPostDetail(widget.postID),
-                              builder: (context,
-                                  AsyncSnapshot<DocumentSnapshot> snapshot) {
-                                if (snapshot.hasError) {
-                                  return Text('Error: ${snapshot.error}');
-                                } else if (snapshot.hasData) {
-                                  DateTime dateStart =
-                                      snapshot.data!['timeStart'].toDate();
-                                  DateTime dateEnd =
-                                      snapshot.data!['timeEnd'].toDate();
+                  Obx(() {
+                    if (postController.postModelforDetail.value == null) {
+                      return CircularProgressIndicator();
+                    } else {
+                      final yourPost = postController.postModelforDetail.value!;
 
-                                  String formattedDateStart =
-                                      DateFormat('EEEE, MMMM d, yyyy')
-                                          .format(dateStart);
-                                  String formattedDateEnd =
-                                      DateFormat('EEEE, MMMM d, yyyy')
-                                          .format(dateEnd);
-                                  return Positioned(
-                                    top: 30,
-                                    left: 0,
-                                    right: 0,
-                                    child: ValueListenableBuilder(
-                                      valueListenable: _imageHeight,
-                                      builder: (context, value, _) {
-                                        return SizedBox(
-                                          height: _imageHeight.value,
-                                          child: Hero(
-                                            // tag: widget.id,
-                                            tag: Text("INI TAG"),
-                                            child: Image.network(
-                                              snapshot.data!['postPhoto'],
-                                              fit: BoxFit.fitHeight,
+                      String formattedDateStart =
+                          DateFormat('EEEE, MMMM d, yyyy')
+                              .format(yourPost.timeStart);
+                      String formattedDateEnd = DateFormat('EEEE, MMMM d, yyyy')
+                          .format(yourPost.timeEnd);
+                      return Positioned(
+                        top: 0,
+                        child: SizedBox(
+                          height: size.height * .5,
+                          width: size.width,
+                          child: Stack(
+                            children: [
+                              FutureBuilder(
+                                future: ImageUtil.extractDominantColors(
+                                    // tOnBoardingImage2),
+                                    tSplashTopIcon),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    final data = snapshot.data as List<Color>;
+                                    return ValueListenableBuilder(
+                                        valueListenable: _circleRadius,
+                                        builder: (context, value, _) {
+                                          return Positioned(
+                                            left: 0,
+                                            right: 0,
+                                            child: CircleProductWidget(
+                                              radius: value,
+                                              colors: data,
                                             ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  );
-                                } else {
-                                  return const Center(
-                                      child: CircularProgressIndicator());
-                                }
-                              }),
-                        ],
-                      ),
-                    ),
-                  ),
+                                          );
+                                        });
+                                  } else {
+                                    return const SizedBox();
+                                  }
+                                },
+                              ),
+                              Positioned(
+                                top: 30,
+                                left: 0,
+                                right: 0,
+                                child: ValueListenableBuilder(
+                                  valueListenable: _imageHeight,
+                                  builder: (context, value, _) {
+                                    return SizedBox(
+                                      height: _imageHeight.value,
+                                      child: Hero(
+                                        // tag: widget.id,
+                                        tag: Text("INI TAG"),
+                                        child: Image.network(
+                                          yourPost.postPhoto,
+                                          fit: BoxFit.fitHeight,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+                  }),
                   _buildDiscoverDrawer(),
                 ],
               ),
@@ -247,6 +238,7 @@ class _FirstPageState extends State<FirstPage> {
                   if (postsnapshot.hasError) {
                     return Text('Error: ${postsnapshot.error}');
                   } else if (postsnapshot.hasData) {
+                    itemIDPost = postsnapshot.data!['itemID'];
                     return FutureBuilder(
                         future: postController
                             .getItemDetailsbyPost(postsnapshot.data!['itemID']),
@@ -319,103 +311,58 @@ class _FirstPageState extends State<FirstPage> {
         delegate: SliverChildBuilderDelegate(
           childCount: sliverChildCount,
           (context, index) {
-            return FutureBuilder(
-                future: postController.getPostNItemDetails(widget.postID),
-                builder:
-                    (context, AsyncSnapshot<DocumentSnapshot> postsnapshot) {
-                  if (postsnapshot.hasError) {
-                    return Text('Error: ${postsnapshot.error}');
-                  } else if (postsnapshot.hasData) {
-                    String userID = postsnapshot.data!['uid'];
-                    DateTime dateStart =
-                        postsnapshot.data!['timeStart'].toDate();
-                    String formattedDateStart =
-                        DateFormat('EEEE, d MMMM,yyyy').format(dateStart);
-                    DateTime dateEnd = postsnapshot.data!['timeEnd'].toDate();
-                    String formattedDateEnd =
-                        DateFormat('EEEE, d MMMM,yyyy').format(dateEnd);
-                    return FutureBuilder(
-                        future: postController
-                            .getItemDetailsbyPost(postsnapshot.data!['itemID']),
-                        builder: (context,
-                            AsyncSnapshot<DocumentSnapshot> itemsnapshot) {
-                          if (itemsnapshot.hasError) {
-                            return Text('Error: ${itemsnapshot.error}');
-                          } else if (itemsnapshot.hasData) {
-                            return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  FutureBuilder(
-                                      future: postController
-                                          .getSellerPhoneNo(userID),
-                                      builder: (context,
-                                          AsyncSnapshot<DocumentSnapshot>
-                                              usersnapshot) {
-                                        if (usersnapshot.hasError) {
-                                          return Text(
-                                              'Error: ${usersnapshot.error}');
-                                        } else if (usersnapshot.hasData) {
-                                          print(usersnapshot.data!['phoneNo']);
-                                          return SizedBox(
-                                            width: 100,
-                                            child: ElevatedButton(
-                                              onPressed: () {
-                                                openWhatsapp(
-                                                    number: usersnapshot
-                                                        .data!['phoneNo'],
-                                                    text:
-                                                        'Hello ${usersnapshot.data!['fullName']},\n\nthrough UTM Food Dashboard, I would like to make a report regarding the item you are selling, ${itemsnapshot.data!['itemName'].toString().toUpperCase()}\n\nunder your post from\n${formattedDateStart} - ${formattedDateEnd}');
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    Colors.redAccent,
-                                                side: BorderSide.none,
-                                                shape: const StadiumBorder(),
-                                              ),
-                                              child: Text(
-                                                'Make Report',
-                                                style: GoogleFonts.poppins(
-                                                  fontSize: 14,
-                                                  color: tDarkColor,
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        } else {
-                                          return const Center(
-                                              child:
-                                                  CircularProgressIndicator());
-                                        }
-                                      }),
-                                  SizedBox(
-                                    width: 100,
-                                    child: ElevatedButton(
-                                      onPressed: () {},
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: tPrimaryColor,
-                                        side: BorderSide.none,
-                                        shape: const StadiumBorder(),
-                                      ),
-                                      child: Text(
-                                        'BUY',
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 14,
-                                          color: tDarkColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ]);
-                          } else {
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          }
-                        });
-                  } else {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                });
+            return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Obx(
+                    () => SizedBox(
+                      width: 100,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          print(postController.sellerPhoneNumber.value);
+                          // await FlutterLaunch.launchWhatsapp(
+                          //   phone: '60197379794',
+                          //   message:
+                          //       'Hi Penjual,Saya mahu report berkenaan posting untuk hari ini, makanan saya basi',
+                          // );\
+                          openWhatsapp(
+                              number: postController.sellerPhoneNumber.value,
+                              text: 'Hello, this is a pre-filled message!');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.redAccent,
+                          side: BorderSide.none,
+                          shape: const StadiumBorder(),
+                        ),
+                        child: Text(
+                          'Send Report to Seller',
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            color: tDarkColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 100,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: tPrimaryColor,
+                        side: BorderSide.none,
+                        shape: const StadiumBorder(),
+                      ),
+                      child: Text(
+                        'BUY',
+                        style: GoogleFonts.poppins(
+                          fontSize: 14,
+                          color: tDarkColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                ]);
           },
         ),
       ),

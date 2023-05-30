@@ -8,6 +8,7 @@ import '../../../../../constants/text_strings.dart';
 import '../../../../post/controller/post_controller.dart';
 import 'categories.dart';
 import 'posts_card1.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreenWidget extends StatelessWidget {
   const HomeScreenWidget({
@@ -69,171 +70,6 @@ class HomeScreenWidget extends StatelessWidget {
               height: tDashboardPadding,
             ),
 
-            //Banners
-            // Row(
-            //   crossAxisAlignment: CrossAxisAlignment.start,
-            //   children: [
-            //     Expanded(
-            //       child: Container(
-            //         decoration: BoxDecoration(
-            //             borderRadius: BorderRadius.circular(10),
-            //             color: tCardBgColor),
-            //         padding: const EdgeInsets.symmetric(
-            //             horizontal: 10, vertical: 20),
-            //         child: Column(
-            //           crossAxisAlignment: CrossAxisAlignment.start,
-            //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //           children: [
-            //             Row(
-            //               crossAxisAlignment: CrossAxisAlignment.start,
-            //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //               children: const [
-            //                 Flexible(
-            //                     child: Image(
-            //                         image: AssetImage(tGoogleLogoImage))),
-            //                 Flexible(
-            //                     child: Image(
-            //                         image: AssetImage(tForgetPassImage))),
-            //               ],
-            //             ),
-            //             const SizedBox(
-            //               height: 25,
-            //             ),
-            //             Text(
-            //               tDashboardBannerTitle1,
-            //               style: txtTheme.headline4,
-            //               maxLines: 2,
-            //               overflow: TextOverflow.ellipsis,
-            //             ),
-            //             Text(
-            //               tDashboardBannerSubTitle,
-            //               style: txtTheme.bodyText2,
-            //               maxLines: 1,
-            //               overflow: TextOverflow.ellipsis,
-            //             ),
-            //           ],
-            //         ),
-            //       ),
-            //     ),
-            //     const SizedBox(
-            //       width: tDashboardCardPadding,
-            //     ),
-            //     Expanded(
-            //       child: Column(
-            //         children: [
-            //           Container(
-            //             decoration: BoxDecoration(
-            //                 borderRadius: BorderRadius.circular(10),
-            //                 color: tCardBgColor),
-            //             padding: const EdgeInsets.symmetric(
-            //                 horizontal: 10, vertical: 20),
-            //             child: Column(
-            //               crossAxisAlignment: CrossAxisAlignment.start,
-            //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //               children: [
-            //                 Row(
-            //                   crossAxisAlignment: CrossAxisAlignment.start,
-            //                   mainAxisAlignment:
-            //                       MainAxisAlignment.spaceBetween,
-            //                   children: const [
-            //                     Flexible(
-            //                         child: Image(
-            //                             image: AssetImage(tGoogleLogoImage))),
-            //                     Flexible(
-            //                         child: Image(
-            //                             image: AssetImage(tForgetPassImage))),
-            //                   ],
-            //                 ),
-            //                 const SizedBox(
-            //                   height: 25,
-            //                 ),
-            //                 Text(
-            //                   tDashboardBannerTitle2,
-            //                   style: txtTheme.headline4,
-            //                   maxLines: 2,
-            //                   overflow: TextOverflow.ellipsis,
-            //                 ),
-            //                 Text(
-            //                   tDashboardBannerSubTitle,
-            //                   style: txtTheme.bodyText2,
-            //                   maxLines: 1,
-            //                   overflow: TextOverflow.ellipsis,
-            //                 ),
-            //               ],
-            //             ),
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-            //   ],
-            // ),
-            //yang bawah ni mmg lama dah comment jadi uncomment yang atas dia je
-            // SingleChildScrollView(
-            //   child: Column(
-            //     children: [
-            //       Container(
-            //         height: 230,
-            //         decoration: BoxDecoration(
-            //             borderRadius: BorderRadius.circular(10),
-            //             color: tCardBgColor),
-            //         padding: const EdgeInsets.symmetric(
-            //             horizontal: 100, vertical: 20),
-            //         child: Center(
-            //           child: Column(
-            //             crossAxisAlignment: CrossAxisAlignment.start,
-            //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //             children: [
-            //               Row(
-            //                 crossAxisAlignment: CrossAxisAlignment.start,
-            //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //                 children: const [
-            //                   Flexible(
-            //                       child: Image(
-            //                     image: AssetImage(tGoogleLogoImage),
-            //                     height: 100.0,
-            //                   )),
-            //                 ],
-            //               ),
-            //               const SizedBox(
-            //                 height: 25,
-            //               ),
-            //               Text(
-            //                 tDashboardBannerTitle2,
-            //                 style: txtTheme.headline4,
-            //                 maxLines: 2,
-            //                 overflow: TextOverflow.ellipsis,
-            //               ),
-            //               Text(
-            //                 tDashboardBannerSubTitle,
-            //                 style: txtTheme.bodyText2,
-            //                 maxLines: 1,
-            //                 overflow: TextOverflow.ellipsis,
-            //               ),
-            //             ],
-            //           ),
-            //         ),
-            //       ),
-            //       const SizedBox(
-            //         height: tDashboardCardPadding,
-            //       ),
-            //       Container(
-            //         height: 100,
-            //         color: Colors.grey[200],
-            //         child: const Center(
-            //           child: Text(
-            //             'Container 2',
-            //             style: TextStyle(
-            //               color: Colors.black,
-            //               fontSize: 20,
-            //               fontWeight: FontWeight.bold,
-            //             ),
-            //           ),
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-
             StreamBuilder<List<Map<String, dynamic>>>(
               stream: postController.getPostListDashboard(),
               builder: (context, snapshot) {
@@ -256,17 +92,17 @@ class HomeScreenWidget extends StatelessWidget {
                         final itemId = postData['itemID'].toString();
                         final caption = postData['caption'].toString();
                         final postPhoto = postData['postPhoto'].toString();
-                        // final stockItem = postData['stockItem'];
-                        // final timeStart = postData['timeStart'];
-                        // final timeEnd = postData['timeEnd'];
                         final venueBlock = postData['venueBlock'].toString();
                         final venueCollege =
                             postData['venueCollege'].toString();
-                        // final createdAt = postData['createdAt'];
+                        DateTime dateStart = postData['timeEnd'].toDate();
+
+                        String formattedDateStart =
+                            DateFormat('MMMM d').format(dateStart);
 
                         return SingleChildScrollView(
                           child: Container(
-                            padding: const EdgeInsets.all(tDashboardPadding),
+                            padding: const EdgeInsets.all(8),
                             child: Center(
                               child: DashboardPostCard1(
                                 txtTheme: txtTheme,
@@ -275,12 +111,9 @@ class HomeScreenWidget extends StatelessWidget {
                                 itemID: itemId,
                                 caption: caption,
                                 postPhoto: postPhoto,
-                                // stockItem: stockItem as int,
-                                // timeStart: timeStart as DateTime,
-                                // timeEnd: timeEnd as DateTime,
                                 venueBlock: venueBlock,
                                 venueCollege: venueCollege,
-                                // createdAt: createdAt as DateTime,
+                                dateEnd: formattedDateStart,
                               ),
                             ),
                           ),

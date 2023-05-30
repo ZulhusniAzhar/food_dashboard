@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:food_dashboard/src/features/item/model/item_model.dart';
 import 'package:food_dashboard/src/features/post/model/post_model.dart'
     as model;
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,6 +18,7 @@ class PostController extends GetxController {
 
   //declare page related
   late Rx<File?> _pickedImage;
+  late RxString sellerPhoneNumber;
   RxBool chooseImage = false.obs;
   File? get postImage => _pickedImage.value;
   DateTime startDate = DateTime.now();
@@ -24,8 +26,12 @@ class PostController extends GetxController {
 
   //declare db related
   RxList<PostModel> posts = <PostModel>[].obs;
+  Rx<PostModel?> postModelforDetail = Rx<PostModel?>(null);
+  Rx<ItemModel?> itemModelforDetail = Rx<ItemModel?>(null);
   final CollectionReference itemCollection =
       FirebaseFirestore.instance.collection('items');
+  final CollectionReference userCollection =
+      FirebaseFirestore.instance.collection('Users');
   final CollectionReference postCollection =
       FirebaseFirestore.instance.collection('posts');
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -56,6 +62,34 @@ class PostController extends GetxController {
   //     print(posts);
   //   }
   // }
+
+  void fetchData(String postID) async {
+    try {
+      final DocumentReference postReference =
+          FirebaseFirestore.instance.collection('posts').doc('postID');
+      postReference.get().then((DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          final Map<String, dynamic> data =
+              documentSnapshot.data() as Map<String, dynamic>;
+          final String itemID = data['itemID'].toString();
+          postModelforDetail.value = PostModel.fromMap(data);
+
+          final DocumentReference itemReference =
+              FirebaseFirestore.instance.collection('items').doc(itemID);
+          itemReference.get().then((DocumentSnapshot documentSnapshot) {
+            if (documentSnapshot.exists) {
+              final Map<String, dynamic> data =
+                  documentSnapshot.data() as Map<String, dynamic>;
+              itemModelforDetail.value = ItemModel.fromMap(data);
+            }
+          });
+        }
+      });
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
+  }
+
   Stream<List<Map<String, dynamic>>> getPostListDashboard() {
     return postCollection
         .orderBy('createdAt', descending: true)
@@ -75,6 +109,40 @@ class PostController extends GetxController {
     } else {
       return "";
     }
+  }
+
+  Future<DocumentSnapshot> getSellerPhoneNo(String userID) async {
+    DocumentSnapshot firstSnapshot = await userCollection.doc(userID).get();
+
+    return firstSnapshot;
+  }
+
+  Future<void> setSellerPhoneNo(String postID) async {
+    final DocumentReference postReference =
+        FirebaseFirestore.instance.collection('posts').doc('postID');
+    postReference.get().then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        final Map<String, dynamic> data =
+            documentSnapshot.data() as Map<String, dynamic>;
+        final String sellerID = data['userID'].toString();
+        // print(attributeAsString);
+
+        final DocumentReference itemReference =
+            FirebaseFirestore.instance.collection('Users').doc(sellerID);
+        itemReference.get().then((DocumentSnapshot documentSnapshot) {
+          if (documentSnapshot.exists) {
+            final Map<String, dynamic> data =
+                documentSnapshot.data() as Map<String, dynamic>;
+            final String sellerPhoneNo = data['phoneNo'].toString();
+            sellerPhoneNumber.value = sellerPhoneNo;
+          } else {
+            sellerPhoneNumber.value = "";
+          }
+        });
+      } else {
+        sellerPhoneNumber.value = "";
+      }
+    });
   }
 
   Stream<List<Map<String, dynamic>>> getItemsListwithUid() {
