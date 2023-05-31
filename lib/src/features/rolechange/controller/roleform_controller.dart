@@ -1,6 +1,8 @@
 // import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:food_dashboard/src/features/rolechange/screen/fill_role_form_screen.dart';
+import 'package:food_dashboard/src/features/rolechange/screen/widget/role_form_widget.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -43,6 +45,33 @@ class RoleFormController extends GetxController {
       return user.uid;
     } else {
       return null;
+    }
+  }
+
+  Future<void> deletePreviousRoleForm() async {
+    String documentId = '';
+    QuerySnapshot querySnapshot = await roleFormCollection
+        .where('userID', isEqualTo: getCurrentUserId())
+        .get();
+    List<QueryDocumentSnapshot> documents = querySnapshot.docs;
+    for (QueryDocumentSnapshot document in documents) {
+      documentId = document.id;
+    }
+    try {
+      final docRef = await roleFormCollection.doc(documentId).delete();
+      Get.until((route) => route.isFirst);
+      Get.to(() => const FillRoleForm());
+      Get.snackbar(
+        'Success',
+        'Successfully removed previous request',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        e.toString(),
+      );
     }
   }
 
@@ -133,8 +162,8 @@ class RoleFormController extends GetxController {
 
   Stream<List<Map<String, dynamic>>> getAllFormList() {
     return roleFormCollection
-        .where('deletedAt', isEqualTo: null)
-        .orderBy('createdAt', descending: true)
+        // .orderBy('createdAt', descending: true)
+        .where('deletedAt', isNull: true)
         .snapshots()
         .map((querySnapshot) {
       return querySnapshot.docs
@@ -155,7 +184,26 @@ class RoleFormController extends GetxController {
   void changeRoleFormStatusReject(String documentId, String description) {
     DocumentReference rfRef = roleFormCollection.doc(documentId);
     String newStatus = "Rejected because $description";
-    rfRef.update({'status': newStatus});
+    DateTime now = DateTime.now();
+
+    try {
+      rfRef.update({'status': newStatus});
+      rfRef.update({'deletedAt': now});
+      // Get.to(() => RoleFormListScreen());
+      Get.back();
+      // update();
+      Get.snackbar(
+        'Success',
+        'Successfully updated status',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        e.toString(),
+      );
+    }
   }
 
   Future<void> changeRoleFormStatusAccept(String documentId) async {

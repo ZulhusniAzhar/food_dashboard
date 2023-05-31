@@ -30,46 +30,51 @@ class RoleFormListScreen extends StatelessWidget {
               List<Map<String, dynamic>>? documents = snapshot.data;
               int documentCount = documents!.length;
               final rfDashboardDocs = snapshot.data!;
+              if (documentCount < 1) {
+                return const Center(
+                    child: Text("No Active Role Form to be Reviewed"));
+              } else {
+                return CardsReelView.builder(
+                    itemExtent: 400,
+                    itemHeaderExtent: 100,
+                    maxScrollPagesAtOnce: 2,
+                    itemCount: documentCount,
+                    itemBuilder: (context, index) {
+                      final rfData = rfDashboardDocs[index];
 
-              return CardsReelView.builder(
-                  itemExtent: 400,
-                  itemHeaderExtent: 100,
-                  maxScrollPagesAtOnce: 2,
-                  itemCount: documentCount,
-                  itemBuilder: (context, index) {
-                    final rfData = rfDashboardDocs[index];
-
-                    DateTime dateCreated = rfData['createdAt'].toDate();
-                    String formattedDateCreated =
-                        DateFormat('EEEE, MMMM d, yyyy').format(dateCreated);
-                    final userID = rfData['userID'].toString();
-                    final rfID = rfData['rfID'].toString();
-                    final status = rfData['status'].toString();
-                    final descriptionRF = rfData['descriptionRF'].toString();
-                    final collegeSelling = rfData['collegeSelling'].toString();
-                    final blockSelling = rfData['blockSelling'].toString();
-                    final createdAt = formattedDateCreated;
-                    var itemSelling = "";
-                    rfData['itemSelling'] == null
-                        ? itemSelling = "No Item"
-                        : itemSelling = rfData['itemSelling'].join(", ");
-                    return Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: SizedBox(
-                        height: 400,
-                        child: FormCard(
-                            index: index,
-                            userID: userID,
-                            rfID: rfID,
-                            status: status,
-                            descriptionRF: descriptionRF,
-                            collegeSelling: collegeSelling,
-                            blockSelling: blockSelling,
-                            createdAt: createdAt,
-                            itemSelling: itemSelling),
-                      ),
-                    );
-                  });
+                      DateTime dateCreated = rfData['createdAt'].toDate();
+                      String formattedDateCreated =
+                          DateFormat('EEEE, MMMM d, yyyy').format(dateCreated);
+                      final userID = rfData['userID'].toString();
+                      final rfID = rfData['rfID'].toString();
+                      final status = rfData['status'].toString();
+                      final descriptionRF = rfData['descriptionRF'].toString();
+                      final collegeSelling =
+                          rfData['collegeSelling'].toString();
+                      final blockSelling = rfData['blockSelling'].toString();
+                      final createdAt = formattedDateCreated;
+                      var itemSelling = "";
+                      rfData['itemSelling'] == null
+                          ? itemSelling = "No Item"
+                          : itemSelling = rfData['itemSelling'].join(", ");
+                      return Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: SizedBox(
+                          height: 400,
+                          child: FormCard(
+                              index: index,
+                              userID: userID,
+                              rfID: rfID,
+                              status: status,
+                              descriptionRF: descriptionRF,
+                              collegeSelling: collegeSelling,
+                              blockSelling: blockSelling,
+                              createdAt: createdAt,
+                              itemSelling: itemSelling),
+                        ),
+                      );
+                    });
+              }
             } else {
               return const Center(
                 child: CircularProgressIndicator(),

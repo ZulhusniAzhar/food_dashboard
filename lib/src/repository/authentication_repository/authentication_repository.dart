@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:food_dashboard/src/constants/auth.dart';
 import 'package:food_dashboard/src/features/authentication/screens/login/login_screen.dart';
 import 'package:food_dashboard/src/features/profilendashboard/controllers/profile_controller.dart';
@@ -175,6 +176,24 @@ class AuthenticationRepository extends GetxController {
     } catch (e) {
       Get.snackbar(
         'Error LoggingIn',
+        e.toString(),
+      );
+    }
+  }
+
+  Future<void> resetPassword(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      Get.to(LoginScreen());
+      Get.snackbar(
+        'Success',
+        'Successfully sent email',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Error ',
         e.toString(),
       );
     }

@@ -6,11 +6,16 @@ import 'package:food_dashboard/src/constants/text_strings.dart';
 import 'package:food_dashboard/src/features/authentication/screens/forget_password/forget_password_otp/otp_screen.dart';
 import 'package:get/get.dart';
 
+import '../../../../../repository/authentication_repository/authentication_repository.dart';
+
 class ForgetPasswordMailScreen extends StatelessWidget {
   const ForgetPasswordMailScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final AuthenticationRepository authRepo =
+        Get.put(AuthenticationRepository.instance);
+    final mailText = TextEditingController();
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -31,6 +36,7 @@ class ForgetPasswordMailScreen extends StatelessWidget {
                   child: Column(
                 children: [
                   TextFormField(
+                    controller: mailText,
                     decoration: const InputDecoration(
                         label: Text(tEmail),
                         hintText: tEmail,
@@ -43,7 +49,8 @@ class ForgetPasswordMailScreen extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        Get.to(() => const OTPScreen());
+                        // Get.to(() => const OTPScreen());
+                        authRepo.resetPassword(mailText.text.trim());
                       },
                       child: const Text("Next"),
                     ),

@@ -56,6 +56,7 @@ class RejectNoteScreen {
                         child: ElevatedButton(
                           // onPressed: () => Get.to(() => Dashboard()),
                           onPressed: () {
+                            Navigator.pop(context);
                             rfController.changeRoleFormStatusReject(
                               rfID,
                               rfController.statusforReject.text.trim(),
