@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_launch/flutter_launch.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:food_dashboard/src/features/payment/screen/buyer/set_amount_buy.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:food_dashboard/src/constants/colors.dart';
 import 'package:food_dashboard/src/constants/image_strings.dart';
@@ -21,6 +22,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 import '../../../../constants/imageutil.dart';
+import '../../../payment/screen/widget/buy_item_bottom_sheet.dart';
 
 class FirstPage extends StatefulWidget {
   final String postID;
@@ -93,6 +95,27 @@ class _FirstPageState extends State<FirstPage> {
     }
   }
 
+  Widget _container(Widget child) {
+    return Container(
+      height: 20.0,
+      width: 40.0,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: tWhiteColor,
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: tDarkColor.withOpacity(0.15),
+            offset: const Offset(1, 1),
+            blurRadius: 10,
+            spreadRadius: 2.0,
+          ),
+        ],
+      ),
+      child: child,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
@@ -112,10 +135,22 @@ class _FirstPageState extends State<FirstPage> {
           "Post Details",
           style: Theme.of(context).textTheme.headline4,
         ),
+        // actions: [
+        //   IconButton(
+        //     color: Colors.redAccent,
+        //     icon: const Icon(Icons.report_outlined),
+        //     tooltip: 'Report Post',
+        //     onPressed: () {
+        //       ScaffoldMessenger.of(context).showSnackBar(
+        //           const SnackBar(content: Text('Report This Post')));
+        //     },
+        //   ),
+        // ],
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
+
       body: Column(
         children: [
           Expanded(
@@ -192,7 +227,7 @@ class _FirstPageState extends State<FirstPage> {
                                           height: _imageHeight.value,
                                           child: Hero(
                                             // tag: widget.id,
-                                            tag: Text("INI TAG"),
+                                            tag: const Text("INI TAG"),
                                             child: Image.network(
                                               snapshot.data!['postPhoto'],
                                               fit: BoxFit.fitHeight,
@@ -356,7 +391,7 @@ class _FirstPageState extends State<FirstPage> {
                                           return Text(
                                               'Error: ${usersnapshot.error}');
                                         } else if (usersnapshot.hasData) {
-                                          print(usersnapshot.data!['phoneNo']);
+                                          // print(usersnapshot.data!['phoneNo']);
                                           return SizedBox(
                                             width: 100,
                                             child: ElevatedButton(
@@ -391,7 +426,24 @@ class _FirstPageState extends State<FirstPage> {
                                   SizedBox(
                                     width: 100,
                                     child: ElevatedButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        // BuyItemStockScreen
+                                        //     .buildShowModalBottomSheet(context);
+                                        Get.to(() => SetAmountItemStockScreen(
+                                              itemPhoto: itemsnapshot
+                                                  .data!['itemPhoto'],
+                                              price:
+                                                  itemsnapshot.data!['price'],
+                                              caption:
+                                                  postsnapshot.data!['caption'],
+                                              itemName: itemsnapshot
+                                                  .data!['itemName'],
+                                              itemStock: postsnapshot
+                                                  .data!['stockItem'],
+                                              sellerID:
+                                                  postsnapshot.data!['uid'],
+                                            ));
+                                      },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: tPrimaryColor,
                                         side: BorderSide.none,

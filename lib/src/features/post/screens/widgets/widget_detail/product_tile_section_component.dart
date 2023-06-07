@@ -44,7 +44,7 @@ class _ProductTileSectionComponentState
                       TileProductInfoWidget(
                         title: 'PRICE',
                         description:
-                            'RM ${itemsnapshot.data!['price'].toString()}',
+                            'RM ${itemsnapshot.data!['price'].toStringAsFixed(2)}',
                         color: const Color(0xff7378ff),
                       ),
                       TileProductInfoWidget(

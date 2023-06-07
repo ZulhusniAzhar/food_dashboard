@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_dashboard/src/constants/colors.dart';
 import 'package:food_dashboard/src/features/profilendashboard/screens/dashboard/widget/appbar.dart';
 import 'package:get/get.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 import '../../../../constants/page.dart';
 import '../../controllers/profile_controller.dart';
@@ -57,8 +58,8 @@ class _DashboardState extends State<Dashboard> {
                   ),
             roleCurrent != 'Admin'
                 ? const BottomNavigationBarItem(
-                    icon: Icon(Icons.bookmark_border_rounded, size: 30),
-                    label: "Bookmarks",
+                    icon: Icon(LineAwesomeIcons.money_bill, size: 30),
+                    label: "Payment",
                   )
                 : const BottomNavigationBarItem(
                     icon: Icon(Icons.home_filled, size: 30),

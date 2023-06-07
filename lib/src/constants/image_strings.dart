@@ -23,3 +23,9 @@ const String tFoodIcon = "assets/images/items/foodimage.png";
 
 const String tRoleChange = "assets/images/rolechange.png";
 const String tAdminPhot = "assets/images/admin.png";
+const String tBox1 = "assets/images/boxes/box1.png";
+const String tBox2 = "assets/images/boxes/box2.png";
+const String tBox3 = "assets/images/boxes/box3.png";
+const String tBox4 = "assets/images/boxes/box4.png";
+
+const String tPaymentCard = "assets/images/payment/card.png";
