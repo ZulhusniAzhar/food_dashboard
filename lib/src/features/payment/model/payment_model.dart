@@ -30,12 +30,12 @@ class PaymentModel {
       paymentID: map['paymentID'],
       sellerID: map['sellerID'],
       method: map['method'],
-      datePayment: map['datePayment'],
+      datePayment: (map['datePayment'] as Timestamp).toDate(),
       paymentTotal: map['paymentTotal'],
       statusPayment: map['statusPayment'],
       itemTotal: map['itemTotal'],
-      createdAt: map['createdAt'].toDate(),
-      deletedAt: map['deletedAt'].toDate(),
+      createdAt: map['createdAt'],
+      deletedAt: map['deletedAt'],
     );
   }
 

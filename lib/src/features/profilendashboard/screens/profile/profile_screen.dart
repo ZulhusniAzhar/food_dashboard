@@ -5,6 +5,7 @@ import 'package:food_dashboard/src/constants/image_strings.dart';
 import 'package:food_dashboard/src/constants/sizes.dart';
 import 'package:food_dashboard/src/features/item/screens/item_list_screen.dart';
 import 'package:food_dashboard/src/features/profilendashboard/screens/profile/update1_profile_screen.dart';
+import 'package:food_dashboard/src/features/report_ticket/screen/report_list_screen.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
@@ -253,9 +254,11 @@ class ProfileScreen extends StatelessWidget {
 
                           //MENU
                           ProfileMenuWidget(
-                            title: tMenu1,
-                            icon: LineAwesomeIcons.cog,
-                            onPress: () {},
+                            title: "My Report",
+                            icon: Icons.notification_important_rounded,
+                            onPress: () {
+                              Get.to(() => ReportTicketListScreen());
+                            },
                           ),
                           if (roleCurrent == 'Seller')
                             ProfileMenuWidget(

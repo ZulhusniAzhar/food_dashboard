@@ -62,6 +62,9 @@ dependencies:
   fl_chart: ^0.36.1
   ternav_icons: ^1.0.0
   percent_indicator: ^4.2.2
+  dropdown_model_list: ^0.0.3+1
+  custom_radio_group_list: ^1.0.0
+ 
 
 dev_dependencies:
   flutter_test:

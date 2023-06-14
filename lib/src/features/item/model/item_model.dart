@@ -37,18 +37,17 @@ class ItemModel {
     };
   }
 
-  static ItemModel fromSnap(DocumentSnapshot snap) {
+  factory ItemModel.fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
     return ItemModel(
       uid: snapshot['uid'],
       itemID: snapshot['itemID'],
       itemPhoto: snapshot['itemPhoto'],
       itemName: snapshot['itemName'],
-      price: snapshot['price'],
-      ingredient: snapshot['ingredient'],
-      sideDish: snapshot['sideDish'],
+      price: snapshot['price'].toDouble(),
+      ingredient: List<String>.from(snapshot['ingredient']),
+      sideDish: List<String>.from(snapshot['sideDish']),
       category: snapshot['category'],
-      // itemId: snapshot['itemId'],
     );
   }
 

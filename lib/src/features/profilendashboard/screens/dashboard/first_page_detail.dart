@@ -23,6 +23,7 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 import '../../../../constants/imageutil.dart';
 import '../../../payment/screen/widget/buy_item_bottom_sheet.dart';
+import '../../../report_ticket/screen/create_report_screen.dart';
 
 class FirstPage extends StatefulWidget {
   final String postID;
@@ -67,32 +68,6 @@ class _FirstPageState extends State<FirstPage> {
     double normalizedSize = (size - _minSize) / (_maxSize - _minSize);
     _circleRadius.value = 180 - (normalizedSize * 100);
     _imageHeight.value = 250 - (normalizedSize * 100);
-  }
-
-  void openWhatsapp({required String text, required String number}) async {
-    var whatsapp = number; //+92xx enter like this
-    var whatsappURlAndroid =
-        "whatsapp://send?phone=" + whatsapp + "&text=$text";
-    var whatsappURLIos = "https://wa.me/$whatsapp?text=${Uri.tryParse(text)}";
-    if (Platform.isIOS) {
-      // for iOS phone only
-      if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
-        await launchUrl(Uri.parse(
-          whatsappURLIos,
-        ));
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Whatsapp not installed")));
-      }
-    } else {
-      // android , web
-      if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
-        await launchUrl(Uri.parse(whatsappURlAndroid));
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Whatsapp not installed")));
-      }
-    }
   }
 
   Widget _container(Widget child) {
@@ -396,11 +371,29 @@ class _FirstPageState extends State<FirstPage> {
                                             width: 100,
                                             child: ElevatedButton(
                                               onPressed: () {
-                                                openWhatsapp(
-                                                    number: usersnapshot
-                                                        .data!['phoneNo'],
-                                                    text:
-                                                        'Hello ${usersnapshot.data!['fullName']},\n\nthrough UTM Food Dashboard, I would like to make a report regarding the item you are selling, ${itemsnapshot.data!['itemName'].toString().toUpperCase()}\n\nunder your post from\n${formattedDateStart} - ${formattedDateEnd}');
+                                                Get.to(() => CreateReportScreen(
+                                                      sellerID: postsnapshot
+                                                          .data!['uid'],
+                                                      postId: postsnapshot
+                                                          .data!['postID'],
+                                                      sellerPhoneNo:
+                                                          usersnapshot
+                                                              .data!['phoneNo'],
+                                                      fullNameSeller:
+                                                          usersnapshot.data![
+                                                              'fullName'],
+                                                      itemName: itemsnapshot
+                                                          .data!['itemName'],
+                                                      dateStartBuy:
+                                                          formattedDateStart,
+                                                      dateStartEnd:
+                                                          formattedDateEnd,
+                                                    ));
+                                                // openWhatsapp(
+                                                //     number: usersnapshot
+                                                //         .data!['phoneNo'],
+                                                //     text:
+                                                //         'Hello ${usersnapshot.data!['fullName']},\n\nthrough UTM Food Dashboard, I would like to make a report regarding the item you are selling, ${itemsnapshot.data!['itemName'].toString().toUpperCase()}\n\nunder your post from\n${formattedDateStart} - ${formattedDateEnd}');
                                               },
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor:

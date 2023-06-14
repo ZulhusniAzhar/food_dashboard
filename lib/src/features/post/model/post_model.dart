@@ -48,6 +48,16 @@ class PostModel {
 
   static PostModel fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
+
+    Timestamp timeStartTimestamp = snapshot['timeStart'];
+    DateTime timeStart = timeStartTimestamp.toDate();
+
+    Timestamp timeEndTimestamp = snapshot['timeEnd'];
+    DateTime timeEnd = timeEndTimestamp.toDate();
+
+    Timestamp createdAtTimestamp = snapshot['createdAt'];
+    DateTime createdAt = createdAtTimestamp.toDate();
+
     return PostModel(
       uid: snapshot['uid'],
       postID: snapshot['postID'],
@@ -55,11 +65,11 @@ class PostModel {
       caption: snapshot['caption'],
       stockItem: snapshot['stockItem'],
       postPhoto: snapshot['postPhoto'],
-      timeStart: snapshot['timeStart'],
-      timeEnd: snapshot['timeEnd'],
+      timeStart: timeStart,
+      timeEnd: timeEnd,
       venueBlock: snapshot['venueBlock'],
       venueCollege: snapshot['venueCollege'],
-      createdAt: snapshot['createdAt'],
+      createdAt: createdAt,
       deletedAt: snapshot['deletedAt'],
     );
   }

@@ -129,6 +129,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
+  custom_radio_group_list:
+    dependency: "direct main"
+    description:
+      name: custom_radio_group_list
+      sha256: ad5246642616955504a08748cb1714200d29c6a574d290dcece855bdd4878dae
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
+  dropdown_model_list:
+    dependency: "direct main"
+    description:
+      name: dropdown_model_list
+      sha256: "0ad66d218604113b53c44e3d19f643b2debbae1eae1bd846815c7b5c78952c48"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3+1"
   email_validator:
     dependency: "direct main"
     description:

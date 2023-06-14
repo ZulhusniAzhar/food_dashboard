@@ -29,3 +29,4 @@ const String tBox3 = "assets/images/boxes/box3.png";
 const String tBox4 = "assets/images/boxes/box4.png";
 
 const String tPaymentCard = "assets/images/payment/card.png";
+const String tProblemSolve = "assets/images/problem.jpg";
