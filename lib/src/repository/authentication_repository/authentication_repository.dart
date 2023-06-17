@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:food_dashboard/src/constants/auth.dart';
 import 'package:food_dashboard/src/features/authentication/screens/login/login_screen.dart';
+import 'package:food_dashboard/src/features/authentication/screens/welcome/welcome_screen.dart';
 import 'package:food_dashboard/src/features/profilendashboard/controllers/profile_controller.dart';
 import 'package:food_dashboard/src/features/profilendashboard/screens/dashboard/dashboard.dart';
 import 'package:get/get.dart';
@@ -28,6 +29,7 @@ class AuthenticationRepository extends GetxController {
   File? get profilePhoto => _pickedImage.value;
   User get user => _firebaseUser.value!;
   final profileController = Get.put(ProfileController());
+  RxString role = RxString('');
 
   @override
   void onReady() {
@@ -40,7 +42,7 @@ class AuthenticationRepository extends GetxController {
   _setInitialScreen(User? user) {
     //check user dah logout ke, kalau ya, bawa ke welcomescreen
     if (user == null) {
-      Get.offAll(() => const LoginScreen());
+      Get.offAll(() => const WelcomeScreen());
     } else {
       Get.offAll(() => Dashboard(
             pageIdx: 0,
@@ -167,6 +169,7 @@ class AuthenticationRepository extends GetxController {
       if (email.isNotEmpty && password.isNotEmpty) {
         await firebaseAuth.signInWithEmailAndPassword(
             email: email, password: password);
+        storeUserRole(getCurrentUserId());
       } else {
         Get.snackbar(
           'Error Logging in',
@@ -179,6 +182,31 @@ class AuthenticationRepository extends GetxController {
         e.toString(),
       );
     }
+  }
+
+  String getCurrentUserId() {
+    final user = _auth.currentUser;
+    if (user != null) {
+      return user.uid;
+    } else {
+      return "";
+    }
+  }
+
+  Future<UserModel?> getUserDetail(String id) async {
+    User? user = _auth.currentUser;
+    if (user == null) {
+      return null;
+    }
+    DocumentSnapshot userData = await collection.doc(id).get();
+    return UserModel.fromSnap(userData);
+  }
+
+  Future<void> storeUserRole(String id) async {
+    User? user = _auth.currentUser;
+    DocumentSnapshot userData = await collection.doc(id).get();
+    Map<String, dynamic> data = userData.data() as Map<String, dynamic>;
+    role.value = data['role'];
   }
 
   Future<void> resetPassword(String email) async {

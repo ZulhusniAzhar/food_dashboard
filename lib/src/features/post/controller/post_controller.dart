@@ -201,19 +201,21 @@ class PostController extends GetxController {
     String venueBlock,
     String venueCollege,
     DateTime createdAt,
-    File? postPhoto,
+    // File? postPhoto,
   ) async {
     CollectionReference collectionReferencess =
         FirebaseFirestore.instance.collection('posts');
     DocumentReference documentReferencess = collectionReferencess.doc();
     try {
       if (itemID.isNotEmpty &&
-          caption.isNotEmpty &&
-          venueBlock.isNotEmpty &&
-          venueCollege.isNotEmpty &&
-          stockItem > 0 &&
-          postPhoto != null) {
-        String downloadUrl = await _uploadToStorage(postPhoto);
+              caption.isNotEmpty &&
+              venueBlock.isNotEmpty &&
+              venueCollege.isNotEmpty &&
+              stockItem > 0
+          // &&
+          // postPhoto != null
+          ) {
+        // String downloadUrl = await _uploadToStorage(postPhoto);
         model.PostModel post = model.PostModel(
           uid: getCurrentUserId(),
           postID: documentReferencess.id,
@@ -226,12 +228,12 @@ class PostController extends GetxController {
           venueCollege: venueCollege,
           createdAt: createdAt,
           deletedAt: null,
-          postPhoto: downloadUrl,
+          // postPhoto: downloadUrl,
         );
         await documentReferencess.set(post.toJson());
 
         String documentId = documentReferencess.id;
-        await documentReferencess.update({'itemID': documentId});
+        await documentReferencess.update({'postID': documentId});
         Get.until((route) => route.isFirst);
         Get.to(() => const PostListScreen());
         Get.snackbar(
@@ -322,12 +324,12 @@ class PostController extends GetxController {
             return itemPhoto;
           } else {
             // print('Document does not exist on the database');
-            return '6QrXF5DPjFZ0RPigAah2';
+            return ['No Data'];
           }
         });
       } else {
         // print('Document does not exist on the database');
-        return '6QrXF5DPjFZ0RPigAah2';
+        return ['No Data'];
       }
     });
   }

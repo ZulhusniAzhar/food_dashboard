@@ -77,6 +77,8 @@ class HomeScreenWidget extends StatelessWidget {
                   return const Center(
                     child: Text("Error while fetching list"),
                   );
+                } else if (snapshot.data == null || snapshot.data!.isEmpty) {
+                  return Center(child: Text("No Data"));
                 } else if (snapshot.hasData) {
                   final postDashboardDocs = snapshot.data!;
                   return SizedBox(
@@ -91,7 +93,7 @@ class HomeScreenWidget extends StatelessWidget {
                         final postId = postData['postID'].toString();
                         final itemId = postData['itemID'].toString();
                         final caption = postData['caption'].toString();
-                        final postPhoto = postData['postPhoto'].toString();
+                        // final postPhoto = postData['postPhoto'].toString();
                         final venueBlock = postData['venueBlock'].toString();
                         final venueCollege =
                             postData['venueCollege'].toString();
@@ -110,7 +112,7 @@ class HomeScreenWidget extends StatelessWidget {
                                 postId: postId,
                                 itemID: itemId,
                                 caption: caption,
-                                postPhoto: postPhoto,
+                                // postPhoto: postPhoto,
                                 venueBlock: venueBlock,
                                 venueCollege: venueCollege,
                                 dateEnd: formattedDateStart,

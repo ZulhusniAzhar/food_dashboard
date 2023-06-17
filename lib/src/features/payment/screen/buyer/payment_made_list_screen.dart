@@ -1,22 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:food_dashboard/src/constants/colors.dart';
+import 'package:food_dashboard/src/constants/sizes.dart';
 import 'package:get/get.dart';
 
+import '../../../../common_widgets/form/form_header_widget.dart';
+import '../../../../constants/image_strings.dart';
 import '../../../authentication/models/user_model.dart';
 import '../../../rolechange/controller/roleform_controller.dart';
 import '../../controller/payment_controller.dart';
 import 'package:intl/intl.dart';
 import '../../model/payment_model.dart';
 
-class MyTabbedScreen extends StatelessWidget {
+class PaymentListSellerScreen extends StatelessWidget {
+  PaymentListSellerScreen({super.key});
+
   final PaymentController paymentController = Get.put(PaymentController());
 
   @override
   Widget build(BuildContext context) {
+    paymentController.fetchPaymentsBuyer(paymentController.getCurrentUserId());
+    paymentController.fetchPaymentsSeller(paymentController.getCurrentUserId());
+    paymentController.storeUserRole(paymentController.getCurrentUserId());
     double fontSizeInSp = 12.0;
     double fontSizeInPixels =
         MediaQuery.of(context).textScaleFactor * fontSizeInSp;
     final txtTheme = Theme.of(context).textTheme;
+
     return DefaultTabController(
       length: 2, // Number of tabs
       child: Scaffold(
@@ -63,18 +72,17 @@ class MyTabbedScreen extends StatelessWidget {
                           fontSize: fontSizeInPixels,
                         ),
                       ),
-                      // ListView.builder(
-                      //   shrinkWrap: true,
-                      //   physics: NeverScrollableScrollPhysics(),
-                      //   itemCount: paymentsForMonth.length,
-                      //   itemBuilder: (context, index) {
-                      //     PaymentModel payment =
-                      //         paymentsForMonth[index];
-                      //     return TransactionCard(
-                      //         paymentforMonths:
-                      //             paymentsForMonth[index]);
-                      //   },
+                      // if (paymentsForMonthBuyer.isEmpty)
+                      // Center(
+                      //   child: Text(
+                      //     'No data',
+                      //     style: TextStyle(
+                      //       fontSize: fontSizeInPixels,
+                      //       fontStyle: FontStyle.italic,
+                      //     ),
+                      //   ),
                       // ),
+                      // else
                       ListView.separated(
                         padding: EdgeInsets.zero,
                         itemCount: paymentsForMonthBuyer.length,
@@ -87,7 +95,9 @@ class MyTabbedScreen extends StatelessWidget {
                           PaymentModel paymentBuyer =
                               paymentsForMonthBuyer[index];
                           return TransactionCard(
-                              paymentforMonths: paymentsForMonthBuyer[index]);
+                            paymentforMonths: paymentsForMonthBuyer[index],
+                            role: "Buyer",
+                          );
                         },
                       ),
                     ],
@@ -97,50 +107,66 @@ class MyTabbedScreen extends StatelessWidget {
             ),
 
             // Contents of Tab 2
-            Obx(() => paymentController.role.value == "Seller"
-                ? Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: paymentController
-                          .getUniqueMonthsSeller()
-                          .map((monthYearSeller) {
-                        List<PaymentModel> paymentsForMonthSeller =
-                            paymentController
-                                .getPaymentsByMonthSeller(monthYearSeller);
+            Obx(
+              () => paymentController.role.value == "Seller"
+                  ? Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: paymentController
+                            .getUniqueMonthsSeller()
+                            .map((monthYearSeller) {
+                          List<PaymentModel> paymentsForMonthSeller =
+                              paymentController
+                                  .getPaymentsByMonthSeller(monthYearSeller);
 
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              monthYearSeller,
-                              style: TextStyle(
-                                fontSize: fontSizeInPixels,
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                monthYearSeller,
+                                style: TextStyle(
+                                  fontSize: fontSizeInPixels,
+                                ),
                               ),
-                            ),
-                            ListView.separated(
-                              padding: EdgeInsets.zero,
-                              itemCount: paymentsForMonthSeller.length,
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              separatorBuilder: (context, index) =>
-                                  const SizedBox(
-                                height: 2,
+                              ListView.separated(
+                                padding: EdgeInsets.zero,
+                                itemCount: paymentsForMonthSeller.length,
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                separatorBuilder: (context, index) =>
+                                    const SizedBox(
+                                  height: 2,
+                                ),
+                                itemBuilder: (context, index) {
+                                  PaymentModel payment =
+                                      paymentsForMonthSeller[index];
+                                  return TransactionCard(
+                                      paymentforMonths:
+                                          paymentsForMonthSeller[index],
+                                      role: "Seller");
+                                },
                               ),
-                              itemBuilder: (context, index) {
-                                PaymentModel payment =
-                                    paymentsForMonthSeller[index];
-                                return TransactionCard(
-                                    paymentforMonths:
-                                        paymentsForMonthSeller[index]);
-                              },
+                            ],
+                          );
+                        }).toList(),
+                      ),
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                          SizedBox(
+                            height: 50,
+                          ),
+                          Center(
+                            child: FormHeaderWidget(
+                              image: tRoleChange,
+                              title: "Be a Seller!",
+                              subTitle: "Join us and gain side incomes",
                             ),
-                          ],
-                        );
-                      }).toList(),
-                    ),
-                  )
-                : Text('Please be Seller')),
+                          ),
+                        ]),
+            )
           ],
         ),
       ),
@@ -152,9 +178,11 @@ class TransactionCard extends StatelessWidget {
   const TransactionCard({
     Key? key,
     required this.paymentforMonths,
+    required this.role,
   }) : super(key: key);
 
   final PaymentModel paymentforMonths;
+  final String role;
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +204,9 @@ class TransactionCard extends StatelessWidget {
     return SizedBox(
       height: heightInPixels,
       child: FutureBuilder<UserModel?>(
-          future: rfCOntroller.getUserDetail(paymentforMonths.sellerID),
+          future: role == "Seller"
+              ? rfCOntroller.getUserDetail(paymentforMonths.userID)
+              : rfCOntroller.getUserDetail(paymentforMonths.sellerID),
           builder: (context, AsyncSnapshot<UserModel?> snapshot) {
             if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
@@ -226,7 +256,9 @@ class TransactionCard extends StatelessWidget {
                   ),
                   const Spacer(),
                   Text(
-                    "RM${paymentforMonths.paymentTotal.toStringAsFixed(2)}",
+                    role == "Seller"
+                        ? "+RM${paymentforMonths.paymentTotal.toStringAsFixed(2)}"
+                        : "-RM${paymentforMonths.paymentTotal.toStringAsFixed(2)}",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: fontSizeInPixels16,

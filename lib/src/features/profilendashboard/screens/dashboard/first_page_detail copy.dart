@@ -184,14 +184,14 @@ class _FirstPageState extends State<FirstPage> {
                                   builder: (context, value, _) {
                                     return SizedBox(
                                       height: _imageHeight.value,
-                                      child: Hero(
-                                        // tag: widget.id,
-                                        tag: Text("INI TAG"),
-                                        child: Image.network(
-                                          yourPost.postPhoto,
-                                          fit: BoxFit.fitHeight,
-                                        ),
-                                      ),
+                                      // child: Hero(
+                                      //   // tag: widget.id,
+                                      //   tag: Text("INI TAG"),
+                                      //   child: Image.network(
+                                      //     yourPost.postPhoto,
+                                      //     fit: BoxFit.fitHeight,
+                                      //   ),
+                                      // ),
                                     );
                                   },
                                 ),

@@ -26,20 +26,20 @@ class CircleProductWidget extends StatelessWidget {
           width: outerCircleRadius * 2,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: colors.first.withOpacity(0.4),
+            color: colors.last.withOpacity(1),
           ),
         ),
         Container(
           height: middleCircleRadius * 2,
           width: middleCircleRadius * 2,
           decoration: BoxDecoration(
-              shape: BoxShape.circle, color: colors[1].withOpacity(0.4)),
+              shape: BoxShape.circle, color: colors[1].withOpacity(1)),
         ),
         Container(
           height: innerCircleRadius * 2,
           width: innerCircleRadius * 2,
           decoration: BoxDecoration(
-              shape: BoxShape.circle, color: colors.last.withOpacity(0.4)),
+              shape: BoxShape.circle, color: colors.first.withOpacity(1)),
         ),
         CirclesAnimation(
           bigRadius: radius * 0.60,

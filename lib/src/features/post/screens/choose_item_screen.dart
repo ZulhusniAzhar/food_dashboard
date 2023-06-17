@@ -17,10 +17,25 @@ class ChooseItemScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double getPropertionateScreenHeight(double inputHeight) {
+      double screenHeight = MediaQuery.of(context).size.height;
+
+      // 812 adalah layout height yang designer gunakan
+      return (inputHeight / 812.0) * screenHeight;
+    }
+
+    double getPropertionateScreenWidht(double inputWidth) {
+      double screenWidth = MediaQuery.of(context).size.width;
+
+      // 812 adalah layout Width yang designer gunakan
+      return (inputWidth / 375.0) * screenWidth;
+    }
+
     final txtTheme = Theme.of(context).textTheme;
     final itemController = Get.put(ItemController());
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
@@ -44,38 +59,39 @@ class ChooseItemScreen extends StatelessWidget {
           // ),
         ],
       ),
-      body: StreamBuilder<List<Map<String, dynamic>>>(
-        stream: itemController.getItemsListwithUid(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Center(
-              child: Text("Error while fetching list"),
-            );
-          }
-          if (!snapshot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+      body: SafeArea(
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 18),
+          child: SingleChildScrollView(
+            child: StreamBuilder<List<Map<String, dynamic>>>(
+              stream: itemController.getItemsListwithUid(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return const Center(
+                    child: Text("Error while fetching list"),
+                  );
+                }
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
 
-          final itemDocs = snapshot.data!;
+                final itemDocs = snapshot.data!;
 
-          return ListView.builder(
-            itemCount: itemDocs.length,
-            itemBuilder: ((context, index) {
-              final itemData = itemDocs[index];
-              final itemId = itemData['id'].toString();
-              final itemName = itemData['itemName'].toString();
-              final itemPhoto = itemData['itemPhoto'].toString();
-              final price = itemData['price'];
-              final category = itemData['category'].toString();
-              // final sideDish = itemData['sideDish'];
+                return ListView.builder(
+                  itemCount: itemDocs.length,
+                  itemBuilder: ((context, index) {
+                    final itemData = itemDocs[index];
+                    final itemId = itemData['itemID'].toString();
+                    final itemName = itemData['itemName'].toString();
+                    final itemPhoto = itemData['itemPhoto'].toString();
+                    final price = itemData['price'];
+                    final category = itemData['category'].toString();
+                    // final sideDish = itemData['sideDish'];
 
-              return SingleChildScrollView(
-                child: Container(
-                  padding: const EdgeInsets.all(tDashboardPadding),
-                  child: Center(
-                    child: ItemCard(
+                    MenuCard(
                       txtTheme: txtTheme,
                       name: itemName,
                       imageLink: itemPhoto,
@@ -83,13 +99,13 @@ class ChooseItemScreen extends StatelessWidget {
                       category: category,
                       itemID: itemId,
                       path: AddPostScreen(itemID: itemId),
-                    ),
-                  ),
-                ),
-              );
-            }),
-          );
-        },
+                    );
+                  }),
+                );
+              },
+            ),
+          ),
+        ),
       ),
     );
   }

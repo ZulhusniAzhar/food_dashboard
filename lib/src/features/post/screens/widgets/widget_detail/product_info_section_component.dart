@@ -31,15 +31,23 @@ class _ProductInfoSectionComponentState
           builder: (context, AsyncSnapshot<DocumentSnapshot> postsnapshot) {
             if (postsnapshot.hasError) {
               return Text('Error: ${postsnapshot.error}');
+            } else if (!postsnapshot.hasData) {
+              return Center(
+                child: Text('No Data'),
+              );
             } else if (postsnapshot.hasData) {
               return FutureBuilder(
                   future: postController
                       .getItemDetailsbyPost(postsnapshot.data!['itemID']),
                   builder:
                       (context, AsyncSnapshot<DocumentSnapshot> itemsnapshot) {
-                    if (postsnapshot.hasError) {
-                      return Text('Error: ${postsnapshot.error}');
-                    } else if (postsnapshot.hasData) {
+                    if (itemsnapshot.hasError) {
+                      return Text('Error: ${itemsnapshot.error}');
+                    } else if (!itemsnapshot.hasData) {
+                      return Center(
+                        child: Text('No Data'),
+                      );
+                    } else if (itemsnapshot.hasData) {
                       DateTime dateStart =
                           postsnapshot.data!['timeStart'].toDate();
                       DateTime dateEnd = postsnapshot.data!['timeEnd'].toDate();

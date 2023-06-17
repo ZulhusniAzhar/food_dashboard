@@ -54,9 +54,7 @@ class _SetAmountItemStockScreenState extends State<SetAmountItemStockScreen> {
   }
 
   void calculatePrice() {
-    // Replace this with your own price calculation logic
-
-    price = quantity * widget.price; // Assuming the price per item is 10
+    price = quantity * widget.price;
   }
 
   Widget _container(Widget child) {

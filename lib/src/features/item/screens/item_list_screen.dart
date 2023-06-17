@@ -52,44 +52,47 @@ class ItemListScreen extends StatelessWidget {
             return const Center(
               child: Text("Error while fetching list"),
             );
-          }
-          if (!snapshot.hasData) {
+          } else if (snapshot.data!.isEmpty) {
             return const Center(
+              child: Text('No Data'),
+            );
+          } else if (snapshot.hasData) {
+            final itemDocs = snapshot.data!;
+
+            return ListView.builder(
+              itemCount: itemDocs.length,
+              itemBuilder: ((context, index) {
+                final itemData = itemDocs[index];
+                final itemId = itemData['itemID'].toString();
+                final itemName = itemData['itemName'].toString();
+                final itemPhoto = itemData['itemPhoto'].toString();
+                final price = itemData['price'];
+                final category = itemData['category'].toString();
+                // final sideDish = itemData['sideDish'];
+
+                return SingleChildScrollView(
+                  child: Container(
+                    padding: const EdgeInsets.all(tDashboardPadding),
+                    child: Center(
+                      child: MenuCard(
+                        txtTheme: txtTheme,
+                        name: itemName,
+                        imageLink: itemPhoto,
+                        price: price as double,
+                        category: category,
+                        itemID: itemId,
+                        path: ItemDetailScreen(itemID: itemId),
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            );
+          } else {
+            return Center(
               child: CircularProgressIndicator(),
             );
           }
-
-          final itemDocs = snapshot.data!;
-
-          return ListView.builder(
-            itemCount: itemDocs.length,
-            itemBuilder: ((context, index) {
-              final itemData = itemDocs[index];
-              final itemId = itemData['itemID'].toString();
-              final itemName = itemData['itemName'].toString();
-              final itemPhoto = itemData['itemPhoto'].toString();
-              final price = itemData['price'];
-              final category = itemData['category'].toString();
-              // final sideDish = itemData['sideDish'];
-
-              return SingleChildScrollView(
-                child: Container(
-                  padding: const EdgeInsets.all(tDashboardPadding),
-                  child: Center(
-                    child: ItemCard(
-                      txtTheme: txtTheme,
-                      name: itemName,
-                      imageLink: itemPhoto,
-                      price: price as double,
-                      category: category,
-                      itemID: itemId,
-                      path: ItemDetailScreen(itemID: itemId),
-                    ),
-                  ),
-                ),
-              );
-            }),
-          );
         },
       ),
 

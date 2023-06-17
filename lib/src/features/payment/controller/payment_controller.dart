@@ -21,13 +21,13 @@ class PaymentController extends GetxController {
   RxString role = RxString('');
   RxList<PaymentModel> paymentsasSeller = RxList<PaymentModel>();
 
-  @override
-  void onInit() {
-    super.onInit();
-    fetchPaymentsBuyer(getCurrentUserId());
-    fetchPaymentsSeller(getCurrentUserId());
-    storeUserRole(getCurrentUserId());
-  }
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  //   fetchPaymentsBuyer(getCurrentUserId());
+  //   fetchPaymentsSeller(getCurrentUserId());
+  //   storeUserRole(getCurrentUserId());
+  // }
 
   String getCurrentUserId() {
     final user = _auth.currentUser;
@@ -42,29 +42,30 @@ class PaymentController extends GetxController {
     try {
       QuerySnapshot querySnapshot =
           await paymentCollection.where('userID', isEqualTo: userId).get();
+      if (querySnapshot != null) {
+        paymentsasBuyer.value = querySnapshot.docs.map((doc) {
+          Timestamp? datePaymentTS = doc['datePayment'] as Timestamp?;
+          Timestamp? createdAtTS = doc['createdAt'] as Timestamp?;
+          Timestamp? deletedAtTS = doc['deletedAt'] as Timestamp?;
 
-      paymentsasBuyer.value = querySnapshot.docs.map((doc) {
-        Timestamp? datePaymentTS = doc['datePayment'] as Timestamp?;
-        Timestamp? createdAtTS = doc['createdAt'] as Timestamp?;
-        Timestamp? deletedAtTS = doc['deletedAt'] as Timestamp?;
+          DateTime? datePaymentDT = datePaymentTS?.toDate();
+          DateTime? createdAtDT = createdAtTS?.toDate();
+          DateTime? deletedAtDT = deletedAtTS?.toDate();
 
-        DateTime? datePaymentDT = datePaymentTS?.toDate();
-        DateTime? createdAtDT = createdAtTS?.toDate();
-        DateTime? deletedAtDT = deletedAtTS?.toDate();
-
-        return PaymentModel(
-          userID: doc['userID'],
-          paymentID: doc['paymentID'],
-          sellerID: doc['sellerID'],
-          method: doc['method'],
-          datePayment: datePaymentDT ?? DateTime.now(),
-          paymentTotal: doc['paymentTotal'],
-          statusPayment: doc['statusPayment'],
-          itemTotal: doc['itemTotal'],
-          createdAt: createdAtDT ?? DateTime.now(),
-          deletedAt: doc['deletedAt'],
-        );
-      }).toList();
+          return PaymentModel(
+            userID: doc['userID'],
+            paymentID: doc['paymentID'],
+            sellerID: doc['sellerID'],
+            method: doc['method'],
+            datePayment: datePaymentDT ?? DateTime.now(),
+            paymentTotal: doc['paymentTotal'],
+            statusPayment: doc['statusPayment'],
+            itemTotal: doc['itemTotal'],
+            createdAt: createdAtDT ?? DateTime.now(),
+            deletedAt: doc['deletedAt'],
+          );
+        }).toList();
+      } else {}
     } catch (e) {
       Get.snackbar(
         'Error',
@@ -114,7 +115,11 @@ class PaymentController extends GetxController {
 
   List<String> getUniqueMonthsBuyer() {
     List<String> uniqueMonths = [];
-    // print(paymentsasBuyer);
+
+    // if (paymentsasBuyer.isEmpty) {
+    //   return ['No data'];
+    // }
+
     paymentsasBuyer.forEach((payment) {
       String monthYear = DateFormat('MMM yyyy').format(payment.datePayment);
       if (!uniqueMonths.contains(monthYear)) {
@@ -128,6 +133,9 @@ class PaymentController extends GetxController {
   List<String> getUniqueMonthsSeller() {
     List<String> uniqueMonths = [];
     // print(paymentsasSeller);
+    // if (paymentsasSeller.isEmpty) {
+    //   return ['No data'];
+    // }
 
     paymentsasSeller.forEach((payment) {
       String monthYear = DateFormat('MMM yyyy').format(payment.datePayment);

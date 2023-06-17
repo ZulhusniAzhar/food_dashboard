@@ -8,8 +8,8 @@ import '../features/profilendashboard/screens/dashboard/analytical_dashboard.dar
 
 var pages = [
   const HomeScreen(),
-  // PaymentListSellerScreen(),
-  MyTabbedScreen(),
+  PaymentListSellerScreen(),
+  // MyTabbedScreen(),
   const QRCodeScreen(),
   ProfileScreen(),
 ];

@@ -14,7 +14,7 @@ class DashboardPostCard1 extends StatelessWidget {
     required this.postId,
     required this.itemID,
     required this.caption,
-    required this.postPhoto,
+    // required this.postPhoto,
     required this.venueBlock,
     required this.venueCollege,
     required this.dateEnd,
@@ -24,7 +24,7 @@ class DashboardPostCard1 extends StatelessWidget {
   final String postId;
   final String itemID;
   final String caption;
-  final String postPhoto;
+  // final String postPhoto;
   final String venueBlock;
   final String venueCollege;
   final String dateEnd;
@@ -40,6 +40,10 @@ class DashboardPostCard1 extends StatelessWidget {
           builder: (context, AsyncSnapshot<DocumentSnapshot> itemsnapshot) {
             if (itemsnapshot.hasError) {
               return Text('Error: ${itemsnapshot.error}');
+            } else if (!itemsnapshot.hasData) {
+              return Center(
+                child: Text("No Data"),
+              );
             } else if (itemsnapshot.hasData) {
               return Container(
                 color: tWhiteColor,

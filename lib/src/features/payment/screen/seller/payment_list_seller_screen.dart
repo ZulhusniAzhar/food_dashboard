@@ -10,7 +10,7 @@ import '../../../authentication/models/user_model.dart';
 import '../../model/payment_model.dart';
 import 'package:intl/intl.dart';
 
-class PaymentListSellerScreen extends StatelessWidget {
+class PaymentListSellerScreen2 extends StatelessWidget {
   final PaymentController paymentController = Get.put(PaymentController());
   @override
   Widget build(BuildContext context) {

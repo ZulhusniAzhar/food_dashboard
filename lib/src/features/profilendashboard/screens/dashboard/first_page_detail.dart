@@ -1,14 +1,11 @@
-import 'dart:io';
+// ignore_for_file: deprecated_member_use
+
 import 'dart:math' as math;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_launch/flutter_launch.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_dashboard/src/features/payment/screen/buyer/set_amount_buy.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:food_dashboard/src/constants/colors.dart';
-import 'package:food_dashboard/src/constants/image_strings.dart';
 import 'package:food_dashboard/src/features/post/controller/post_controller.dart';
 import 'package:food_dashboard/src/features/post/screens/widgets/widget_detail/product_info_section_component.dart';
 import 'package:food_dashboard/src/features/post/screens/widgets/widget_detail/product_tile_section_component.dart';
@@ -22,7 +19,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 import '../../../../constants/imageutil.dart';
-import '../../../payment/screen/widget/buy_item_bottom_sheet.dart';
 import '../../../report_ticket/screen/create_report_screen.dart';
 
 class FirstPage extends StatefulWidget {
@@ -49,7 +45,7 @@ class _FirstPageState extends State<FirstPage> {
   final double _maxSize = 0.76;
   final String itemName = '';
 
-  final ValueNotifier<bool> _buttonLoading = ValueNotifier(false);
+  // final ValueNotifier<bool> _buttonLoading = ValueNotifier(false);
 
   @override
   void initState() {
@@ -126,108 +122,136 @@ class _FirstPageState extends State<FirstPage> {
         backgroundColor: Colors.transparent,
       ),
 
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-              width: size.width,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(42),
-                  bottomRight: Radius.circular(42),
-                ),
-              ),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Positioned(
-                    top: 0,
-                    child: SizedBox(
-                      height: size.height * .5,
-                      width: size.width,
-                      child: Stack(
-                        children: [
-                          FutureBuilder(
-                            future: ImageUtil.extractDominantColors(
-                                // tOnBoardingImage2),
-                                tSplashTopIcon),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                final data = snapshot.data as List<Color>;
-                                return ValueListenableBuilder(
-                                    valueListenable: _circleRadius,
-                                    builder: (context, value, _) {
-                                      return Positioned(
-                                        left: 0,
-                                        right: 0,
-                                        child: CircleProductWidget(
-                                          radius: value,
-                                          colors: data,
-                                        ),
-                                      );
-                                    });
-                              } else {
-                                return const SizedBox();
-                              }
-                            },
-                          ),
-                          FutureBuilder(
-                              future:
-                                  postController.getPostDetail(widget.postID),
-                              builder: (context,
-                                  AsyncSnapshot<DocumentSnapshot> snapshot) {
-                                if (snapshot.hasError) {
-                                  return Text('Error: ${snapshot.error}');
-                                } else if (snapshot.hasData) {
-                                  DateTime dateStart =
-                                      snapshot.data!['timeStart'].toDate();
-                                  DateTime dateEnd =
-                                      snapshot.data!['timeEnd'].toDate();
+      body: FutureBuilder(
+          future: postController.getPostDetail(widget.postID),
+          builder: (context, AsyncSnapshot<DocumentSnapshot> postsnapshot) {
+            if (postsnapshot.hasError) {
+              return Text('Error: ${postsnapshot.error}');
+            } else if (!postsnapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (postsnapshot.hasData) {
+              DateTime dateStart = postsnapshot.data!['timeStart'].toDate();
+              DateTime dateEnd = postsnapshot.data!['timeEnd'].toDate();
 
-                                  String formattedDateStart =
-                                      DateFormat('EEEE, MMMM d, yyyy')
-                                          .format(dateStart);
-                                  String formattedDateEnd =
-                                      DateFormat('EEEE, MMMM d, yyyy')
-                                          .format(dateEnd);
-                                  return Positioned(
-                                    top: 30,
-                                    left: 0,
-                                    right: 0,
-                                    child: ValueListenableBuilder(
-                                      valueListenable: _imageHeight,
-                                      builder: (context, value, _) {
-                                        return SizedBox(
-                                          height: _imageHeight.value,
-                                          child: Hero(
-                                            // tag: widget.id,
-                                            tag: const Text("INI TAG"),
-                                            child: Image.network(
-                                              snapshot.data!['postPhoto'],
-                                              fit: BoxFit.fitHeight,
+              String formattedDateStart =
+                  DateFormat('EEEE, MMMM d, yyyy').format(dateStart);
+              String formattedDateEnd =
+                  DateFormat('EEEE, MMMM d, yyyy').format(dateEnd);
+              return Column(
+                children: [
+                  Expanded(
+                    child: Container(
+                      width: size.width,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(42),
+                          bottomRight: Radius.circular(42),
+                        ),
+                      ),
+                      child: FutureBuilder(
+                          future: postController.getItemDetailsbyPost(
+                              postsnapshot.data!['itemID']),
+                          builder: (context,
+                              AsyncSnapshot<DocumentSnapshot> itemsnapshot) {
+                            if (itemsnapshot.hasError) {
+                              return Text('Error: ${itemsnapshot.error}');
+                            } else if (!itemsnapshot.hasData) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            } else if (itemsnapshot.hasData) {
+                              return Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Positioned(
+                                    top: 0,
+                                    child: SizedBox(
+                                      height: size.height * .5,
+                                      width: size.width,
+                                      child: Stack(
+                                        children: [
+                                          FutureBuilder(
+                                            future:
+                                                ImageUtil.extractDominantColors(
+                                              itemsnapshot.data!['itemPhoto'],
+                                            ),
+                                            builder: (context, colorsnapshot) {
+                                              if (colorsnapshot.hasError) {
+                                                return const Center(
+                                                  child:
+                                                      Text("There is an error"),
+                                                );
+                                              } else if (!colorsnapshot
+                                                  .hasData) {
+                                                return const Center(
+                                                    child:
+                                                        CircularProgressIndicator());
+                                              } else if (colorsnapshot
+                                                  .hasData) {
+                                                final data = colorsnapshot.data
+                                                    as List<Color>;
+                                                return ValueListenableBuilder(
+                                                    valueListenable:
+                                                        _circleRadius,
+                                                    builder:
+                                                        (context, value, _) {
+                                                      return Positioned(
+                                                        left: 0,
+                                                        right: 0,
+                                                        child:
+                                                            CircleProductWidget(
+                                                          radius: value,
+                                                          colors: data,
+                                                        ),
+                                                      );
+                                                    });
+                                              } else {
+                                                return const SizedBox();
+                                              }
+                                            },
+                                          ),
+                                          Positioned(
+                                            top: 30,
+                                            left: 0,
+                                            right: 0,
+                                            child: ValueListenableBuilder(
+                                              valueListenable: _imageHeight,
+                                              builder: (context, value, _) {
+                                                return SizedBox(
+                                                  height: _imageHeight.value,
+                                                  child: Hero(
+                                                    // tag: widget.id,
+                                                    tag: const Text("INI TAG"),
+                                                    child: Image.network(
+                                                      itemsnapshot
+                                                          .data!['itemPhoto'],
+                                                      fit: BoxFit.fitHeight,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
                                             ),
                                           ),
-                                        );
-                                      },
+                                        ],
+                                      ),
                                     ),
-                                  );
-                                } else {
-                                  return const Center(
-                                      child: CircularProgressIndicator());
-                                }
-                              }),
-                        ],
-                      ),
+                                  ),
+                                  _buildDiscoverDrawer(),
+                                ],
+                              );
+                            } else {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                          }),
                     ),
                   ),
-                  _buildDiscoverDrawer(),
                 ],
-              ),
-            ),
-          ),
-        ],
-      ),
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          }),
     );
   }
 
@@ -256,6 +280,8 @@ class _FirstPageState extends State<FirstPage> {
                     (context, AsyncSnapshot<DocumentSnapshot> postsnapshot) {
                   if (postsnapshot.hasError) {
                     return Text('Error: ${postsnapshot.error}');
+                  } else if (!postsnapshot.hasData) {
+                    return const Center(child: CircularProgressIndicator());
                   } else if (postsnapshot.hasData) {
                     return FutureBuilder(
                         future: postController
@@ -264,6 +290,9 @@ class _FirstPageState extends State<FirstPage> {
                             AsyncSnapshot<DocumentSnapshot> itemsnapshot) {
                           if (itemsnapshot.hasError) {
                             return Text('Error: ${itemsnapshot.error}');
+                          } else if (!itemsnapshot.hasData) {
+                            return const Center(
+                                child: CircularProgressIndicator());
                           } else if (itemsnapshot.hasData) {
                             return Column(
                               children: [
@@ -335,6 +364,8 @@ class _FirstPageState extends State<FirstPage> {
                     (context, AsyncSnapshot<DocumentSnapshot> postsnapshot) {
                   if (postsnapshot.hasError) {
                     return Text('Error: ${postsnapshot.error}');
+                  } else if (!postsnapshot.hasData) {
+                    return const Center(child: CircularProgressIndicator());
                   } else if (postsnapshot.hasData) {
                     String userID = postsnapshot.data!['uid'];
                     DateTime dateStart =
@@ -351,6 +382,9 @@ class _FirstPageState extends State<FirstPage> {
                             AsyncSnapshot<DocumentSnapshot> itemsnapshot) {
                           if (itemsnapshot.hasError) {
                             return Text('Error: ${itemsnapshot.error}');
+                          } else if (!itemsnapshot.hasData) {
+                            return const Center(
+                                child: CircularProgressIndicator());
                           } else if (itemsnapshot.hasData) {
                             return Row(
                                 mainAxisAlignment:
@@ -365,6 +399,10 @@ class _FirstPageState extends State<FirstPage> {
                                         if (usersnapshot.hasError) {
                                           return Text(
                                               'Error: ${usersnapshot.error}');
+                                        } else if (!usersnapshot.hasData) {
+                                          return const Center(
+                                              child:
+                                                  CircularProgressIndicator());
                                         } else if (usersnapshot.hasData) {
                                           // print(usersnapshot.data!['phoneNo']);
                                           return SizedBox(

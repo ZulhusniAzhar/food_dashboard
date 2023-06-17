@@ -49,57 +49,60 @@ class PostListScreen extends StatelessWidget {
             return const Center(
               child: Text("Error while fetching list"),
             );
-          }
-          if (!snapshot.hasData) {
+          } else if (snapshot.data!.isEmpty) {
+            return const Center(
+              child: Text("No Data"),
+            );
+          } else if (snapshot.hasData) {
+            final postDocs = snapshot.data!;
+            return ListView.builder(
+              itemCount: postDocs.length,
+              itemBuilder: ((context, index) {
+                final postData = postDocs[index];
+                final postId = postData['postID'].toString();
+                final itemId = postData['itemID'].toString();
+                final caption = postData['caption'].toString();
+                final postPhoto = postData['postPhoto'].toString();
+                final stockItem = postData['stockItem'];
+                DateTime timeStartdt = postData['timeStart'].toDate();
+                DateTime timeEnddt = postData['timeEnd'].toDate();
+                final timeStart = timeStartdt;
+                final timeEnd = timeEnddt;
+                final venueBlock = postData['venueBlock'].toString();
+                final venueCollege = postData['venueCollege'].toString();
+                DateTime createdAtdt = postData['createdAt'].toDate();
+                final createdAt = createdAtdt;
+
+                // final sideDish = itemData['sideDish'];
+
+                return SingleChildScrollView(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: tDashboardCardPadding),
+                    child: Center(
+                      child: PostCard(
+                        txtTheme: txtTheme,
+                        postID: postId,
+                        itemID: itemId,
+                        caption: caption,
+                        stockItem: stockItem,
+                        // postPhoto: postPhoto,
+                        timeStart: timeStart,
+                        timeEnd: timeEnd,
+                        venueBlock: venueBlock,
+                        venueCollege: venueCollege,
+                        createdAt: createdAt,
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            );
+          } else {
             return const Center(
               child: CircularProgressIndicator(),
             );
           }
-
-          final postDocs = snapshot.data!;
-
-          return ListView.builder(
-            itemCount: postDocs.length,
-            itemBuilder: ((context, index) {
-              final postData = postDocs[index];
-              final postId = postData['postID'].toString();
-              final itemId = postData['itemID'].toString();
-              final caption = postData['caption'].toString();
-              final postPhoto = postData['postPhoto'].toString();
-              final stockItem = postData['stockItem'];
-              DateTime timeStartdt = postData['timeStart'].toDate();
-              DateTime timeEnddt = postData['timeEnd'].toDate();
-              final timeStart = timeStartdt;
-              final timeEnd = timeEnddt;
-              final venueBlock = postData['venueBlock'].toString();
-              final venueCollege = postData['venueCollege'].toString();
-              DateTime createdAtdt = postData['createdAt'].toDate();
-              final createdAt = createdAtdt;
-
-              // final sideDish = itemData['sideDish'];
-
-              return SingleChildScrollView(
-                child: Container(
-                  padding: const EdgeInsets.all(tDashboardPadding),
-                  child: Center(
-                    child: PostCard(
-                      txtTheme: txtTheme,
-                      postID: postId,
-                      itemID: itemId,
-                      caption: caption,
-                      stockItem: stockItem,
-                      postPhoto: postPhoto,
-                      timeStart: timeStart,
-                      timeEnd: timeEnd,
-                      venueBlock: venueBlock,
-                      venueCollege: venueCollege,
-                      createdAt: createdAt,
-                    ),
-                  ),
-                ),
-              );
-            }),
-          );
         },
       ),
       floatingActionButton: FloatingActionButton(

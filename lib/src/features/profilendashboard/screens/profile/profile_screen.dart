@@ -253,13 +253,7 @@ class ProfileScreen extends StatelessWidget {
                           ),
 
                           //MENU
-                          ProfileMenuWidget(
-                            title: "My Report",
-                            icon: Icons.notification_important_rounded,
-                            onPress: () {
-                              Get.to(() => ReportTicketListScreen());
-                            },
-                          ),
+
                           if (roleCurrent == 'Seller')
                             ProfileMenuWidget(
                               title: tMenu2,
@@ -274,6 +268,14 @@ class ProfileScreen extends StatelessWidget {
                               icon: LineAwesomeIcons.user_check,
                               onPress: () {
                                 Get.to(() => const PostListScreen());
+                              },
+                            ),
+                          if (roleCurrent != 'Admin')
+                            ProfileMenuWidget(
+                              title: "My Report",
+                              icon: Icons.notification_important_rounded,
+                              onPress: () {
+                                Get.to(() => ReportTicketListScreen());
                               },
                             ),
 

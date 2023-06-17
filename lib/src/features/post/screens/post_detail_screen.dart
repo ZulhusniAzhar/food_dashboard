@@ -59,7 +59,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final PostController postController = Get.put(PostController());
+    final PostController postController = Get.put(PostController());
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
@@ -92,6 +92,10 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
               builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                 if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
+                } else if (!snapshot.hasData) {
+                  return const Center(
+                    child: Text('No Data'),
+                  );
                 } else if (snapshot.hasData) {
                   DateTime dateStart = snapshot.data!['timeStart'].toDate();
                   DateTime dateEnd = snapshot.data!['timeEnd'].toDate();
@@ -101,155 +105,184 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                   String formattedDateEnd =
                       DateFormat('EEEE, MMMM d, yyyy').format(dateEnd);
 
-                  return SafeArea(
-                    child: SingleChildScrollView(
-                      child: Container(
-                        padding: const EdgeInsets.all(tDefaultSize),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Center(
+                  return FutureBuilder(
+                      future: postController
+                          .getItemDetailsbyPost(snapshot.data!['itemID']),
+                      builder: (context, itemsnapshot) {
+                        if (itemsnapshot.hasError) {
+                          return Text('Error: ${itemsnapshot.error}');
+                        } else if (!itemsnapshot.hasData) {
+                          return const Center(
+                            child: Text('No Data'),
+                          );
+                        } else if (itemsnapshot.hasData) {
+                          return SafeArea(
+                            child: SingleChildScrollView(
                               child: Container(
-                                width: 250,
-                                height: 200,
-                                decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: Colors.black, width: 4),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Image.network(
-                                  snapshot.data!['postPhoto'],
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: tDashboardCardPadding),
-                            Center(
-                              child: Text(
-                                snapshot.data!['caption'],
-                                style: const TextStyle(
-                                  fontSize: 24.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 16.0),
-                            Text(
-                              'Item Stock: ${snapshot.data!['stockItem'].toString()}',
-                              style: const TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blue,
-                              ),
-                            ),
-                            const SizedBox(height: 16.0),
-                            Text(
-                              'Start Date: $formattedDateStart',
-                              style: const TextStyle(
-                                fontSize: 18.0,
-                              ),
-                            ),
-                            const SizedBox(height: 16.0),
-                            Text(
-                              'End Date: $formattedDateEnd',
-                              style: const TextStyle(
-                                fontSize: 18.0,
-                              ),
-                            ),
-                            const SizedBox(height: 16.0),
-                            Text(
-                              'Venue Block: ${snapshot.data!['venueBlock']}',
-                              style: const TextStyle(
-                                fontSize: 18.0,
-                              ),
-                            ),
-                            const SizedBox(height: 16.0),
-                            Text(
-                              'Venue College: ${snapshot.data!['venueCollege']}',
-                              style: const TextStyle(
-                                fontSize: 18.0,
-                              ),
-                            ),
-                            const SizedBox(height: 32.0),
-                            GestureDetector(
-                              onTap: () {
-                                Get.to(ResultQRGeneratorScreen(
-                                  text: snapshot.data!['postID'],
-                                ));
-                              },
-                              child: Container(
-                                width: double.infinity,
-                                height: 50.0,
-                                decoration: BoxDecoration(
-                                  color: Colors.yellow,
-                                  borderRadius: BorderRadius.circular(16.0),
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    'Generate QR Code',
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
+                                padding: const EdgeInsets.all(tDefaultSize),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Center(
+                                      child: Container(
+                                        width: 250,
+                                        height: 200,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Colors.black, width: 4),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Image.network(
+                                          itemsnapshot.data!['itemPhoto'],
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 20.0),
-                            // GestureDetector(
-                            //   onTap: () {
-                            //     // Navigate to another page when the box is clicked
-                            //   },
-                            //   child: Container(
-                            //     width: double.infinity,
-                            //     height: 50.0,
-                            //     decoration: BoxDecoration(
-                            //       color: Colors.yellow,
-                            //       borderRadius: BorderRadius.circular(16.0),
-                            //     ),
-                            //     child: const Center(
-                            //       child: Text(
-                            //         'Edit',
-                            //         style: TextStyle(
-                            //           fontSize: 18.0,
-                            //           color: Colors.black,
-                            //           fontWeight: FontWeight.normal,
-                            //         ),
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
-                            const SizedBox(height: 20.0),
-                            GestureDetector(
-                              onTap: () {
-                                showOptionsDialog(context);
-                                // Navigate to another page when the box is clicked
-                              },
-                              child: Container(
-                                width: double.infinity,
-                                height: 50.0,
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius: BorderRadius.circular(16.0),
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    'Delete',
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
+
+                                    const SizedBox(
+                                        height: tDashboardCardPadding),
+                                    Center(
+                                      child: Text(
+                                        snapshot.data!['caption'],
+                                        style: const TextStyle(
+                                          fontSize: 24.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    Text(
+                                      'Item Name: ${itemsnapshot.data!['itemName']}',
+                                      style: const TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.blue,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16.0),
+                                    Text(
+                                      'Item Stock: ${snapshot.data!['stockItem'].toString()}',
+                                      style: const TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.blue,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16.0),
+                                    Text(
+                                      'Start Date: $formattedDateStart',
+                                      style: const TextStyle(
+                                        fontSize: 18.0,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16.0),
+                                    Text(
+                                      'End Date: $formattedDateEnd',
+                                      style: const TextStyle(
+                                        fontSize: 18.0,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16.0),
+                                    Text(
+                                      'Venue Block: ${snapshot.data!['venueBlock']}',
+                                      style: const TextStyle(
+                                        fontSize: 18.0,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16.0),
+                                    Text(
+                                      'Venue College: ${snapshot.data!['venueCollege']}',
+                                      style: const TextStyle(
+                                        fontSize: 18.0,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 32.0),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Get.to(ResultQRGeneratorScreen(
+                                          text: snapshot.data!['postID'],
+                                        ));
+                                      },
+                                      child: Container(
+                                        width: double.infinity,
+                                        height: 50.0,
+                                        decoration: BoxDecoration(
+                                          color: Colors.yellow,
+                                          borderRadius:
+                                              BorderRadius.circular(16.0),
+                                        ),
+                                        child: const Center(
+                                          child: Text(
+                                            'Generate QR Code',
+                                            style: TextStyle(
+                                              fontSize: 18.0,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20.0),
+                                    // GestureDetector(
+                                    //   onTap: () {
+                                    //     // Navigate to another page when the box is clicked
+                                    //   },
+                                    //   child: Container(
+                                    //     width: double.infinity,
+                                    //     height: 50.0,
+                                    //     decoration: BoxDecoration(
+                                    //       color: Colors.yellow,
+                                    //       borderRadius: BorderRadius.circular(16.0),
+                                    //     ),
+                                    //     child: const Center(
+                                    //       child: Text(
+                                    //         'Edit',
+                                    //         style: TextStyle(
+                                    //           fontSize: 18.0,
+                                    //           color: Colors.black,
+                                    //           fontWeight: FontWeight.normal,
+                                    //         ),
+                                    //       ),
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                    const SizedBox(height: 20.0),
+                                    GestureDetector(
+                                      onTap: () {
+                                        showOptionsDialog(context);
+                                        // Navigate to another page when the box is clicked
+                                      },
+                                      child: Container(
+                                        width: double.infinity,
+                                        height: 50.0,
+                                        decoration: BoxDecoration(
+                                          color: Colors.red,
+                                          borderRadius:
+                                              BorderRadius.circular(16.0),
+                                        ),
+                                        child: const Center(
+                                          child: Text(
+                                            'Delete',
+                                            style: TextStyle(
+                                              fontSize: 18.0,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
+                          );
+                        } else {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                      });
                 } else {
                   return const Center(child: CircularProgressIndicator());
                 }

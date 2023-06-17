@@ -6,7 +6,7 @@ class PostModel {
   final String itemID;
   final String caption;
   final int stockItem;
-  final String postPhoto;
+  // final String postPhoto;
   final DateTime timeStart;
   final DateTime timeEnd;
   final String venueBlock;
@@ -20,7 +20,7 @@ class PostModel {
     required this.itemID,
     required this.caption,
     required this.stockItem,
-    required this.postPhoto,
+    // required this.postPhoto,
     required this.timeStart,
     required this.timeEnd,
     required this.venueBlock,
@@ -36,7 +36,7 @@ class PostModel {
       "itemID": itemID,
       "caption": caption,
       "stockItem": stockItem,
-      "postPhoto": postPhoto,
+      // "postPhoto": postPhoto,
       "timeStart": timeStart,
       "timeEnd": timeEnd,
       "venueBlock": venueBlock,
@@ -64,7 +64,7 @@ class PostModel {
       itemID: snapshot['itemID'],
       caption: snapshot['caption'],
       stockItem: snapshot['stockItem'],
-      postPhoto: snapshot['postPhoto'],
+      // postPhoto: snapshot['postPhoto'],
       timeStart: timeStart,
       timeEnd: timeEnd,
       venueBlock: snapshot['venueBlock'],
@@ -82,7 +82,7 @@ class PostModel {
       itemID: map['itemID'],
       caption: map['caption'],
       stockItem: map['stockItem'],
-      postPhoto: map['postPhoto'],
+      // postPhoto: map['postPhoto'],
       timeStart: map['timeStart'],
       timeEnd: map['timeEnd'],
       venueBlock: map['venueBlock'],
@@ -98,7 +98,7 @@ class PostModel {
       "itemID": itemID,
       "caption": caption,
       "stockItem": stockItem,
-      "postPhoto": postPhoto,
+      // "postPhoto": postPhoto,
       "timeStart": timeStart,
       "timeEnd": timeEnd,
       "venueBlock": venueBlock,

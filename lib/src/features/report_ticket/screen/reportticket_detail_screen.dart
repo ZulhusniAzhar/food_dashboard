@@ -83,10 +83,10 @@ class ReportTicketDetailScreen extends StatelessWidget {
                                             'Error: ${postsnapshot.error}');
                                       } else if (postsnapshot.hasData) {
                                         String postStartformattedDateTime =
-                                            DateFormat('d MMM, hh:mm a').format(
+                                            DateFormat('d MMM').format(
                                                 postsnapshot.data!.timeStart);
                                         String postEndformattedDateTime =
-                                            DateFormat('d MMM, hh:mm a').format(
+                                            DateFormat('d MMM').format(
                                                 postsnapshot.data!.timeEnd);
                                         return Column(
                                           mainAxisAlignment:
@@ -164,10 +164,8 @@ class ReportTicketDetailScreen extends StatelessWidget {
                                                 const SizedBox(width: 5),
                                                 Container(
                                                   width: 250,
-                                                  alignment:
-                                                      Alignment.bottomCenter,
                                                   child: Text(
-                                                    "${postStartformattedDateTime} until ${postEndformattedDateTime}",
+                                                    "${postStartformattedDateTime} - ${postEndformattedDateTime}",
                                                     style: txtTheme.bodyText2,
                                                     textAlign: TextAlign.start,
                                                     overflow: TextOverflow.fade,

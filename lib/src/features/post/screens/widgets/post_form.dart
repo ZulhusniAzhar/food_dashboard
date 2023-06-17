@@ -103,35 +103,35 @@ class AddPostForm extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(
-              height: 10,
-            ),
-            Center(
-              child: SizedBox(
-                width: 200,
-                child: ElevatedButton(
-                  onPressed: () {
-                    showOptionsDialog(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: tPrimaryColor,
-                    side: BorderSide.none,
-                    shape: const StadiumBorder(),
-                  ),
-                  child: Obx(
-                    () => Text(
-                      postController.chooseImage.value == false
-                          ? "Add Venue Image"
-                          : "Image Added",
-                      style: const TextStyle(color: tDarkColor),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
+            // const SizedBox(
+            //   height: 10,
+            // ),
+            // Center(
+            //   child: SizedBox(
+            //     width: 200,
+            //     child: ElevatedButton(
+            //       onPressed: () {
+            //         showOptionsDialog(context);
+            //       },
+            //       style: ElevatedButton.styleFrom(
+            //         backgroundColor: tPrimaryColor,
+            //         side: BorderSide.none,
+            //         shape: const StadiumBorder(),
+            //       ),
+            //       child: Obx(
+            //         () => Text(
+            //           postController.chooseImage.value == false
+            //               ? "Add Venue Image"
+            //               : "Image Added",
+            //           style: const TextStyle(color: tDarkColor),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // const SizedBox(
+            //   height: 10,
+            // ),
             // StreamBuilder<List<Map<String, dynamic>>>(
             //   stream: controller.getItemsListwithUid(),
             //   builder: ((context, snapshot) {
@@ -166,9 +166,9 @@ class AddPostForm extends StatelessWidget {
             //         });
             //   }),
             // ),
-            const SizedBox(
-              height: 10,
-            ),
+            // const SizedBox(
+            //   height: 10,
+            // ),
             SizedBox(
               height: 100.0,
               child: TextFormField(
@@ -277,7 +277,7 @@ class AddPostForm extends StatelessWidget {
                       postController.venueBlock.text.trim(),
                       postController.venueCollege.text.trim(),
                       now,
-                      postController.postImage,
+                      // postController.postImage,
                     );
                   } catch (e) {
                     Get.snackbar(
