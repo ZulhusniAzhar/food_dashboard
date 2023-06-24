@@ -5,6 +5,10 @@ class RoleFormModel {
   final String? userID;
   final DateTime createdAt;
   final String status;
+  //status
+  // 0: Ongoing
+  // 1:Completed
+  // 2:AdminIntervention
   final List<String> itemsSelling;
   final String? descriptionRF;
   final String blockSelling;

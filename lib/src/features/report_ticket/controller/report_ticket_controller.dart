@@ -8,6 +8,8 @@ import 'package:intl/intl.dart';
 import '../../authentication/models/user_model.dart';
 import '../../item/model/item_model.dart';
 import '../../profilendashboard/screens/dashboard/dashboard.dart';
+import '../../rolechange/screen/list_role_form_screen.dart';
+import '../screen/report_list_screen.dart';
 
 class ReportTicketController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -33,6 +35,7 @@ class ReportTicketController extends GetxController {
   void onInit() {
     super.onInit();
     fetchTicketReportBuyer(getCurrentUserId());
+    fetchTicketReportSeller(getCurrentUserId());
     // print(reportforBuyer);
   }
 
@@ -67,7 +70,7 @@ class ReportTicketController extends GetxController {
           comment: doc['comment'],
           statusTicket: doc['statusTicket'],
           createdAt: createdAtDT ?? DateTime.now(),
-          deletedAt: doc['deletedAt'],
+          deletedAt: deletedAtDT,
         );
       }).toList();
     } catch (e) {
@@ -86,7 +89,7 @@ class ReportTicketController extends GetxController {
           .where('sellerID', isEqualTo: userId)
           .get();
 
-      reportforBuyer.value = querySnapshot.docs.map((doc) {
+      reportforSeller.value = querySnapshot.docs.map((doc) {
         Timestamp? createdAtTS = doc['createdAt'] as Timestamp?;
         Timestamp? deletedAtTS = doc['deletedAt'] as Timestamp?;
 
@@ -102,7 +105,7 @@ class ReportTicketController extends GetxController {
           comment: doc['comment'],
           statusTicket: doc['statusTicket'],
           createdAt: createdAtDT ?? DateTime.now(),
-          deletedAt: doc['deletedAt'],
+          deletedAt: deletedAtDT,
         );
       }).toList();
     } catch (e) {
@@ -119,7 +122,7 @@ class ReportTicketController extends GetxController {
     try {
       QuerySnapshot querySnapshot = await reportticketCollection.get();
 
-      reportforBuyer.value = querySnapshot.docs.map((doc) {
+      reportforAdmin.value = querySnapshot.docs.map((doc) {
         Timestamp? createdAtTS = doc['createdAt'] as Timestamp?;
         Timestamp? deletedAtTS = doc['deletedAt'] as Timestamp?;
 
@@ -135,7 +138,7 @@ class ReportTicketController extends GetxController {
           comment: doc['comment'],
           statusTicket: doc['statusTicket'],
           createdAt: createdAtDT ?? DateTime.now(),
-          deletedAt: doc['deletedAt'],
+          deletedAt: deletedAtDT,
         );
       }).toList();
     } catch (e) {
@@ -205,15 +208,6 @@ class ReportTicketController extends GetxController {
     return DateFormat('MMM d, hh:mm a').format(dateTime);
   }
 
-  Future<UserModel?> getUserDetail(String id) async {
-    User? user = _auth.currentUser;
-    if (user == null) {
-      return null;
-    }
-    DocumentSnapshot userData = await userCollection.doc(id).get();
-    return UserModel.fromSnap(userData);
-  }
-
   Future<void> storeUserRole(String id) async {
     User? user = _auth.currentUser;
     DocumentSnapshot userData = await userCollection.doc(id).get();
@@ -244,6 +238,15 @@ class ReportTicketController extends GetxController {
     }
   }
 
+  Future<UserModel?> getUserDetail(String id) async {
+    User? user = _auth.currentUser;
+    if (user == null) {
+      return null;
+    }
+    DocumentSnapshot userData = await userCollection.doc(id).get();
+    return UserModel.fromSnap(userData);
+  }
+
   Future<ReportTicketModel?> getReportTicketDetail(String id) async {
     DocumentSnapshot ticketData = await reportticketCollection.doc(id).get();
     return ReportTicketModel.fromSnap(ticketData);
@@ -262,5 +265,32 @@ class ReportTicketController extends GetxController {
   Future<ItemModel?> getItemDetail(String id) async {
     DocumentSnapshot itemData = await itemCollection.doc(id).get();
     return ItemModel.fromSnap(itemData);
+  }
+
+  Future<void> changeStatusTicket(String documentId, int status) async {
+    final ticketRef = reportticketCollection.doc(documentId);
+    DateTime now = DateTime.now();
+
+    try {
+      await ticketRef.update({'statusTicket': status});
+      // await ticketRef.update({'deletedAt': FieldValue.serverTimestamp()});
+
+      Get.until((route) => route.isFirst);
+      Get.to(() => ReportTicketListScreen());
+      Get.back();
+      Get.snackbar(
+        'Success',
+        'Successfully updated status of Ticket Issue',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        e.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
   }
 }

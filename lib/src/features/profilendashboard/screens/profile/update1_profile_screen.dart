@@ -114,7 +114,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
                       child: widget.user.profilePhoto != ""
-                          ? Image(image: NetworkImage(widget.user.profilePhoto))
+                          ? Image(
+                              image: NetworkImage(widget.user.profilePhoto),
+                              fit: BoxFit.cover)
                           : const Image(image: AssetImage(tImageBlank)),
                     ),
                   ),

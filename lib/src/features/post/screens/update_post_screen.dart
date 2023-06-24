@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:food_dashboard/src/features/post/controller/post_controller.dart';
 import 'package:food_dashboard/src/features/post/model/post_model.dart';
 import 'package:food_dashboard/src/features/post/screens/widgets/date_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:time_interval_picker/time_interval_picker.dart';
@@ -30,6 +31,8 @@ class _UpdatePostScreenState extends State<UpdatePostScreen> {
   TextEditingController stockItemController = TextEditingController();
   TextEditingController venueBlockController = TextEditingController();
   TextEditingController venueCollegeController = TextEditingController();
+  TextEditingController saleTimeStartController = TextEditingController();
+  TextEditingController saleTimeEndController = TextEditingController();
 
   @override
   void initState() {
@@ -39,6 +42,10 @@ class _UpdatePostScreenState extends State<UpdatePostScreen> {
     venueBlockController = TextEditingController(text: widget.post.venueBlock);
     venueCollegeController =
         TextEditingController(text: widget.post.venueCollege);
+    saleTimeStartController =
+        TextEditingController(text: widget.post.saleTimeStart);
+    saleTimeEndController =
+        TextEditingController(text: widget.post.saleTimeEnd);
 
     super.initState();
   }
@@ -55,7 +62,12 @@ class _UpdatePostScreenState extends State<UpdatePostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(PostController());
+    final _formKey = GlobalKey<FormState>();
+    final postController = Get.put(PostController());
+    DateTime parsedSaleStartTime =
+        DateFormat('HH:mm').parse(widget.post.saleTimeStart);
+    DateTime parsedSaleEndTime =
+        DateFormat('HH:mm').parse(widget.post.saleTimeEnd);
     // bool chooseImage = false;
     int selectedIndexCollege = 0;
     for (int i = 0; i < college.length; i++) {
@@ -110,6 +122,12 @@ class _UpdatePostScreenState extends State<UpdatePostScreen> {
                           label: Text("Caption"),
                           // prefixIcon: Icon(Icons.person_outline_rounded)
                         ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Field is required.';
+                          }
+                          return null;
+                        },
                       ),
                     ),
                     const SizedBox(height: tFormHeight),
@@ -153,47 +171,55 @@ class _UpdatePostScreenState extends State<UpdatePostScreen> {
                         color: Colors.black.withOpacity(0.7),
                       ),
                     ),
-                    // TimeIntervalPicker(
-                    //   endLimit: null,
-                    //   startLimit: null,
-                    //   onChanged:
-                    //       (DateTime? startTime, DateTime? endTime, bool isAllDay) {
-                    //     postController.formattedSaleStart.value =
-                    //         DateFormat('HH:mm').format(startTime!);
-                    //     postController.formattedSaleEnd.value =
-                    //         DateFormat('HH:mm').format(endTime!);
-                    //   },
-                    // ),
-                    // const SizedBox(height: tFormHeight),
-                    // DateRangePickerWidget(),
+                    TimeIntervalPicker(
+                      endLimit: parsedSaleEndTime,
+                      startLimit: parsedSaleStartTime,
+                      onChanged: (DateTime? startTime, DateTime? endTime,
+                          bool isAllDay) {
+                        postController.formattedSaleStart.value =
+                            DateFormat('HH:mm').format(startTime!);
+                        postController.formattedSaleEnd.value =
+                            DateFormat('HH:mm').format(endTime!);
+                      },
+                    ),
+                    const SizedBox(height: tFormHeight),
+                    DateRangePickerWidget(),
                     // const SizedBox(height: tFormHeight),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          //   try {
-                          //     int? parsedStock =
-                          //         int.tryParse(postController.itemStock.text);
-                          //     DateTime now = DateTime.now();
-                          //     postController.createPost(
-                          //       itemID,
-                          //       postController.caption.text.trim(),
-                          //       parsedStock!,
-                          //       postController.formattedSaleStart.value,
-                          //       postController.formattedSaleEnd.value,
-                          //       // dateController.startDate,
-                          //       // postController.endDate,
-                          //       postController.venueBlock.text.trim(),
-                          //       postController.collegeChosen.value,
-                          //       now,
-                          //       // postController.postImage,
-                          //     );
-                          //   } catch (e) {
-                          //     Get.snackbar(
-                          //       'Error',
-                          //       e.toString(),
-                          //     );
-                          //   }
+                          if (_formKey.currentState!.validate()) {
+                            try {
+                              int? parsedStock =
+                                  int.tryParse(stockItemController.text.trim());
+                              DateTime now = DateTime.now();
+                              postController.updatePost(PostModel(
+                                  uid: widget.post.uid,
+                                  postID: widget.post.postID,
+                                  itemID: widget.post.itemID,
+                                  caption: captionController.text.trim(),
+                                  stockItem: parsedStock!,
+                                  saleTimeStart:
+                                      postController.formattedSaleStart.value,
+                                  saleTimeEnd:
+                                      postController.formattedSaleEnd.value,
+                                  timeStart: widget.post.timeStart,
+                                  timeEnd: widget.post.timeEnd,
+                                  venueBlock: venueBlockController.text.trim(),
+                                  venueCollege:
+                                      venueCollegeController.text.trim(),
+                                  createdAt: widget.post.createdAt,
+                                  deletedAt: widget.post.deletedAt));
+                            } catch (e) {
+                              Get.snackbar(
+                                'Error',
+                                e.toString(),
+                              );
+                            }
+                          } else {
+                            Get.snackbar("Error", "Please fill all fields");
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.black,

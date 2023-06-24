@@ -89,6 +89,10 @@ class _DashboardState extends State<Dashboard> {
                       label: "Role Change",
                     ),
                     BottomNavigationBarItem(
+                      icon: Icon(Icons.home_filled, size: 30),
+                      label: "Issue Ticket",
+                    ),
+                    BottomNavigationBarItem(
                       icon: Icon(Icons.person_2_rounded, size: 30),
                       label: "Profile",
                     ),

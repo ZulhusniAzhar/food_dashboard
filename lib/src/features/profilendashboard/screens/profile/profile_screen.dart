@@ -104,30 +104,8 @@ class ProfileScreen extends StatelessWidget {
     final profileController = Get.put(ProfileController());
     String roleCurrent = 'General';
     return Scaffold(
-      // appBar: AppBar(
-      //   leading: IconButton(
-      //       onPressed: () {
-      //         Get.to(() => Dashboard());
-      //       },
-      //       icon: Icon(LineAwesomeIcons.angle_left,
-      //           color: isDark ? tWhiteColor : tDarkColor)),
-      //   title: Text(
-      //     tProfile,
-      //     style: Theme.of(context).textTheme.headline4,
-      //   ),
-      //   centerTitle: true,
-      //   elevation: 0,
-      //   backgroundColor: Colors.transparent,
-      //   actions: [
-      //     IconButton(
-      //         onPressed: () {},
-      //         icon: Icon(isDark ? LineAwesomeIcons.sun : LineAwesomeIcons.moon,
-      //             color: isDark ? tWhiteColor : tDarkColor)),
-      //   ],
-      // ),
       body: GetBuilder<ProfileController>(builder: (controller) {
         roleCurrent = controller.currentRole.value;
-        // print(controller.role.value);
         return SafeArea(
           child: SingleChildScrollView(
             child: Container(
@@ -149,7 +127,8 @@ class ProfileScreen extends StatelessWidget {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(100),
                                     child: const Image(
-                                        image: AssetImage(tAdminPhot)),
+                                        image: AssetImage(tAdminPhot),
+                                        fit: BoxFit.cover),
                                   ),
                                 ),
                               if (roleCurrent != 'Admin')
@@ -161,7 +140,8 @@ class ProfileScreen extends StatelessWidget {
                                       child: snapshot.data!.profilePhoto != ""
                                           ? Image(
                                               image: NetworkImage(
-                                                  snapshot.data!.profilePhoto))
+                                                  snapshot.data!.profilePhoto),
+                                              fit: BoxFit.cover)
                                           : const Image(
                                               image: AssetImage(tImageBlank))),
                                 ),
@@ -256,10 +236,10 @@ class ProfileScreen extends StatelessWidget {
 
                           //MENU
 
-                          if (roleCurrent == 'Seller')
+                          if (controller.currentRole.value == 'Seller')
                             ProfileMenuWidget(
                               title: tMenu2,
-                              icon: LineAwesomeIcons.wallet,
+                              icon: LineAwesomeIcons.stream,
                               onPress: () {
                                 Get.to(() => const ItemListScreen());
                               },
@@ -267,14 +247,14 @@ class ProfileScreen extends StatelessWidget {
                           if (roleCurrent == 'Seller')
                             ProfileMenuWidget(
                               title: tMenu3,
-                              icon: LineAwesomeIcons.user_check,
+                              icon: LineAwesomeIcons.sticky_note_1,
                               onPress: () {
                                 Get.to(() => const PostListScreen());
                               },
                             ),
                           if (roleCurrent != 'Admin')
                             ProfileMenuWidget(
-                              title: "My Report",
+                              title: "My Issue Ticket",
                               icon: Icons.notification_important_rounded,
                               onPress: () {
                                 Get.to(() => ReportTicketListScreen());

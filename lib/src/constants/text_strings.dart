@@ -4,7 +4,7 @@ const String tSignUp = "  Sign Up";
 const String tLogout = "Logout";
 
 // -- Splash Screen Text
-const String tAppName = "UTM Food Dashboard";
+const String tAppName = "UTM AdsFood";
 const String tAppTagLine =
     "Wondering What They\nSelling?\nDont Be.\nWe List Them.";
 

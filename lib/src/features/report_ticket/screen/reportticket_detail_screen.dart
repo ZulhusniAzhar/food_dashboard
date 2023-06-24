@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:food_dashboard/src/features/item/model/item_model.dart';
 import 'package:food_dashboard/src/features/post/model/post_model.dart';
@@ -14,8 +16,10 @@ import '../controller/report_ticket_controller.dart';
 import '../model/reportticket_model.dart';
 
 class ReportTicketDetailScreen extends StatelessWidget {
-  ReportTicketDetailScreen({super.key, required this.reportId});
-  String reportId;
+  ReportTicketDetailScreen(
+      {super.key, required this.reportId, required this.role});
+  final String reportId;
+  final String role;
   @override
   Widget build(BuildContext context) {
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
@@ -58,15 +62,18 @@ class ReportTicketDetailScreen extends StatelessWidget {
                           child: FormHeaderWidget(
                             image: tProblemSolve,
                             title: snapshot.data!.problemCat,
-                            subTitle: "Report Date: ${formattedDateTime}",
+                            subTitle: "Report Date: $formattedDateTime",
                           ),
                         ),
                         const SizedBox(
                           height: 20,
                         ),
                         FutureBuilder<UserModel?>(
-                            future: rtController
-                                .getSellerDetail(snapshot.data!.sellerID),
+                            future: role == "Seller"
+                                ? rtController
+                                    .getUserDetail(snapshot.data!.reporterID)
+                                : rtController
+                                    .getUserDetail(snapshot.data!.sellerID),
                             builder: (context,
                                 AsyncSnapshot<UserModel?> sellersnapshot) {
                               if (sellersnapshot.hasError) {
@@ -96,23 +103,46 @@ class ReportTicketDetailScreen extends StatelessWidget {
                                           children: [
                                             Row(
                                               children: [
-                                                Text(
-                                                  "Seller Name:",
-                                                  style: txtTheme.headline6,
-                                                ),
+                                                role == "Buyer"
+                                                    ? Text(
+                                                        "Seller Name:",
+                                                        style:
+                                                            txtTheme.headline6,
+                                                      )
+                                                    : Text(
+                                                        "Customer Name:",
+                                                        style:
+                                                            txtTheme.headline6,
+                                                      ),
                                                 const SizedBox(width: 5),
-                                                Text(
-                                                  sellersnapshot.data!.fullName,
-                                                  style: txtTheme.bodyText2,
-                                                ),
+                                                role == "Buyer"
+                                                    ? Text(
+                                                        sellersnapshot
+                                                            .data!.fullName,
+                                                        style:
+                                                            txtTheme.bodyText2,
+                                                      )
+                                                    : Text(
+                                                        sellersnapshot
+                                                            .data!.fullName,
+                                                        style:
+                                                            txtTheme.bodyText2,
+                                                      ),
                                               ],
                                             ),
                                             Row(
                                               children: [
-                                                Text(
-                                                  "Seller Phone Number:",
-                                                  style: txtTheme.headline6,
-                                                ),
+                                                role == "Buyer"
+                                                    ? Text(
+                                                        "Seller Phone Number:",
+                                                        style:
+                                                            txtTheme.headline6,
+                                                      )
+                                                    : Text(
+                                                        "Customer Phone Number:",
+                                                        style:
+                                                            txtTheme.headline6,
+                                                      ),
                                                 const SizedBox(width: 5),
                                                 Text(
                                                   sellersnapshot.data!.phoneNo,
@@ -165,7 +195,7 @@ class ReportTicketDetailScreen extends StatelessWidget {
                                                 Container(
                                                   width: 250,
                                                   child: Text(
-                                                    "${postStartformattedDateTime} - ${postEndformattedDateTime}",
+                                                    "$postStartformattedDateTime - $postEndformattedDateTime",
                                                     style: txtTheme.bodyText2,
                                                     textAlign: TextAlign.start,
                                                     overflow: TextOverflow.fade,
@@ -308,57 +338,67 @@ class ReportTicketDetailScreen extends StatelessWidget {
                                             const SizedBox(
                                               height: 40,
                                             ),
-                                            snapshot.data!.statusTicket == 0 ||
-                                                    snapshot.data!
-                                                            .statusTicket ==
-                                                        2
-                                                ? SizedBox(
-                                                    width: 200,
-                                                    child: ElevatedButton(
-                                                      onPressed: () {},
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                        backgroundColor:
-                                                            tPrimaryColor,
-                                                        side: BorderSide.none,
-                                                        shape:
-                                                            const StadiumBorder(),
+                                            if (role != "Seller")
+                                              snapshot.data!.statusTicket ==
+                                                          0 ||
+                                                      snapshot.data!
+                                                              .statusTicket ==
+                                                          2
+                                                  ? SizedBox(
+                                                      width: 200,
+                                                      child: ElevatedButton(
+                                                        onPressed: () {
+                                                          rtController
+                                                              .changeStatusTicket(
+                                                                  reportId, 1);
+                                                        },
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          backgroundColor:
+                                                              tPrimaryColor,
+                                                          side: BorderSide.none,
+                                                          shape:
+                                                              const StadiumBorder(),
+                                                        ),
+                                                        child: const Text(
+                                                          "Problem Resolved",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  tDarkColor),
+                                                        ),
                                                       ),
-                                                      child: const Text(
-                                                        "Problem Resolved",
-                                                        style: TextStyle(
-                                                            color: tDarkColor),
-                                                      ),
-                                                    ),
-                                                  )
-                                                : SizedBox(height: 1),
+                                                    )
+                                                  : const SizedBox(height: 1),
                                             const SizedBox(
                                               height: 10,
                                             ),
-                                            snapshot.data!.statusTicket == 0 ||
-                                                    snapshot.data!
-                                                            .statusTicket ==
-                                                        2
-                                                ? SizedBox(
-                                                    width: 200,
-                                                    child: ElevatedButton(
-                                                      onPressed: () {},
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                        backgroundColor:
-                                                            Colors.red,
-                                                        side: BorderSide.none,
-                                                        shape:
-                                                            const StadiumBorder(),
+                                            if (role != "Seller")
+                                              snapshot.data!.statusTicket == 0
+                                                  ? SizedBox(
+                                                      width: 200,
+                                                      child: ElevatedButton(
+                                                        onPressed: () {
+                                                          rtController
+                                                              .changeStatusTicket(
+                                                                  reportId, 2);
+                                                        },
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          backgroundColor:
+                                                              Colors.red,
+                                                          side: BorderSide.none,
+                                                          shape:
+                                                              const StadiumBorder(),
+                                                        ),
+                                                        child: const Text(
+                                                          "Seller Not Cooperating",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  tDarkColor),
+                                                        ),
                                                       ),
-                                                      child: const Text(
-                                                        "Seller Not Cooperating",
-                                                        style: TextStyle(
-                                                            color: tDarkColor),
-                                                      ),
-                                                    ),
-                                                  )
-                                                : SizedBox(height: 1),
+                                                    )
+                                                  : const SizedBox(height: 1),
                                           ],
                                         );
                                       } else {

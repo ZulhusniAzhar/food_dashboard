@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:food_dashboard/src/constants/colors.dart';
-import 'package:food_dashboard/src/constants/sizes.dart';
 import 'package:get/get.dart';
 
 import '../../../../common_widgets/form/form_header_widget.dart';

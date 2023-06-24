@@ -279,6 +279,48 @@ class PostController extends GetxController {
     }
   }
 
+  Future<void> updatePost(PostModel post) async {
+    final postCollection = FirebaseFirestore.instance.collection("posts");
+    final docRef = postCollection.doc(post.postID);
+
+    final newPost = PostModel(
+            uid: post.uid,
+            postID: post.postID,
+            itemID: post.itemID,
+            caption: post.caption,
+            stockItem: post.stockItem,
+            saleTimeStart: post.saleTimeStart,
+            saleTimeEnd: post.saleTimeEnd,
+            timeStart: startDate,
+            timeEnd: endDate,
+            venueBlock: post.venueBlock,
+            venueCollege: post.venueCollege,
+            createdAt: post.createdAt,
+            deletedAt: post.deletedAt)
+        .toJson();
+
+    try {
+      await docRef.update(newPost);
+      Get.until((route) => route.isFirst);
+      Get.to(() => const PostListScreen());
+      Get.snackbar(
+        'Success',
+        'Successfully edited details for post',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+      // Get.back();
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        e.toString(),
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+      //
+    }
+  }
+
   Future<DocumentSnapshot> getPostDetail(String docID) async {
     // DocumentSnapshot userData = await _usersCollection.doc(user.uid).get();
     return await postCollection.doc(docID).get();
