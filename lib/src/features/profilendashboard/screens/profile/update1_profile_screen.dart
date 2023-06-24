@@ -2,14 +2,18 @@
 
 // ignore_for_file: deprecated_member_use
 
+import 'package:custom_radio_group_list/custom_radio_group_list.dart';
 import 'package:flutter/material.dart';
+import 'package:food_dashboard/src/constants/image_strings.dart';
 import 'package:food_dashboard/src/constants/sizes.dart';
 import 'package:food_dashboard/src/features/profilendashboard/controllers/profile_controller.dart';
 import 'package:food_dashboard/src/features/profilendashboard/screens/dashboard/dashboard.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
+import '../../../../constants/college.dart';
 import '../../../../constants/colors.dart';
+import '../../../../constants/gender.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/models/user_model.dart';
 
@@ -64,6 +68,20 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    int selectedIndexGender = 0;
+    for (int i = 0; i < gender.length; i++) {
+      if (gender[i] == widget.user.gender) {
+        selectedIndexGender = i;
+        break;
+      }
+    }
+    int selectedIndexCollege = 0;
+    for (int i = 0; i < college.length; i++) {
+      if (college[i] == widget.user.college) {
+        selectedIndexCollege = i;
+        break;
+      }
+    }
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     final profileController = Get.put(ProfileController());
     return Scaffold(
@@ -95,8 +113,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     height: 120,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
-                      child:
-                          Image(image: NetworkImage(widget.user.profilePhoto)),
+                      child: widget.user.profilePhoto != ""
+                          ? Image(image: NetworkImage(widget.user.profilePhoto))
+                          : const Image(image: AssetImage(tImageBlank)),
                     ),
                   ),
                 ],
@@ -127,11 +146,24 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     const SizedBox(
                       height: tFormHeight,
                     ),
-                    TextFormField(
-                      controller: genderController,
-                      decoration: const InputDecoration(
-                          label: Text("Gender"),
-                          prefixIcon: Icon(Icons.boy_rounded)),
+                    // TextFormField(
+                    //   controller: genderController,
+                    //   decoration: const InputDecoration(
+                    //       label: Text("Gender"),
+                    //       prefixIcon: Icon(Icons.boy_rounded)),
+                    // ),
+                    Text(
+                      "Gender",
+                      style: TextStyle(
+                        color: Colors.black.withOpacity(0.7),
+                      ),
+                    ),
+                    RadioGroup(
+                      radioList: gender,
+                      selectedItem: selectedIndexGender,
+                      onChanged: (value) {
+                        genderController.text = value;
+                      },
                     ),
                     const SizedBox(
                       height: tFormHeight,
@@ -163,6 +195,19 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     // const SizedBox(
                     //   height: tFormHeight,
                     // ),
+                    Text(
+                      "College",
+                      style: TextStyle(
+                        color: Colors.black.withOpacity(0.7),
+                      ),
+                    ),
+                    RadioGroup(
+                      radioList: college,
+                      selectedItem: selectedIndexCollege,
+                      onChanged: (value) {
+                        collegeController.text = value;
+                      },
+                    ),
                     TextFormField(
                       controller: blockController,
                       decoration: const InputDecoration(
@@ -172,12 +217,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     const SizedBox(
                       height: tFormHeight,
                     ),
-                    TextFormField(
-                      controller: collegeController,
-                      decoration: const InputDecoration(
-                          label: Text("College"),
-                          prefixIcon: Icon(Icons.house_rounded)),
-                    ),
+                    // TextFormField(
+                    //   controller: collegeController,
+                    //   decoration: const InputDecoration(
+                    //       label: Text("College"),
+                    //       prefixIcon: Icon(Icons.house_rounded)),
+                    // ),
                     const SizedBox(
                       height: tFormHeight + 20,
                     ),

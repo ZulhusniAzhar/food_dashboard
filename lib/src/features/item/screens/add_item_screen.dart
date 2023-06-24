@@ -26,7 +26,7 @@ class AddItemScreen extends StatelessWidget {
               icon: Icon(LineAwesomeIcons.angle_left,
                   color: isDark ? tWhiteColor : tDarkColor)),
           title: Text(
-            "New Item (Food/Drink)",
+            "New Item (Your Product)",
             style: Theme.of(context).textTheme.headline4,
           ),
           centerTitle: true,

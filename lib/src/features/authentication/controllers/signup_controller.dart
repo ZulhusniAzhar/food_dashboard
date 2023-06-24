@@ -9,7 +9,7 @@ class SignUpController extends GetxController {
   final password = TextEditingController();
   final matricNo = TextEditingController();
   final fullName = TextEditingController();
-  final phoneNo = TextEditingController();
+  final phoneNo = TextEditingController(text: "+06");
   final gender = TextEditingController();
   final block = TextEditingController();
   final college = TextEditingController();

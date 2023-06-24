@@ -1,13 +1,16 @@
+import 'package:custom_radio_group_list/custom_radio_group_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../../../constants/colors.dart';
+import '../../../../constants/college.dart';
 import '../../../../constants/sizes.dart';
 import '../../../item/controller/item_controller.dart';
 import '../../controller/post_controller.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:time_interval_picker/time_interval_picker.dart';
 import 'date_picker.dart';
+import 'package:intl/intl.dart';
 
 class AddPostForm extends StatelessWidget {
   AddPostForm({required this.itemID, super.key});
@@ -219,46 +222,39 @@ class AddPostForm extends StatelessWidget {
               },
             ),
             const SizedBox(height: tFormHeight),
-            TextFormField(
-              controller: postController.venueCollege,
-              decoration: const InputDecoration(
-                label: Text("Venue College"),
-                // prefixIcon: Icon(Icons.person_outline_rounded)
+            Text(
+              "Venue College",
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.7),
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Field is required.';
-                }
-                return null;
+            ),
+            RadioGroup(
+              radioList: college,
+              selectedItem: 1,
+              onChanged: (value) {
+                postController.collegeChosen.value = value;
+              },
+            ),
+            const SizedBox(height: tFormHeight),
+            Text(
+              "Sale Time",
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.7),
+              ),
+            ),
+            TimeIntervalPicker(
+              endLimit: null,
+              startLimit: null,
+              onChanged:
+                  (DateTime? startTime, DateTime? endTime, bool isAllDay) {
+                postController.formattedSaleStart.value =
+                    DateFormat('HH:mm').format(startTime!);
+                postController.formattedSaleEnd.value =
+                    DateFormat('HH:mm').format(endTime!);
               },
             ),
             const SizedBox(height: tFormHeight),
             DateRangePickerWidget(),
-            // TextFormField(
-            //   decoration: const InputDecoration(
-            //     labelText: 'Date',
-            //     hintText: 'Select a date',
-            //     prefixIcon: Icon(Icons.calendar_today),
-            //   ),
-            //   keyboardType: TextInputType.datetime,
-            //   validator: (value) {
-            //     if (value==null) {
-            //       return 'Please enter a date';
-            //     }
-            //     return null;
-            //   },
-            //   onTap: () async {
-            //     DateTime selectedDate = await showDatePicker(
-            //       context: context,
-            //       initialDate: DateTime.now(),
-            //       firstDate: DateTime(2000),
-            //       lastDate: DateTime(2100),
-            //     );
-            //     if (selectedDate != null) {
-            //       // Do something with the selected date
-            //     }
-            //   },
-            // ),
             const SizedBox(height: tFormHeight),
             SizedBox(
               width: double.infinity,
@@ -272,10 +268,12 @@ class AddPostForm extends StatelessWidget {
                       itemID,
                       postController.caption.text.trim(),
                       parsedStock!,
+                      postController.formattedSaleStart.value,
+                      postController.formattedSaleEnd.value,
                       // dateController.startDate,
                       // postController.endDate,
                       postController.venueBlock.text.trim(),
-                      postController.venueCollege.text.trim(),
+                      postController.collegeChosen.value,
                       now,
                       // postController.postImage,
                     );

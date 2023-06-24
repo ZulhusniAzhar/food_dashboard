@@ -147,88 +147,95 @@ class MenuCard extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Container(
-            height: getPropertionateScreenWidht(188),
-            width: getPropertionateScreenWidht(156),
-            decoration: BoxDecoration(
-              // color: tPrimaryColor.withOpacity(0.6),
-              borderRadius: BorderRadius.circular(20),
-              image: DecorationImage(
-                image: NetworkImage(imageLink),
-                fit: BoxFit.cover,
-                colorFilter: ColorFilter.mode(
-                  tDarkColor
-                      .withOpacity(0.85), // Adjust the opacity value as needed
-                  BlendMode.dstATop,
-                ),
-              ),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Container(
-                    width: getPropertionateScreenWidht(43),
-                    height: getPropertionateScreenWidht(43),
-                    decoration: const BoxDecoration(
-                      color: tPrimaryColor,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        category,
-                        style: whiteTextStyle.copyWith(
-                          fontSize: getPropertionateScreenWidht(14),
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
+          Column(
+            children: [
+              Container(
+                height: getPropertionateScreenWidht(188),
+                width: getPropertionateScreenWidht(156),
+                decoration: BoxDecoration(
+                  // color: tPrimaryColor.withOpacity(0.6),
+                  borderRadius: BorderRadius.circular(20),
+                  image: DecorationImage(
+                    image: NetworkImage(imageLink),
+                    fit: BoxFit.cover,
+                    colorFilter: ColorFilter.mode(
+                      tDarkColor.withOpacity(
+                          0.85), // Adjust the opacity value as needed
+                      BlendMode.dstATop,
                     ),
                   ),
                 ),
-                Row(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0,
-                        vertical: 8.0,
-                      ),
+                    Align(
+                      alignment: Alignment.topLeft,
                       child: Container(
-                        width: getPropertionateScreenWidht(130),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              name.toUpperCase(),
-                              style: primaryTextStyle.copyWith(
-                                fontWeight: FontWeight.w900,
-                                color: tDarkColor,
-                                fontSize: getPropertionateScreenWidht(16),
-                              ),
-                              overflow: TextOverflow
-                                  .ellipsis, // Set the desired overflow behavior
-                              maxLines: 1,
+                        width: getPropertionateScreenWidht(43),
+                        height: getPropertionateScreenWidht(43),
+                        decoration: const BoxDecoration(
+                          color: tPrimaryColor,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            bottomRight: Radius.circular(20),
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            category,
+                            style: whiteTextStyle.copyWith(
+                              fontSize: getPropertionateScreenWidht(14),
+                              fontWeight: FontWeight.w800,
                             ),
-                            Text(
-                              'RM ${price.toStringAsFixed(2)}',
-                              style: primaryTextStyle.copyWith(
-                                color: tWhiteColor,
-                                fontSize: getPropertionateScreenWidht(14),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10.0,
+                            vertical: 8.0,
+                          ),
+                          child: Container(
+                            width: getPropertionateScreenWidht(130),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  name.toUpperCase(),
+                                  style: primaryTextStyle.copyWith(
+                                    fontWeight: FontWeight.w900,
+                                    color: tDarkColor,
+                                    fontSize: getPropertionateScreenWidht(16),
+                                  ),
+                                  overflow: TextOverflow
+                                      .ellipsis, // Set the desired overflow behavior
+                                  maxLines: 1,
+                                ),
+                                Text(
+                                  'RM ${price.toStringAsFixed(2)}',
+                                  style: primaryTextStyle.copyWith(
+                                    color: tWhiteColor,
+                                    fontSize: getPropertionateScreenWidht(14),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-              ],
-            ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+            ],
           ),
           // Image.network(imageLink),
         ],

@@ -1,7 +1,12 @@
+import 'dart:io';
+
+import 'package:custom_radio_group_list/custom_radio_group_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:food_dashboard/src/constants/image_strings.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../../../constants/category.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../controller/item_controller.dart';
@@ -102,25 +107,45 @@ class AddItemForm extends StatelessWidget {
               height: 10,
             ),
             Center(
-              child: SizedBox(
-                width: 200,
-                child: ElevatedButton(
-                  onPressed: () {
-                    showOptionsDialog(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: tPrimaryColor,
-                    side: BorderSide.none,
-                    shape: const StadiumBorder(),
-                  ),
-                  child: Obx(
-                    () => Text(
-                      controller.chooseImage.value == false
-                          ? "Add Item's Image"
-                          : "Image Added",
-                      style: const TextStyle(color: tDarkColor),
+              child: Obx(
+                () => Column(
+                  children: [
+                    controller.imagePath.value == ""
+                        ? const Image(
+                            image:
+                                AssetImage(tImageBlank), // Use the AssetImage
+                            fit: BoxFit.cover,
+                            width: 150,
+                            height: 150,
+                          )
+                        : Image.file(
+                            File(controller.imagePath.value),
+                            fit: BoxFit.cover,
+                            width: 150,
+                            height: 150,
+                          ),
+                    SizedBox(
+                      width: 200,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          showOptionsDialog(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: tPrimaryColor,
+                          side: BorderSide.none,
+                          shape: const StadiumBorder(),
+                        ),
+                        child: Obx(
+                          () => Text(
+                            controller.chooseImage.value
+                                ? "Image Added"
+                                : "Add Item's Image",
+                            style: const TextStyle(color: tDarkColor),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ),
@@ -162,18 +187,31 @@ class AddItemForm extends StatelessWidget {
               ),
             ),
             const SizedBox(height: tFormHeight),
-            TextFormField(
-              controller: controller.category,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Field is required.';
-                }
-                return null;
-              },
-              decoration: const InputDecoration(
-                label: Text("Category (Food/Drink)"),
-                // prefixIcon: Icon(Icons.boy_rounded)
+            // TextFormField(
+            //   controller: controller.category,
+            //   validator: (value) {
+            //     if (value == null || value.isEmpty) {
+            //       return 'Field is required.';
+            //     }
+            //     return null;
+            //   },
+            //   decoration: const InputDecoration(
+            //     label: Text("Category (Food/Drink)"),
+            //     // prefixIcon: Icon(Icons.boy_rounded)
+            //   ),
+            // ),
+            Text(
+              "Category",
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.7),
               ),
+            ),
+            RadioGroup(
+              radioList: category,
+              selectedItem: 1,
+              onChanged: (value) {
+                controller.categoryItem.value = value;
+              },
             ),
             const SizedBox(height: tFormHeight),
             TextFormField(
@@ -222,7 +260,7 @@ class AddItemForm extends StatelessWidget {
                     controller.createItem(
                       controller.name.text.trim(),
                       parsedPrice,
-                      controller.category.text.trim(),
+                      controller.categoryItem.value,
                       controller.ingredient.text
                           .trim()
                           .split(',')

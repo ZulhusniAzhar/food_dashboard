@@ -1,11 +1,15 @@
+import 'package:custom_radio_group_list/custom_radio_group_list.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:food_dashboard/src/constants/auth.dart';
 import 'package:food_dashboard/src/features/authentication/controllers/signup_controller.dart';
+import 'package:food_dashboard/src/repository/authentication_repository/authentication_repository.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
+import '../../../../../constants/college.dart';
 import '../../../../../constants/colors.dart';
+import '../../../../../constants/gender.dart';
 import '../../../../../constants/image_strings.dart';
 import '../../../../../constants/sizes.dart';
 import '../../../../../constants/text_strings.dart';
@@ -18,6 +22,8 @@ class SignUpFormWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(SignUpController());
+    final AuthenticationRepository authRepo =
+        Get.put(AuthenticationRepository());
     final _formKey = GlobalKey<FormState>();
     bool _obsecureText = true;
 
@@ -31,45 +37,45 @@ class SignUpFormWidget extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            Center(
-              child: Stack(
-                children: [
-                  SizedBox(
-                    width: 120,
-                    height: 120,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: const Image(image: AssetImage(tImageBlank)),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: tPrimaryColor),
-                      child: IconButton(
-                        onPressed: () {
-                          authRepo.pickImage();
-                        },
-                        icon: const Icon(
-                          LineAwesomeIcons.camera,
-                          size: 20,
-                        ),
-                        color: Colors.black,
-                        // size: 20,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
+            // Center(
+            //   child: Stack(
+            //     children: [
+            //       SizedBox(
+            //         width: 120,
+            //         height: 120,
+            //         child: ClipRRect(
+            //           borderRadius: BorderRadius.circular(100),
+            //           child: const Image(image: AssetImage(tImageBlank)),
+            //         ),
+            //       ),
+            //       Positioned(
+            //         bottom: 0,
+            //         right: 0,
+            //         child: Container(
+            //           width: 35,
+            //           height: 35,
+            //           decoration: BoxDecoration(
+            //               borderRadius: BorderRadius.circular(100),
+            //               color: tPrimaryColor),
+            //           child: IconButton(
+            //             onPressed: () {
+            //               authRepo.pickImage();
+            //             },
+            //             icon: const Icon(
+            //               LineAwesomeIcons.camera,
+            //               size: 20,
+            //             ),
+            //             color: Colors.black,
+            //             // size: 20,
+            //           ),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // const SizedBox(
+            //   height: 10,
+            // ),
             TextFormField(
               controller: controller.fullName,
               decoration: const InputDecoration(
@@ -92,17 +98,30 @@ class SignUpFormWidget extends StatelessWidget {
                   prefixIcon: Icon(Icons.numbers_rounded)),
             ),
             const SizedBox(height: tFormHeight),
-            TextFormField(
-              controller: controller.gender,
-              validator: (value) {
-                if (value == null || value.isEmpty) return 'Field is required.';
-                return null;
-              },
-              decoration: const InputDecoration(
-                  label: Text("Gender (Male/Female)"),
-                  prefixIcon: Icon(Icons.boy_rounded)),
+            // TextFormField(
+            //   controller: controller.gender,
+            //   validator: (value) {
+            //     if (value == null || value.isEmpty) return 'Field is required.';
+            //     return null;
+            //   },
+            //   decoration: const InputDecoration(
+            //       label: Text("Gender (Male/Female)"),
+            //       prefixIcon: Icon(Icons.boy_rounded)),
+            // ),
+            Text(
+              "Gender",
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.7),
+              ),
             ),
-            const SizedBox(height: tFormHeight),
+            RadioGroup(
+              radioList: gender,
+              selectedItem: 1,
+              onChanged: (value) {
+                authRepo.chosenGender.value = value;
+              },
+            ),
+            const SizedBox(height: tFormHeight + 4),
             TextFormField(
               controller: controller.email,
               validator: (String? value) => EmailValidator.validate(value!)
@@ -133,6 +152,20 @@ class SignUpFormWidget extends StatelessWidget {
                   label: Text(tPassword), prefixIcon: Icon(Icons.fingerprint)),
             ),
             const SizedBox(height: tFormHeight),
+            Text(
+              "College",
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.7),
+              ),
+            ),
+            RadioGroup(
+              radioList: college,
+              selectedItem: 1,
+              onChanged: (value) {
+                authRepo.chosenCollege.value = value;
+              },
+            ),
+            const SizedBox(height: tFormHeight + 5),
             TextFormField(
               controller: controller.block,
               validator: (value) {
@@ -143,60 +176,41 @@ class SignUpFormWidget extends StatelessWidget {
                   label: Text("Block"), prefixIcon: Icon(Icons.house)),
             ),
             const SizedBox(height: tFormHeight),
-            TextFormField(
-              controller: controller.college,
-              validator: (value) {
-                if (value == null || value.isEmpty) return 'Field is required.';
-                return null;
-              },
-              decoration: const InputDecoration(
-                  label: Text("College"), prefixIcon: Icon(Icons.house)),
-            ),
-            const SizedBox(height: tFormHeight),
+            // TextFormField(
+            //   controller: controller.college,
+            //   validator: (value) {
+            //     if (value == null || value.isEmpty) return 'Field is required.';
+            //     return null;
+            //   },
+            //   decoration: const InputDecoration(
+            //       label: Text("College"), prefixIcon: Icon(Icons.house)),
+            // ),
+
             SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // if (_formKey.currentState!.validate()) {
-                    //   //Email Password Authentication
-                    //   // =>
-                    //   // SignUpController.instance.registerUser(
-                    //   //     controller.email.text.trim(),
-                    //   //     controller.password.text.trim());
-
-                    //   //Phone Number Authentication
-                    //   // =>
-                    //   // SignUpController.instance
-                    //   //     .phoneAuthentication(controller.phoneNo.text.trim());
-                    //   // Get.to(() => OTPScreen());
-
-                    //   // final user = UserModel(
-                    //   //   fullName: controller.fullName.text.trim(),
-                    //   //   role: "General",
-                    //   //   matricNo: controller.matricNo.text.trim(),
-                    //   //   gender: controller.gender.text.trim(),
-                    //   //   email: controller.email.text.trim(),
-                    //   //   phoneNo: controller.phoneNo.text.trim(),
-                    //   //   password: controller.password.text.trim(),
-                    //   //   block: controller.block.text.trim(),
-                    //   //   college: controller.college.text.trim(),
-                    //   // );
-                    //   // SignUpController.instance.createUser(user);
-                    //   // Get.to(() => OTPScreen());
-                    // }
-
-                    authRepo.registerUser(
-                      controller.fullName.text.trim(),
-                      controller.email.text.trim(),
-                      controller.matricNo.text.trim(),
-                      controller.gender.text.trim(),
-                      controller.phoneNo.text.trim(),
-                      controller.password.text.trim(),
-                      controller.block.text.trim(),
-                      controller.college.text.trim(),
-                      "General",
-                      authRepo.profilePhoto,
-                    );
+                    if (_formKey.currentState!.validate() &&
+                        authRepo.chosenGender.value != null &&
+                        authRepo.chosenCollege.value != null) {
+                      authRepo.registerUser(
+                        controller.fullName.text.trim(),
+                        controller.email.text.trim(),
+                        controller.matricNo.text.trim(),
+                        // controller.gender.text.trim(),
+                        authRepo.chosenGender.value,
+                        controller.phoneNo.text.trim(),
+                        controller.password.text.trim(),
+                        controller.block.text.trim(),
+                        // controller.college.text.trim(),
+                        authRepo.chosenCollege.value,
+                        "General",
+                        // image: authRepo.profilePhoto,
+                      );
+                    } else {
+                      Get.snackbar(
+                          "Error", "Please fill all fields and radio buttons");
+                    }
                   },
                   child: Text(tSignUp.toUpperCase()),
                 )),

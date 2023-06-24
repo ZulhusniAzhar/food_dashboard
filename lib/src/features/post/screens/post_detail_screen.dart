@@ -2,12 +2,15 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:food_dashboard/src/features/post/model/post_model.dart';
+import 'package:food_dashboard/src/features/post/screens/update_post_screen.dart';
 import 'package:food_dashboard/src/features/qrcode/screens/generator/result_qr_generator.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
+import '../../item/screens/update_item_screen.dart';
 import '../controller/post_controller.dart';
 
 class PostDetailScreen extends StatefulWidget {
@@ -33,7 +36,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Are you sure you want to delete this item?"),
+          title: const Text("Are you sure you want to delete this post?"),
           content: const Text("This action cannot be undone."),
           actions: [
             TextButton(
@@ -86,7 +89,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
         ],
       ),
       body: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(10.0),
           child: FutureBuilder(
               future: postController.getPostDetail(widget.postID),
               builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -139,7 +142,6 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                         ),
                                       ),
                                     ),
-
                                     const SizedBox(
                                         height: tDashboardCardPadding),
                                     Center(
@@ -151,47 +153,82 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                         ),
                                       ),
                                     ),
-                                    Text(
-                                      'Item Name: ${itemsnapshot.data!['itemName']}',
-                                      style: const TextStyle(
+                                    const Text(
+                                      'Item Name:',
+                                      style: TextStyle(
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.blue,
                                       ),
                                     ),
-                                    const SizedBox(height: 16.0),
                                     Text(
-                                      'Item Stock: ${snapshot.data!['stockItem'].toString()}',
+                                      '${itemsnapshot.data!['itemName']}',
                                       style: const TextStyle(
+                                        fontSize: 18.0,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16.0),
+                                    const Text(
+                                      'Item Stock: ',
+                                      style: TextStyle(
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.blue,
+                                        color: Colors.redAccent,
                                       ),
                                     ),
-                                    const SizedBox(height: 16.0),
                                     Text(
-                                      'Start Date: $formattedDateStart',
+                                      ' ${snapshot.data!['stockItem'].toString()}',
                                       style: const TextStyle(
                                         fontSize: 18.0,
                                       ),
                                     ),
                                     const SizedBox(height: 16.0),
+                                    const Text(
+                                      'Time',
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.green,
+                                      ),
+                                    ),
                                     Text(
-                                      'End Date: $formattedDateEnd',
+                                      '${snapshot.data!['saleTimeStart']} to ${snapshot.data!['saleTimeEnd']}',
+                                      style: const TextStyle(
+                                        fontSize: 18.0,
+                                      ),
+                                    ),
+                                    Text(
+                                      '$formattedDateStart until $formattedDateEnd',
                                       style: const TextStyle(
                                         fontSize: 18.0,
                                       ),
                                     ),
                                     const SizedBox(height: 16.0),
+                                    const Text(
+                                      'Venue Block:',
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.purple,
+                                      ),
+                                    ),
                                     Text(
-                                      'Venue Block: ${snapshot.data!['venueBlock']}',
+                                      '${snapshot.data!['venueBlock']}',
                                       style: const TextStyle(
                                         fontSize: 18.0,
                                       ),
                                     ),
                                     const SizedBox(height: 16.0),
+                                    const Text(
+                                      'Venue College:',
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.purple,
+                                      ),
+                                    ),
                                     Text(
-                                      'Venue College: ${snapshot.data!['venueCollege']}',
+                                      '${snapshot.data!['venueCollege']}',
                                       style: const TextStyle(
                                         fontSize: 18.0,
                                       ),
@@ -207,7 +244,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                         width: double.infinity,
                                         height: 50.0,
                                         decoration: BoxDecoration(
-                                          color: Colors.yellow,
+                                          color: tDarkColor,
                                           borderRadius:
                                               BorderRadius.circular(16.0),
                                         ),
@@ -216,7 +253,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                             'Generate QR Code',
                                             style: TextStyle(
                                               fontSize: 18.0,
-                                              color: Colors.black,
+                                              color: tWhiteColor,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -224,29 +261,64 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                       ),
                                     ),
                                     const SizedBox(height: 20.0),
-                                    // GestureDetector(
-                                    //   onTap: () {
-                                    //     // Navigate to another page when the box is clicked
-                                    //   },
-                                    //   child: Container(
-                                    //     width: double.infinity,
-                                    //     height: 50.0,
-                                    //     decoration: BoxDecoration(
-                                    //       color: Colors.yellow,
-                                    //       borderRadius: BorderRadius.circular(16.0),
-                                    //     ),
-                                    //     child: const Center(
-                                    //       child: Text(
-                                    //         'Edit',
-                                    //         style: TextStyle(
-                                    //           fontSize: 18.0,
-                                    //           color: Colors.black,
-                                    //           fontWeight: FontWeight.normal,
-                                    //         ),
-                                    //       ),
-                                    //     ),
-                                    //   ),
-                                    // ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        DateTime now = DateTime.now();
+                                        Get.to(
+                                            // () => UpdateProfileScreen(uid: authRepo.user.uid)),
+                                            () => UpdatePostScreen(
+                                                    post: PostModel(
+                                                  uid: snapshot.data!['uid'],
+                                                  postID:
+                                                      snapshot.data!['postID'],
+                                                  itemID:
+                                                      snapshot.data!['itemID'],
+                                                  caption:
+                                                      snapshot.data!['caption'],
+                                                  stockItem: snapshot
+                                                      .data!['stockItem'],
+                                                  saleTimeStart: snapshot
+                                                      .data!['saleTimeStart'],
+                                                  saleTimeEnd: snapshot
+                                                      .data!['saleTimeEnd'],
+                                                  // timeStart: snapshot
+                                                  //     .data!['timeStart'],
+                                                  // timeEnd: snapshot
+                                                  //     .data!['timeEnd'],
+                                                  timeStart: now,
+                                                  timeEnd: now,
+                                                  venueBlock: snapshot
+                                                      .data!['venueBlock'],
+                                                  venueCollege: snapshot
+                                                      .data!['venueCollege'],
+                                                  // createdAt: snapshot
+                                                  //     .data!['createdAt'],
+                                                  // deletedAt: snapshot
+                                                  //     .data!['deletedAt']
+                                                  createdAt: now,
+                                                  deletedAt: now,
+                                                )));
+                                      },
+                                      child: Container(
+                                        width: double.infinity,
+                                        height: 50.0,
+                                        decoration: BoxDecoration(
+                                          color: Colors.yellow,
+                                          borderRadius:
+                                              BorderRadius.circular(16.0),
+                                        ),
+                                        child: const Center(
+                                          child: Text(
+                                            'Edit',
+                                            style: TextStyle(
+                                              fontSize: 18.0,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                     const SizedBox(height: 20.0),
                                     GestureDetector(
                                       onTap: () {

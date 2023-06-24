@@ -70,65 +70,73 @@ class HomeScreenWidget extends StatelessWidget {
               height: tDashboardPadding,
             ),
 
-            StreamBuilder<List<Map<String, dynamic>>>(
-              stream: postController.getPostListDashboard(),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return const Center(
-                    child: Text("Error while fetching list"),
-                  );
-                } else if (snapshot.data == null || snapshot.data!.isEmpty) {
-                  return Center(child: Text("No Data"));
-                } else if (snapshot.hasData) {
-                  final postDashboardDocs = snapshot.data!;
-                  return SizedBox(
-                    height: 430,
-                    child: ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: postDashboardDocs.length,
-                      itemBuilder: ((context, index) {
-                        final postData = postDashboardDocs[index];
-                        final uid = postData['uid'].toString();
-                        final postId = postData['postID'].toString();
-                        final itemId = postData['itemID'].toString();
-                        final caption = postData['caption'].toString();
-                        // final postPhoto = postData['postPhoto'].toString();
-                        final venueBlock = postData['venueBlock'].toString();
-                        final venueCollege =
-                            postData['venueCollege'].toString();
-                        DateTime dateStart = postData['timeEnd'].toDate();
+            Obx(
+              () => StreamBuilder<List<Map<String, dynamic>>>(
+                stream: postController.getPostListDashboardwithCollege(
+                    postController.selectedCategory.value),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return const Center(
+                      child: Text("Error while fetching list"),
+                    );
+                  } else if (snapshot.data == null || snapshot.data!.isEmpty) {
+                    return Center(child: Text("No Data"));
+                  } else if (snapshot.hasData) {
+                    final postDashboardDocs = snapshot.data;
+                    // final filteredList = snapshot.data
+                    //     ?.where((postData) =>
+                    //         postData['venueCollege'] ==
+                    //         postController.selectedCategory.value)
+                    //     .toList();
+                    return SizedBox(
+                      height: 430,
+                      child: ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: postDashboardDocs!.length,
+                        itemBuilder: ((context, index) {
+                          final postData = postDashboardDocs[index];
+                          final uid = postData['uid'].toString();
+                          final postId = postData['postID'].toString();
+                          final itemId = postData['itemID'].toString();
+                          final caption = postData['caption'].toString();
+                          // final postPhoto = postData['postPhoto'].toString();
+                          final venueBlock = postData['venueBlock'].toString();
+                          final venueCollege =
+                              postData['venueCollege'].toString();
+                          DateTime dateStart = postData['timeEnd'].toDate();
 
-                        String formattedDateStart =
-                            DateFormat('MMMM d').format(dateStart);
+                          String formattedDateStart =
+                              DateFormat('MMMM d').format(dateStart);
 
-                        return SingleChildScrollView(
-                          child: Container(
-                            padding: const EdgeInsets.all(8),
-                            child: Center(
-                              child: DashboardPostCard1(
-                                txtTheme: txtTheme,
-                                uid: uid,
-                                postId: postId,
-                                itemID: itemId,
-                                caption: caption,
-                                // postPhoto: postPhoto,
-                                venueBlock: venueBlock,
-                                venueCollege: venueCollege,
-                                dateEnd: formattedDateStart,
+                          return SingleChildScrollView(
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              child: Center(
+                                child: DashboardPostCard1(
+                                  txtTheme: txtTheme,
+                                  uid: uid,
+                                  postId: postId,
+                                  itemID: itemId,
+                                  caption: caption,
+                                  // postPhoto: postPhoto,
+                                  venueBlock: venueBlock,
+                                  venueCollege: venueCollege,
+                                  dateEnd: formattedDateStart,
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      }),
-                    ),
-                  );
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              },
+                          );
+                        }),
+                      ),
+                    );
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                },
+              ),
             ),
           ],
         ),

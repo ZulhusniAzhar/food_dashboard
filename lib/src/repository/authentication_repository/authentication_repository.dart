@@ -30,6 +30,8 @@ class AuthenticationRepository extends GetxController {
   User get user => _firebaseUser.value!;
   final profileController = Get.put(ProfileController());
   RxString role = RxString('');
+  final RxString chosenCollege = ''.obs;
+  final RxString chosenGender = ''.obs;
 
   @override
   void onReady() {
@@ -115,33 +117,39 @@ class AuthenticationRepository extends GetxController {
   }
 
   void registerUser(
-      String fullName,
-      String email,
-      String matricNo,
-      String gender,
-      String phoneNo,
-      String password,
-      String block,
-      String college,
-      String role,
-      File? image) async {
+    String fullName,
+    String email,
+    String matricNo,
+    String gender,
+    String phoneNo,
+    String password,
+    String block,
+    String college,
+    String role,
+    // {File? image}
+  ) async {
     try {
+      print(gender);
       if (fullName.isNotEmpty &&
           email.isNotEmpty &&
           matricNo.isNotEmpty &&
-          gender.isNotEmpty &&
           phoneNo.isNotEmpty &&
-          password.isNotEmpty &&
-          image != null) {
+          password.isNotEmpty) {
         //save user into auth and firestore
         UserCredential cred = await firebaseAuth.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
-        String downloadUrl = await _uploadToStorage(image);
+        // String? downloadUrl;
+        // if (image != null) {
+        //   downloadUrl = await _uploadToStorage(image);
+        // } else {
+        //   downloadUrl = "";
+        // }
+        // phoneNo = "+60$phoneNo";
         model.UserModel user = model.UserModel(
           uid: cred.user!.uid,
-          profilePhoto: downloadUrl,
+          profilePhoto: "",
           fullName: fullName,
           matricNo: matricNo,
           gender: gender,

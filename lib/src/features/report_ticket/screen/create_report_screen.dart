@@ -98,8 +98,6 @@ class CreateReportScreen extends StatelessWidget {
                 radioList: reportList,
                 selectedItem: 1,
                 onChanged: (value) {
-                  print("Value : ${value}");
-                  // chosenCategory = value;
                   controller.chosenCategory.value = value;
                 },
               ),

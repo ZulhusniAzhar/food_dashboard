@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../constants/auth.dart';
+import '../../profilendashboard/models/dashboard/categories_model.dart';
 import '../model/post_model.dart';
 
 class PostController extends GetxController {
@@ -23,6 +24,10 @@ class PostController extends GetxController {
   File? get postImage => _pickedImage.value;
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now().add(const Duration(days: 7));
+  final selectedCategory = DashboardCategoriesModel.list[0].title.obs;
+  final RxString collegeChosen = ''.obs;
+  final RxString formattedSaleEnd = '23:59'.obs;
+  final RxString formattedSaleStart = '00:00'.obs;
 
   //declare db related
   RxList<PostModel> posts = <PostModel>[].obs;
@@ -63,6 +68,10 @@ class PostController extends GetxController {
   //   }
   // }
 
+  void changeCategory(String title) {
+    selectedCategory.value = title;
+  }
+
   void fetchData(String postID) async {
     try {
       final DocumentReference postReference =
@@ -93,6 +102,20 @@ class PostController extends GetxController {
   Stream<List<Map<String, dynamic>>> getPostListDashboard() {
     return postCollection
         .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((querySnapshot) {
+      return querySnapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
+    });
+  }
+
+  Stream<List<Map<String, dynamic>>> getPostListDashboardwithCollege(
+      String? venueCollege) {
+    Query postQuery = postCollection.orderBy('createdAt', descending: true);
+
+    return postCollection
+        .where('venueCollege', isEqualTo: venueCollege)
         .snapshots()
         .map((querySnapshot) {
       return querySnapshot.docs
@@ -196,6 +219,8 @@ class PostController extends GetxController {
     String itemID,
     String caption,
     int stockItem,
+    String saleStart,
+    String saleEnd,
     // Timestamp timeStart,
     // Timestamp timeEnd,
     String venueBlock,
@@ -222,6 +247,8 @@ class PostController extends GetxController {
           itemID: itemID,
           caption: caption,
           stockItem: stockItem,
+          saleTimeStart: saleStart,
+          saleTimeEnd: saleEnd,
           timeStart: startDate,
           timeEnd: endDate,
           venueBlock: venueBlock,
@@ -231,7 +258,6 @@ class PostController extends GetxController {
           // postPhoto: downloadUrl,
         );
         await documentReferencess.set(post.toJson());
-
         String documentId = documentReferencess.id;
         await documentReferencess.update({'postID': documentId});
         Get.until((route) => route.isFirst);

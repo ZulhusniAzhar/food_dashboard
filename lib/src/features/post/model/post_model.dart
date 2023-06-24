@@ -6,6 +6,8 @@ class PostModel {
   final String itemID;
   final String caption;
   final int stockItem;
+  final String saleTimeStart;
+  final String saleTimeEnd;
   // final String postPhoto;
   final DateTime timeStart;
   final DateTime timeEnd;
@@ -20,6 +22,8 @@ class PostModel {
     required this.itemID,
     required this.caption,
     required this.stockItem,
+    required this.saleTimeStart,
+    required this.saleTimeEnd,
     // required this.postPhoto,
     required this.timeStart,
     required this.timeEnd,
@@ -36,6 +40,8 @@ class PostModel {
       "itemID": itemID,
       "caption": caption,
       "stockItem": stockItem,
+      "saleTimeStart": saleTimeStart,
+      "saleTimeEnd": saleTimeEnd,
       // "postPhoto": postPhoto,
       "timeStart": timeStart,
       "timeEnd": timeEnd,
@@ -64,6 +70,8 @@ class PostModel {
       itemID: snapshot['itemID'],
       caption: snapshot['caption'],
       stockItem: snapshot['stockItem'],
+      saleTimeStart: snapshot['saleTimeStart'],
+      saleTimeEnd: snapshot['saleTimeEnd'],
       // postPhoto: snapshot['postPhoto'],
       timeStart: timeStart,
       timeEnd: timeEnd,
@@ -82,6 +90,8 @@ class PostModel {
       itemID: map['itemID'],
       caption: map['caption'],
       stockItem: map['stockItem'],
+      saleTimeStart: map['saleTimeStart'],
+      saleTimeEnd: map['saleTimeEnd'],
       // postPhoto: map['postPhoto'],
       timeStart: map['timeStart'],
       timeEnd: map['timeEnd'],
@@ -98,6 +108,8 @@ class PostModel {
       "itemID": itemID,
       "caption": caption,
       "stockItem": stockItem,
+      "saleTimeStart": saleTimeStart,
+      "saleTimeEnd": saleTimeEnd,
       // "postPhoto": postPhoto,
       "timeStart": timeStart,
       "timeEnd": timeEnd,

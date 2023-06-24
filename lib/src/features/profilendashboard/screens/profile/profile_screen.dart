@@ -157,11 +157,13 @@ class ProfileScreen extends StatelessWidget {
                                   width: 120,
                                   height: 120,
                                   child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
-                                    child: Image(
-                                        image: NetworkImage(
-                                            snapshot.data!.profilePhoto)),
-                                  ),
+                                      borderRadius: BorderRadius.circular(100),
+                                      child: snapshot.data!.profilePhoto != ""
+                                          ? Image(
+                                              image: NetworkImage(
+                                                  snapshot.data!.profilePhoto))
+                                          : const Image(
+                                              image: AssetImage(tImageBlank))),
                                 ),
                               if (roleCurrent != 'Admin')
                                 Positioned(

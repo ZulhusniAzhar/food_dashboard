@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_dashboard/src/features/post/model/post_model.dart';
-import 'package:food_dashboard/src/features/post/screens/post_list_screen.dart';
 import 'package:food_dashboard/src/features/report_ticket/model/reportticket_model.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -225,14 +224,8 @@ class ReportTicketController extends GetxController {
   Future<void> addTicket(ReportTicketModel reportticket) async {
     try {
       final jsonItem = reportticket.toJson();
-      // await _firestore.collection('payment').add(jsonItem);
       final docRef = await _firestore.collection('reportticket').add(jsonItem);
       final docId = docRef.id;
-
-      // Update the payment with the document ID
-      // payments.paymentID = docId;
-
-      // Update the payment document with the document ID
       await _firestore.collection('reportticket').doc(docId).update({
         'reportID': docId,
       });

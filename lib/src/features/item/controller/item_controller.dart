@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:food_dashboard/src/features/item/model/item_model.dart'
     as model;
 import '../../../constants/auth.dart';
+import '../model/item_model.dart';
 import '../screens/item_list_screen.dart';
 
 class ItemController extends GetxController {
@@ -15,11 +16,16 @@ class ItemController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final CollectionReference itemCollection =
       FirebaseFirestore.instance.collection('items');
-  late Rx<File?> _pickedImage;
+  Rx<File?> _pickedImage = Rx<File?>(null);
   File? get itemImage => _pickedImage.value;
+  final RxString itemIDCurrent = ''.obs;
+
   late final DocumentReference documentReference = itemCollection.doc();
   var chooseImage = false.obs;
   var isLoading = true.obs;
+  final RxString imagePath = ''.obs;
+  final RxString categoryItem = ''.obs;
+  var itemPhoto = ''.obs;
 
   final name = TextEditingController();
   final category = TextEditingController();
@@ -37,17 +43,81 @@ class ItemController extends GetxController {
   }
 
   void pickImage(ImageSource src) async {
-    final pickedImage = await ImagePicker().pickImage(source: src);
-    if (pickedImage != null) {
+    try {
+      final pickedImage = await ImagePicker().pickImage(source: src);
+      if (pickedImage != null) {
+        _pickedImage.value = File(pickedImage.path);
+
+        imagePath.value = pickedImage.path;
+        Get.snackbar(
+          'Success',
+          'Successfully added image for item',
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+        // Navigator.pop(context);
+      }
+      _pickedImage = Rx<File?>(File(pickedImage!.path));
+      chooseImage.value = true;
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Fail adding image for item, ${e.toString()}',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
+  void pickImageUpdate(ImageSource src) async {
+    try {
+      final pickedImage = await ImagePicker().pickImage(source: src);
+      if (pickedImage != null) {
+        _pickedImage.value = File(pickedImage.path);
+
+        // Get.snackbar(
+        //   'Success',
+        //   'Successfully updated image for item',
+        //   backgroundColor: Colors.green,
+        //   colorText: Colors.white,
+        // );
+        // // Navigator.pop(context);
+      }
+      _pickedImage = Rx<File?>(File(pickedImage!.path));
+      updateItemImage(itemImage);
+      print("itemID:${itemIDCurrent}");
+    } catch (e) {
+      // Get.snackbar(
+      //   'Error',
+      //   'Fail updating image for item, ${e.toString()}',
+      //   backgroundColor: Colors.red,
+      //   colorText: Colors.white,
+      // );
+    }
+  }
+
+  Future<void> updateItemImage(File? image) async {
+    final itemCollection = FirebaseFirestore.instance.collection("items");
+    final docRef = itemCollection.doc(itemIDCurrent.value);
+    String downloadUrl = await _uploadToStorage(image!);
+    try {
+      await docRef.update({'itemPhoto': downloadUrl});
       Get.snackbar(
         'Success',
-        'Successfully added image for item',
+        'Successfully update the image.',
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
-      // Navigator.pop(context);
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Image update is not successfull',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     }
-    _pickedImage = Rx<File?>(File(pickedImage!.path));
+
+    update();
   }
 
   Future<String> _uploadToStorage(File image) async {
@@ -127,7 +197,45 @@ class ItemController extends GetxController {
   Future<DocumentSnapshot> getItemDetail(String docID) async {
     // DocumentSnapshot userData = await _usersCollection.doc(user.uid).get();
     return await itemCollection.doc(docID).get();
+
     // return userData.data();
+  }
+
+  static Future<void> updateItem(ItemModel item) async {
+    final itemCollection = FirebaseFirestore.instance.collection("items");
+    final docRef = itemCollection.doc(item.itemID);
+
+    final newItem = ItemModel(
+      uid: item.uid,
+      itemID: item.itemID,
+      itemName: item.itemName,
+      price: item.price,
+      ingredient: item.ingredient,
+      sideDish: item.sideDish,
+      itemPhoto: item.itemPhoto,
+      category: item.category,
+    ).toJson();
+
+    try {
+      await docRef.update(newItem);
+      Get.until((route) => route.isFirst);
+      Get.to(() => const ItemListScreen());
+      Get.snackbar(
+        'Success',
+        'Successfully edited details for item',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+      // Get.back();
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        e.toString(),
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+      //
+    }
   }
 
   Future<void> deleteItem(String docID) async {
