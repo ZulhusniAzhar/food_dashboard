@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:food_dashboard/src/features/analytic_admin/controller/analytic_controller.dart';
+import 'package:food_dashboard/src/features/analytic_admin/model/data.dart';
+import 'package:get/get.dart';
 
 import '../../../constants/colors.dart';
 import 'widget/activity_header.dart';
@@ -39,14 +42,14 @@ class DashboardAnalytics extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            const CourseGrid(),
+            CourseGrid(),
             const SizedBox(
               height: 20,
             ),
             // const PlaningHeader(),
-            const SizedBox(
-              height: 15,
-            ),
+            // const SizedBox(
+            //   height: 15,
+            // ),
             // const PlaningGrid(),
             const SizedBox(
               height: 15,

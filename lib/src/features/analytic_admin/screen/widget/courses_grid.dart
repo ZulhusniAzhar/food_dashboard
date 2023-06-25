@@ -1,16 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:food_dashboard/src/constants/image_strings.dart';
+import 'package:food_dashboard/src/features/analytic_admin/controller/analytic_controller.dart';
+import 'package:get/get.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
+import '../../model/course_model.dart';
 import '../../model/data.dart';
 
-class CourseGrid extends StatelessWidget {
-  const CourseGrid({Key? key}) : super(key: key);
+class CourseGrid extends StatefulWidget {
+  const CourseGrid({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<CourseGrid> createState() => _CourseGridState();
+}
+
+class _CourseGridState extends State<CourseGrid> {
+  final DataAnalyController dataController = Get.put(DataAnalyController());
+  @override
+  void initState() {
+    super.initState();
+    dataController
+        .updateCourseData(); // Call the updateCourseData function here
+  }
 
   @override
   Widget build(BuildContext context) {
+    final AnalyticDashboardController analyticDashboardController =
+        Get.put(AnalyticDashboardController());
+    final List<Course> finalcourses = dataController.courses;
     return GridView.builder(
-        itemCount: course.length,
+        itemCount: finalcourses.length,
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -19,7 +40,8 @@ class CourseGrid extends StatelessWidget {
           return Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage(course[index].backImage), fit: BoxFit.fill),
+                  image: AssetImage(finalcourses[index].backImage),
+                  fit: BoxFit.fill),
             ),
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -31,11 +53,11 @@ class CourseGrid extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
-                        course[index].text,
+                        finalcourses[index].text,
                         style: const TextStyle(color: Colors.white),
                       ),
                       Text(
-                        course[index].lessons,
+                        finalcourses[index].number.toString(),
                         style: const TextStyle(color: Colors.white),
                       ),
                       CircularPercentIndicator(
@@ -44,10 +66,10 @@ class CourseGrid extends StatelessWidget {
                         animation: true,
                         animationDuration: 1500,
                         circularStrokeCap: CircularStrokeCap.round,
-                        percent: course[index].percent / 100,
+                        percent: finalcourses[index].percent / 100,
                         progressColor: Colors.white,
                         center: Text(
-                          "${course[index].percent}%",
+                          "${finalcourses[index].percent.toString()}%",
                           style: const TextStyle(color: Colors.white),
                         ),
                       )

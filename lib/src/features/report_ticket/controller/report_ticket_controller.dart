@@ -24,7 +24,10 @@ class ReportTicketController extends GetxController {
       FirebaseFirestore.instance.collection('items');
   RxList<ReportTicketModel> reportforBuyer = RxList<ReportTicketModel>();
   RxList<ReportTicketModel> reportforSeller = RxList<ReportTicketModel>();
-  RxList<ReportTicketModel> reportforAdmin = RxList<ReportTicketModel>();
+  RxList<ReportTicketModel> reportforAdminIntervention =
+      RxList<ReportTicketModel>();
+  RxList<ReportTicketModel> reportforOngoing = RxList<ReportTicketModel>();
+
   RxString role = RxString('');
 
   final problemCat = TextEditingController();
@@ -36,6 +39,9 @@ class ReportTicketController extends GetxController {
     super.onInit();
     fetchTicketReportBuyer(getCurrentUserId());
     fetchTicketReportSeller(getCurrentUserId());
+    fetchTicketReportAdminIntervention();
+    fetchTicketReportOngoing();
+
     // print(reportforBuyer);
   }
 
@@ -45,6 +51,76 @@ class ReportTicketController extends GetxController {
       return user.uid;
     } else {
       return "";
+    }
+  }
+
+  Future<void> fetchTicketReportAdminIntervention() async {
+    try {
+      QuerySnapshot querySnapshot = await reportticketCollection
+          .where('statusTicket', isEqualTo: 2)
+          .get();
+
+      reportforAdminIntervention.value = querySnapshot.docs.map((doc) {
+        Timestamp? createdAtTS = doc['createdAt'] as Timestamp?;
+        Timestamp? deletedAtTS = doc['deletedAt'] as Timestamp?;
+
+        DateTime? createdAtDT = createdAtTS?.toDate();
+        DateTime? deletedAtDT = deletedAtTS?.toDate();
+
+        return ReportTicketModel(
+          reporterID: doc['reporterID'],
+          reportID: doc['reportID'],
+          sellerID: doc['sellerID'],
+          postID: doc['postID'],
+          problemCat: doc['problemCat'],
+          comment: doc['comment'],
+          statusTicket: doc['statusTicket'],
+          createdAt: createdAtDT ?? DateTime.now(),
+          deletedAt: deletedAtDT,
+        );
+      }).toList();
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        e.toString(),
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+    }
+  }
+
+  Future<void> fetchTicketReportOngoing() async {
+    try {
+      QuerySnapshot querySnapshot = await reportticketCollection
+          .where('statusTicket', isEqualTo: 0)
+          .get();
+
+      reportforOngoing.value = querySnapshot.docs.map((doc) {
+        Timestamp? createdAtTS = doc['createdAt'] as Timestamp?;
+        Timestamp? deletedAtTS = doc['deletedAt'] as Timestamp?;
+
+        DateTime? createdAtDT = createdAtTS?.toDate();
+        DateTime? deletedAtDT = deletedAtTS?.toDate();
+
+        return ReportTicketModel(
+          reporterID: doc['reporterID'],
+          reportID: doc['reportID'],
+          sellerID: doc['sellerID'],
+          postID: doc['postID'],
+          problemCat: doc['problemCat'],
+          comment: doc['comment'],
+          statusTicket: doc['statusTicket'],
+          createdAt: createdAtDT ?? DateTime.now(),
+          deletedAt: deletedAtDT,
+        );
+      }).toList();
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        e.toString(),
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
     }
   }
 
@@ -118,39 +194,6 @@ class ReportTicketController extends GetxController {
     }
   }
 
-  Future<void> fetchTicketReportAdmin() async {
-    try {
-      QuerySnapshot querySnapshot = await reportticketCollection.get();
-
-      reportforAdmin.value = querySnapshot.docs.map((doc) {
-        Timestamp? createdAtTS = doc['createdAt'] as Timestamp?;
-        Timestamp? deletedAtTS = doc['deletedAt'] as Timestamp?;
-
-        DateTime? createdAtDT = createdAtTS?.toDate();
-        DateTime? deletedAtDT = deletedAtTS?.toDate();
-
-        return ReportTicketModel(
-          reporterID: doc['reporterID'],
-          reportID: doc['reportID'],
-          sellerID: doc['sellerID'],
-          postID: doc['postID'],
-          problemCat: doc['problemCat'],
-          comment: doc['comment'],
-          statusTicket: doc['statusTicket'],
-          createdAt: createdAtDT ?? DateTime.now(),
-          deletedAt: deletedAtDT,
-        );
-      }).toList();
-    } catch (e) {
-      Get.snackbar(
-        'Error',
-        e.toString(),
-        backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
-      );
-    }
-  }
-
   List<String> getUniqueMonthsBuyer() {
     List<String> uniqueMonths = [];
     reportforBuyer.forEach((payment) {
@@ -180,7 +223,21 @@ class ReportTicketController extends GetxController {
     List<String> uniqueMonths = [];
     // print(paymentsasSeller);
 
-    reportforAdmin.forEach((payment) {
+    reportforAdminIntervention.forEach((payment) {
+      String monthYear = DateFormat('MMM yyyy').format(payment.createdAt);
+      if (!uniqueMonths.contains(monthYear)) {
+        uniqueMonths.add(monthYear);
+      }
+    });
+
+    return uniqueMonths;
+  }
+
+  List<String> getUniqueMonthsOngoing() {
+    List<String> uniqueMonths = [];
+    // print(paymentsasSeller);
+
+    reportforOngoing.forEach((payment) {
       String monthYear = DateFormat('MMM yyyy').format(payment.createdAt);
       if (!uniqueMonths.contains(monthYear)) {
         uniqueMonths.add(monthYear);
@@ -199,6 +256,20 @@ class ReportTicketController extends GetxController {
 
   List<ReportTicketModel> getReportsByMonthSeller(String monthYear) {
     return reportforSeller
+        .where((payment) =>
+            DateFormat('MMM yyyy').format(payment.createdAt) == monthYear)
+        .toList();
+  }
+
+  List<ReportTicketModel> getReportsByMonthAdminIntervention(String monthYear) {
+    return reportforAdminIntervention
+        .where((payment) =>
+            DateFormat('MMM yyyy').format(payment.createdAt) == monthYear)
+        .toList();
+  }
+
+  List<ReportTicketModel> getReportsByMonthOngoing(String monthYear) {
+    return reportforOngoing
         .where((payment) =>
             DateFormat('MMM yyyy').format(payment.createdAt) == monthYear)
         .toList();
