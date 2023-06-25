@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
             darkTheme: TAppTheme.darkTheme,
             themeMode: ThemeMode.system,
             defaultTransition: Transition.leftToRightWithFade,
+            debugShowCheckedModeBanner: false,
             transitionDuration: const Duration(milliseconds: 500),
             home: const WelcomeScreen(),
           );

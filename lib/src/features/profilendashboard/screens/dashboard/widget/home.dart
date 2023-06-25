@@ -111,7 +111,7 @@ class HomeScreenWidget extends StatelessWidget {
 
                           return SingleChildScrollView(
                             child: Container(
-                              padding: const EdgeInsets.all(8),
+                              // padding: const EdgeInsets.all(8),
                               child: Center(
                                 child: DashboardPostCard1(
                                   txtTheme: txtTheme,
