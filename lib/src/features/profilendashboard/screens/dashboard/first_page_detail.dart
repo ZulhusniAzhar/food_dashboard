@@ -427,11 +427,6 @@ class _FirstPageState extends State<FirstPage> {
                                                       dateStartEnd:
                                                           formattedDateEnd,
                                                     ));
-                                                // openWhatsapp(
-                                                //     number: usersnapshot
-                                                //         .data!['phoneNo'],
-                                                //     text:
-                                                //         'Hello ${usersnapshot.data!['fullName']},\n\nthrough UTM Food Dashboard, I would like to make a report regarding the item you are selling, ${itemsnapshot.data!['itemName'].toString().toUpperCase()}\n\nunder your post from\n${formattedDateStart} - ${formattedDateEnd}');
                                               },
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor:

@@ -158,7 +158,7 @@ class CreateReportScreen extends StatelessWidget {
                       openWhatsapp(
                         number: sellerPhoneNo,
                         text:
-                            'Hello ${fullNameSeller},\n\nthrough UTM Food Dashboard, I would like to make a report regarding the item you are selling, ${itemName.toString().toUpperCase()}\n\nunder your post from\n${dateStartBuy} - ${dateStartEnd}.\n\nThe problem is regarding the ${controller.chosenCategory.value}. To elaborate, ${controller.comment.text.trim()}',
+                            'Hello ${fullNameSeller},\n\nthrough UTM Food Dashboard, I would like to make a report regarding the item you are selling. \nItem: ${itemName.toString().toUpperCase()}\nPost:${dateStartBuy} - ${dateStartEnd}.\nProblem:${controller.chosenCategory.value}.\nExplanation:${controller.comment.text.trim()}',
                       );
                     }
                   },

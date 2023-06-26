@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_dashboard/src/features/authentication/models/user_model.dart';
 import 'package:food_dashboard/src/features/report_ticket/model/reportticket_model.dart';
-import 'package:food_dashboard/src/features/report_ticket/screen/reportticket_detail_screen.dart';
+import 'package:food_dashboard/src/features/report_ticket/screen/admin_detail_reportticket.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -247,8 +247,8 @@ class TransactionCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        Get.to(() => ReportTicketDetailScreen(
-            reportId: ticketforMonths.reportID, role: role));
+        Get.to(() =>
+            AdminReportTicketDetailScreen(reportId: ticketforMonths.reportID));
       },
       child: SizedBox(
         height: heightInPixels,
@@ -275,7 +275,7 @@ class TransactionCard extends StatelessWidget {
                         Container(
                           width: 170,
                           child: Text(
-                            snapshot.data!.fullName,
+                            "By:  ${snapshot.data!.fullName}",
                             overflow: TextOverflow
                                 .ellipsis, // Specify the overflow behavior
                             maxLines: 1,

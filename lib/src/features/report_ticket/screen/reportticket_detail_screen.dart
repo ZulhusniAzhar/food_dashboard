@@ -1,11 +1,14 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:food_dashboard/src/features/item/model/item_model.dart';
 import 'package:food_dashboard/src/features/post/model/post_model.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common_widgets/form/form_header_widget.dart';
 import '../../../constants/colors.dart';
@@ -22,6 +25,32 @@ class ReportTicketDetailScreen extends StatelessWidget {
   final String role;
   @override
   Widget build(BuildContext context) {
+    void openWhatsapp({required String text, required String number}) async {
+      var whatsapp = number; //+92xx enter like this
+      var whatsappURlAndroid =
+          "whatsapp://send?phone=" + whatsapp + "&text=$text";
+      var whatsappURLIos = "https://wa.me/$whatsapp?text=${Uri.tryParse(text)}";
+      if (Platform.isIOS) {
+        // for iOS phone only
+        if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
+          await launchUrl(Uri.parse(
+            whatsappURLIos,
+          ));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Whatsapp not installed")));
+        }
+      } else {
+        // android , web
+        if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
+          await launchUrl(Uri.parse(whatsappURlAndroid));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Whatsapp not installed")));
+        }
+      }
+    }
+
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     final ReportTicketController rtController =
         Get.put(ReportTicketController());
@@ -339,11 +368,7 @@ class ReportTicketDetailScreen extends StatelessWidget {
                                               height: 40,
                                             ),
                                             if (role != "Seller")
-                                              snapshot.data!.statusTicket ==
-                                                          0 ||
-                                                      snapshot.data!
-                                                              .statusTicket ==
-                                                          2
+                                              snapshot.data!.statusTicket == 0
                                                   ? SizedBox(
                                                       width: 200,
                                                       child: ElevatedButton(
@@ -399,6 +424,58 @@ class ReportTicketDetailScreen extends StatelessWidget {
                                                       ),
                                                     )
                                                   : const SizedBox(height: 1),
+                                            if (role != "Seller")
+                                              SizedBox(
+                                                width: 200,
+                                                child: ElevatedButton(
+                                                  onPressed: () {
+                                                    openWhatsapp(
+                                                        number: sellersnapshot
+                                                            .data!.phoneNo,
+                                                        text:
+                                                            'Hello.\n Issue Ticket Details\n Category:${snapshot.data!.problemCat} \n Comment: ${snapshot.data!.comment}');
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.black,
+                                                    side: BorderSide.none,
+                                                    shape:
+                                                        const StadiumBorder(),
+                                                  ),
+                                                  child: const Text(
+                                                    "WhatsApp Buyer",
+                                                    style: TextStyle(
+                                                        color: tWhiteColor),
+                                                  ),
+                                                ),
+                                              ),
+                                            if (role != "Buyer")
+                                              SizedBox(
+                                                width: 200,
+                                                child: ElevatedButton(
+                                                  onPressed: () {
+                                                    openWhatsapp(
+                                                        number: sellersnapshot
+                                                            .data!.phoneNo,
+                                                        text:
+                                                            'Hello.\n Issue Ticket Details\n Category:${snapshot.data!.problemCat} \n Comment: ${snapshot.data!.comment}');
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.black,
+                                                    side: BorderSide.none,
+                                                    shape:
+                                                        const StadiumBorder(),
+                                                  ),
+                                                  child: const Text(
+                                                    "WhatsApp Seller",
+                                                    style: TextStyle(
+                                                        color: tWhiteColor),
+                                                  ),
+                                                ),
+                                              )
                                           ],
                                         );
                                       } else {
