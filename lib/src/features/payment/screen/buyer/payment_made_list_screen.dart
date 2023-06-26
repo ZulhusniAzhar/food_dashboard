@@ -17,6 +17,7 @@ class PaymentListSellerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final PaymentController paymentController = Get.put(PaymentController());
     paymentController.fetchPaymentsBuyer(paymentController.getCurrentUserId());
     paymentController.fetchPaymentsSeller(paymentController.getCurrentUserId());
     paymentController.storeUserRole(paymentController.getCurrentUserId());
@@ -52,103 +53,111 @@ class PaymentListSellerScreen extends StatelessWidget {
         body: TabBarView(
           children: [
             // Contents of Tab 1
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: paymentController
-                    .getUniqueMonthsBuyer()
-                    .map((monthYearBuyer) {
-                  List<PaymentModel> paymentsForMonthBuyer =
-                      paymentController.getPaymentsByMonthBuyer(monthYearBuyer);
-
-                  return Column(
+            SingleChildScrollView(
+              child: Obx(
+                () => Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        monthYearBuyer,
-                        style: TextStyle(
-                          fontSize: fontSizeInPixels,
-                        ),
-                      ),
-                      // if (paymentsForMonthBuyer.isEmpty)
-                      // Center(
-                      //   child: Text(
-                      //     'No data',
-                      //     style: TextStyle(
-                      //       fontSize: fontSizeInPixels,
-                      //       fontStyle: FontStyle.italic,
-                      //     ),
-                      //   ),
-                      // ),
-                      // else
-                      ListView.separated(
-                        padding: EdgeInsets.zero,
-                        itemCount: paymentsForMonthBuyer.length,
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        separatorBuilder: (context, index) => const SizedBox(
-                          height: 2,
-                        ),
-                        itemBuilder: (context, index) {
-                          PaymentModel paymentBuyer =
-                              paymentsForMonthBuyer[index];
-                          return TransactionCard(
-                            paymentforMonths: paymentsForMonthBuyer[index],
-                            role: "Buyer",
-                          );
-                        },
-                      ),
-                    ],
-                  );
-                }).toList(),
+                    children: paymentController
+                        .getUniqueMonthsBuyer()
+                        .map((monthYearBuyer) {
+                      List<PaymentModel> paymentsForMonthBuyer =
+                          paymentController
+                              .getPaymentsByMonthBuyer(monthYearBuyer);
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            monthYearBuyer,
+                            style: TextStyle(
+                              fontSize: fontSizeInPixels,
+                            ),
+                          ),
+                          // if (paymentsForMonthBuyer.isEmpty)
+                          // Center(
+                          //   child: Text(
+                          //     'No data',
+                          //     style: TextStyle(
+                          //       fontSize: fontSizeInPixels,
+                          //       fontStyle: FontStyle.italic,
+                          //     ),
+                          //   ),
+                          // ),
+                          // else
+                          ListView.separated(
+                            padding: EdgeInsets.zero,
+                            itemCount: paymentsForMonthBuyer.length,
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(
+                              height: 2,
+                            ),
+                            itemBuilder: (context, index) {
+                              PaymentModel paymentBuyer =
+                                  paymentsForMonthBuyer[index];
+                              return TransactionCard(
+                                paymentforMonths: paymentsForMonthBuyer[index],
+                                role: "Buyer",
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                ),
               ),
             ),
 
             // Contents of Tab 2
             Obx(
               () => paymentController.role.value == "Seller"
-                  ? Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: paymentController
-                            .getUniqueMonthsSeller()
-                            .map((monthYearSeller) {
-                          List<PaymentModel> paymentsForMonthSeller =
-                              paymentController
-                                  .getPaymentsByMonthSeller(monthYearSeller);
+                  ? SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: paymentController
+                              .getUniqueMonthsSeller()
+                              .map((monthYearSeller) {
+                            List<PaymentModel> paymentsForMonthSeller =
+                                paymentController
+                                    .getPaymentsByMonthSeller(monthYearSeller);
 
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                monthYearSeller,
-                                style: TextStyle(
-                                  fontSize: fontSizeInPixels,
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  monthYearSeller,
+                                  style: TextStyle(
+                                    fontSize: fontSizeInPixels,
+                                  ),
                                 ),
-                              ),
-                              ListView.separated(
-                                padding: EdgeInsets.zero,
-                                itemCount: paymentsForMonthSeller.length,
-                                physics: const NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                separatorBuilder: (context, index) =>
-                                    const SizedBox(
-                                  height: 2,
+                                ListView.separated(
+                                  padding: EdgeInsets.zero,
+                                  itemCount: paymentsForMonthSeller.length,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(
+                                    height: 2,
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    PaymentModel payment =
+                                        paymentsForMonthSeller[index];
+                                    return TransactionCard(
+                                        paymentforMonths:
+                                            paymentsForMonthSeller[index],
+                                        role: "Seller");
+                                  },
                                 ),
-                                itemBuilder: (context, index) {
-                                  PaymentModel payment =
-                                      paymentsForMonthSeller[index];
-                                  return TransactionCard(
-                                      paymentforMonths:
-                                          paymentsForMonthSeller[index],
-                                      role: "Seller");
-                                },
-                              ),
-                            ],
-                          );
-                        }).toList(),
+                              ],
+                            );
+                          }).toList(),
+                        ),
                       ),
                     )
                   : Column(

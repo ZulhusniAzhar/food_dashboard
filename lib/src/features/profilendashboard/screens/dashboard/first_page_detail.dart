@@ -468,6 +468,8 @@ class _FirstPageState extends State<FirstPage> {
                                                   .data!['stockItem'],
                                               sellerID:
                                                   postsnapshot.data!['uid'],
+                                              postID:
+                                                  postsnapshot.data!['postID'],
                                             ));
                                       },
                                       style: ElevatedButton.styleFrom(

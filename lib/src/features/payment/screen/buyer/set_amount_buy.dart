@@ -16,6 +16,7 @@ class SetAmountItemStockScreen extends StatefulWidget {
     required this.caption,
     required this.itemStock,
     required this.sellerID,
+    required this.postID,
   });
 
   final String itemPhoto;
@@ -24,6 +25,7 @@ class SetAmountItemStockScreen extends StatefulWidget {
   final String caption;
   final int itemStock;
   final String sellerID;
+  final String postID;
 
   @override
   State<SetAmountItemStockScreen> createState() =>
@@ -314,6 +316,7 @@ class _SetAmountItemStockScreenState extends State<SetAmountItemStockScreen> {
                                 amountPayment: price,
                                 quantity: quantity,
                                 sellerID: widget.sellerID,
+                                postID: widget.postID,
                               ))
                           : Get.snackbar("Error", "You must buy atleast one");
                     },

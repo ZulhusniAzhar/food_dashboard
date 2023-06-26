@@ -15,19 +15,21 @@ class PaymentController extends GetxController {
       FirebaseFirestore.instance.collection('payment');
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection('Users');
+  final CollectionReference postCollection =
+      FirebaseFirestore.instance.collection('posts');
   // final paymentsasBuyer = <PaymentModel>[].obs;
   RxList<PaymentModel> paymentsasBuyer = RxList<PaymentModel>();
   // final paymentsasSeller = <PaymentModel>[].obs;
   RxString role = RxString('');
   RxList<PaymentModel> paymentsasSeller = RxList<PaymentModel>();
 
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   fetchPaymentsBuyer(getCurrentUserId());
-  //   fetchPaymentsSeller(getCurrentUserId());
-  //   storeUserRole(getCurrentUserId());
-  // }
+  @override
+  void onInit() {
+    super.onInit();
+    fetchPaymentsBuyer(getCurrentUserId());
+    fetchPaymentsSeller(getCurrentUserId());
+    storeUserRole(getCurrentUserId());
+  }
 
   String getCurrentUserId() {
     final user = _auth.currentUser;
@@ -181,13 +183,13 @@ class PaymentController extends GetxController {
     role.value = data['role'];
   }
 
-  Future<void> addPayment(PaymentModel payments) async {
+  Future<void> addPayment(PaymentModel payments, String postID) async {
     try {
       final jsonItem = payments.toJson();
       // await _firestore.collection('payment').add(jsonItem);
       final docRef = await _firestore.collection('payment').add(jsonItem);
       final docId = docRef.id;
-
+      updateItemStock(postID, payments.itemTotal);
       // Update the payment with the document ID
       // payments.paymentID = docId;
 
@@ -206,5 +208,19 @@ class PaymentController extends GetxController {
     } catch (e) {
       Get.snackbar("Error", "The payment fails");
     }
+  }
+
+  Future<void> updateItemStock(String postID, int quantity) async {
+    final ticketRef = postCollection.doc(postID);
+
+// Retrieve current stock value from Firebase
+    DocumentSnapshot postSnapshot = await ticketRef.get();
+    Map<String, dynamic> data = postSnapshot.data() as Map<String, dynamic>;
+    int currentStock = data['stockItem'];
+
+//decrease as much as quantity
+    int newStock = currentStock - quantity;
+
+    await ticketRef.update({'stockItem': newStock});
   }
 }

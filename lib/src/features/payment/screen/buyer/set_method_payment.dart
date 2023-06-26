@@ -17,12 +17,14 @@ class PaymentMethod {
 class SetPaymentMethod extends StatelessWidget {
   SetPaymentMethod(
       {super.key,
+      required this.postID,
       required this.amountPayment,
       required this.quantity,
       required this.sellerID});
   final double amountPayment;
   final int quantity;
   final String sellerID;
+  final String postID;
   final List<PaymentMethod> paymentMethods = [
     PaymentMethod(name: 'PayPal', icon: Icons.payment),
     PaymentMethod(name: 'Visa', icon: Icons.credit_card),
@@ -73,7 +75,7 @@ class SetPaymentMethod extends StatelessWidget {
                   createdAt: DateTime.now(),
                   datePayment: DateTime.now(),
                   deletedAt: null);
-              controller.addPayment(newPayment);
+              controller.addPayment(newPayment, postID);
             },
           );
         },
