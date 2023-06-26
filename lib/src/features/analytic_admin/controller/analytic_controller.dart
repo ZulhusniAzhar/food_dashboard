@@ -50,6 +50,7 @@ class AnalyticDashboardController extends GetxController {
           .toList();
     });
 
-    return MergeStream([sellerList, studentList, administratorList]);
+    return CombineLatestStream([sellerList, studentList, administratorList],
+        (list) => list.reduce((a, b) => a + b));
   }
 }

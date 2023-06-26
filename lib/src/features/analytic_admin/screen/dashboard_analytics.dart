@@ -1,18 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:food_dashboard/src/features/analytic_admin/controller/analytic_controller.dart';
-import 'package:food_dashboard/src/features/analytic_admin/model/data.dart';
-import 'package:get/get.dart';
-
-import '../../../constants/colors.dart';
 import 'widget/activity_header.dart';
 import 'widget/bar_chart.dart';
 import 'widget/chart_container.dart';
-import 'widget/courses_grid.dart';
-import 'widget/planing_grid.dart';
-import 'widget/planing_header.dart';
 import 'widget/statistics_grid.dart';
+import 'widget/user_grid.dart';
 
 class DashboardAnalytics extends StatelessWidget {
   const DashboardAnalytics({super.key});
@@ -42,7 +33,7 @@ class DashboardAnalytics extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            CourseGrid(),
+            UserGrid(),
             const SizedBox(
               height: 20,
             ),
@@ -55,7 +46,7 @@ class DashboardAnalytics extends StatelessWidget {
               height: 15,
             ),
             const Text(
-              "Statistics",
+              "Business Info",
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(

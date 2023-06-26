@@ -110,6 +110,7 @@ flutter:
     - assets/images/forget_password_images/
     - assets/images/dashboard/
     - assets/images/profile_images/
+    - assets/images/analyticalDashboard/
     - assets/images/items/
     - assets/images/boxes/
     - assets/images/payment/

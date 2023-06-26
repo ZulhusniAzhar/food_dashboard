@@ -30,3 +30,7 @@ const String tBox4 = "assets/images/boxes/box4.png";
 
 const String tPaymentCard = "assets/images/payment/card.png";
 const String tProblemSolve = "assets/images/problem.jpg";
+
+const String tAdminImage = "assets/images/analyticalDashboard/admin.png";
+const String tSellerImage = "assets/images/analyticalDashboard/seller.png";
+const String tBuyerImage = "assets/images/analyticalDashboard/buyer.png";
