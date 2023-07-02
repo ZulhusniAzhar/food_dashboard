@@ -237,7 +237,8 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                     GestureDetector(
                                       onTap: () {
                                         Get.to(ResultQRGeneratorScreen(
-                                          text: snapshot.data!['postID'],
+                                          postID: snapshot.data!['postID'],
+                                          sellerID: snapshot.data!['uid'],
                                         ));
                                       },
                                       child: Container(

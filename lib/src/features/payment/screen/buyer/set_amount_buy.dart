@@ -35,9 +35,10 @@ class SetAmountItemStockScreen extends StatefulWidget {
 class _SetAmountItemStockScreenState extends State<SetAmountItemStockScreen> {
   int quantity = 0;
   double price = 0;
-  final int limit = 10;
+  int limit = 0;
 
   void increaseQuantity() {
+    limit += widget.itemStock;
     if (quantity < limit) {
       setState(() {
         quantity++;

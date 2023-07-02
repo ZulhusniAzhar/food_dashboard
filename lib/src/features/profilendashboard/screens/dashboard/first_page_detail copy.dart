@@ -22,21 +22,21 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 import '../../../../constants/imageutil.dart';
 
-class FirstPage extends StatefulWidget {
+class FirstPageCopy extends StatefulWidget {
   final String postID;
 
   final PostController postController = Get.put(PostController());
 
-  FirstPage({
+  FirstPageCopy({
     super.key,
     required this.postID,
   });
 
   @override
-  State<FirstPage> createState() => _FirstPageState();
+  State<FirstPageCopy> createState() => _FirstPageCopyState();
 }
 
-class _FirstPageState extends State<FirstPage> {
+class _FirstPageCopyState extends State<FirstPageCopy> {
   final DraggableScrollableController _scrollableController =
       DraggableScrollableController();
   final PostController postController = Get.put(PostController());

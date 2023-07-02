@@ -90,7 +90,7 @@ class _UpdatePostScreenState extends State<UpdatePostScreen> {
               icon: Icon(LineAwesomeIcons.angle_left,
                   color: isDark ? tWhiteColor : tDarkColor)),
           title: Text(
-            "Update Item (Your Product)",
+            "Update Post ",
             style: Theme.of(context).textTheme.headline4,
           ),
           centerTitle: true,
@@ -157,12 +157,16 @@ class _UpdatePostScreenState extends State<UpdatePostScreen> {
                         color: Colors.black.withOpacity(0.7),
                       ),
                     ),
-                    RadioGroup(
-                      radioList: college,
-                      selectedItem: selectedIndexCollege,
-                      onChanged: (value) {
-                        venueCollegeController.text = value;
-                      },
+                    Container(
+                      width: 180, // Set the desired width
+                      height: 370,
+                      child: RadioGroup(
+                        radioList: college,
+                        selectedItem: selectedIndexCollege,
+                        onChanged: (value) {
+                          venueCollegeController.text = value;
+                        },
+                      ),
                     ),
                     const SizedBox(height: tFormHeight),
                     Text(

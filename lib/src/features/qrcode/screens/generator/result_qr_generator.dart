@@ -16,10 +16,12 @@ import 'package:path/path.dart' as path;
 import '../../../../constants/colors.dart';
 
 class ResultQRGeneratorScreen extends StatefulWidget {
-  final String text;
+  final String postID;
+  final String sellerID;
   ResultQRGeneratorScreen({
     super.key,
-    required this.text,
+    required this.postID,
+    required this.sellerID,
   });
   @override
   State<ResultQRGeneratorScreen> createState() =>
@@ -147,7 +149,7 @@ class _ResultQRGeneratorScreenState extends State<ResultQRGeneratorScreen> {
                     child: RepaintBoundary(
                       key: globalKey,
                       child: QrImage(
-                        data: widget.text,
+                        data: '${widget.postID}|${widget.sellerID}',
                         version: QrVersions.auto,
                         size: 180,
                         foregroundColor: const Color(0xFF8194FE),

@@ -2,11 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:food_dashboard/src/features/profilendashboard/screens/dashboard/first_page_detail.dart';
 import 'package:get/get.dart';
-import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import '../../../constants/colors.dart';
 import 'scanner/qr_result_screen.dart';
 import 'widgets/tool.dart';
 
@@ -72,16 +69,23 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
                 allowDuplicates: true,
                 onDetect: (barcode, args) {
                   if (!isScanComplete) {
-                    String qrResult = barcode.rawValue ?? "---";
-                    setState(() {
-                      isScanComplete = true;
-                    });
-                    Get.to(
-                      () => FirstPage(
-                        // closeScreen: closeScanner,
-                        postID: qrResult,
-                      ),
-                    );
+                    String qrResult = barcode.rawValue ?? "";
+                    List<String> values = qrResult
+                        .split('|'); // Split the string using the separator
+                    if (values.length >= 2) {
+                      String postID = values[0];
+                      String sellerID = values[1];
+                      setState(() {
+                        isScanComplete = true;
+                      });
+                      Get.to(
+                        () => QrResultScreen(
+                          // closeScreen: closeScanner,
+                          postID: postID,
+                          sellerID: sellerID,
+                        ),
+                      );
+                    }
                   }
                 },
               ),

@@ -75,7 +75,7 @@ class UserGrid extends StatelessWidget {
                             percent: sellerRatio,
                             progressColor: Colors.white,
                             center: Text(
-                              "${sellerRatioPercent.toString()}%",
+                              "${sellerRatioPercent.toStringAsFixed(2)}%",
                               style: const TextStyle(color: Colors.white),
                             ),
                           )

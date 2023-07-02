@@ -191,6 +191,18 @@ class PostController extends GetxController {
     });
   }
 
+  Stream<List<Map<String, dynamic>>> getPostListSeller(String sellerID) {
+    return postCollection
+        .where('uid', isEqualTo: sellerID)
+        // .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((querySnapshot) {
+      return querySnapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
+    });
+  }
+
   void pickImage(ImageSource src) async {
     final pickedImage = await ImagePicker().pickImage(source: src);
     if (pickedImage != null) {
@@ -274,7 +286,7 @@ class PostController extends GetxController {
     } catch (e) {
       Get.snackbar(
         "Error",
-        e.toString(),
+        "Theres a problem",
       );
     }
   }

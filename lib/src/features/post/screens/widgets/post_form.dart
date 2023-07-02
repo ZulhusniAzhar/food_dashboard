@@ -280,7 +280,9 @@ class AddPostForm extends StatelessWidget {
                   } catch (e) {
                     Get.snackbar(
                       'Error',
-                      e.toString(),
+                      "Please fill in all fields",
+                      backgroundColor: Colors.red,
+                      colorText: Colors.white,
                     );
                   }
                 },

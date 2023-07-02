@@ -80,7 +80,7 @@ class CreateReportScreen extends StatelessWidget {
             icon: Icon(LineAwesomeIcons.angle_left,
                 color: isDark ? tWhiteColor : tDarkColor)),
         title: Text(
-          "Post Details",
+          "Create Issue Ticket",
           style: Theme.of(context).textTheme.headline4,
         ),
         centerTitle: true,

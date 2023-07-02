@@ -4,6 +4,7 @@
 
 import 'package:custom_radio_group_list/custom_radio_group_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:food_dashboard/src/constants/image_strings.dart';
 import 'package:food_dashboard/src/constants/sizes.dart';
 import 'package:food_dashboard/src/features/profilendashboard/controllers/profile_controller.dart';
@@ -182,8 +183,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     TextFormField(
                       controller: phoneNoController,
                       decoration: const InputDecoration(
-                          label: Text(tPhoneNo),
-                          prefixIcon: Icon(Icons.numbers_rounded)),
+                        labelText: tPhoneNo,
+                        prefixIcon: Icon(Icons.numbers_rounded),
+                      ),
+                      keyboardType: TextInputType.phone,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9+]')),
+                      ],
                     ),
                     const SizedBox(
                       height: tFormHeight,
@@ -234,24 +240,39 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          ProfileController.updateUser(UserModel(
-                                  uid: widget.user.uid,
-                                  fullName: fullNameController.text.trim(),
-                                  matricNo: matricNoController.text.trim(),
-                                  gender: genderController.text.trim(),
-                                  email: emailController.text.trim(),
-                                  phoneNo: phoneNoController.text.trim(),
-                                  password: passwordController.text.trim(),
-                                  block: blockController.text.trim(),
-                                  college: collegeController.text.trim(),
-                                  profilePhoto: widget.user.profilePhoto,
-                                  role: widget.user.role))
-                              .then((value) => Get.to(() => Dashboard(
-                                    pageIdx: 3,
-                                  )));
-                          // Get.back());
+                          try {
+                            if (fullNameController.text != "" ||
+                                matricNoController.text != "" ||
+                                emailController.text != "" ||
+                                phoneNoController.text != "" ||
+                                blockController.text != "" ||
+                                passwordController.text != "") {
+                              ProfileController.updateUser(UserModel(
+                                      uid: widget.user.uid,
+                                      fullName: fullNameController.text.trim(),
+                                      matricNo: matricNoController.text.trim(),
+                                      gender: genderController.text.trim(),
+                                      email: emailController.text.trim(),
+                                      phoneNo: phoneNoController.text.trim(),
+                                      password: passwordController.text.trim(),
+                                      block: blockController.text.trim(),
+                                      college: collegeController.text.trim(),
+                                      profilePhoto: widget.user.profilePhoto,
+                                      role: widget.user.role))
+                                  .then((value) => Get.to(() => Dashboard(
+                                        pageIdx: 3,
+                                      )));
+                              // Get.back());
 
-                          Get.snackbar("Success", "Data Successfully updated");
+                              Get.snackbar(
+                                  "Success", "Data Successfully updated");
+                            }
+                          } catch (e) {
+                            Get.snackbar(
+                              'Error',
+                              "Please Fill All Field",
+                            );
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: tPrimaryColor,

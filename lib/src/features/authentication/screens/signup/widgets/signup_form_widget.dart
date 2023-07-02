@@ -1,16 +1,12 @@
 import 'package:custom_radio_group_list/custom_radio_group_list.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:food_dashboard/src/constants/auth.dart';
+import 'package:flutter/services.dart';
 import 'package:food_dashboard/src/features/authentication/controllers/signup_controller.dart';
 import 'package:food_dashboard/src/repository/authentication_repository/authentication_repository.dart';
 import 'package:get/get.dart';
-import 'package:line_awesome_flutter/line_awesome_flutter.dart';
-
 import '../../../../../constants/college.dart';
-import '../../../../../constants/colors.dart';
 import '../../../../../constants/gender.dart';
-import '../../../../../constants/image_strings.dart';
 import '../../../../../constants/sizes.dart';
 import '../../../../../constants/text_strings.dart';
 
@@ -98,28 +94,25 @@ class SignUpFormWidget extends StatelessWidget {
                   prefixIcon: Icon(Icons.numbers_rounded)),
             ),
             const SizedBox(height: tFormHeight),
-            // TextFormField(
-            //   controller: controller.gender,
-            //   validator: (value) {
-            //     if (value == null || value.isEmpty) return 'Field is required.';
-            //     return null;
-            //   },
-            //   decoration: const InputDecoration(
-            //       label: Text("Gender (Male/Female)"),
-            //       prefixIcon: Icon(Icons.boy_rounded)),
-            // ),
             Text(
               "Gender",
               style: TextStyle(
                 color: Colors.black.withOpacity(0.7),
               ),
             ),
-            RadioGroup(
-              radioList: gender,
-              selectedItem: 1,
-              onChanged: (value) {
-                authRepo.chosenGender.value = value;
-              },
+
+            // ignore: sized_box_for_whitespace
+            Container(
+              width: 180, // Set the desired width
+              height: 97,
+              child: RadioGroup(
+                scrollDirection: Axis.vertical,
+                radioList: gender,
+                selectedItem: 1,
+                onChanged: (value) {
+                  authRepo.chosenGender.value = value;
+                },
+              ),
             ),
             const SizedBox(height: tFormHeight + 4),
             TextFormField(
@@ -139,6 +132,10 @@ class SignUpFormWidget extends StatelessWidget {
               },
               decoration: const InputDecoration(
                   label: Text(tPhoneNo), prefixIcon: Icon(Icons.numbers)),
+              keyboardType: TextInputType.phone,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9+]')),
+              ],
             ),
             const SizedBox(height: tFormHeight),
             TextFormField(
@@ -158,12 +155,16 @@ class SignUpFormWidget extends StatelessWidget {
                 color: Colors.black.withOpacity(0.7),
               ),
             ),
-            RadioGroup(
-              radioList: college,
-              selectedItem: 1,
-              onChanged: (value) {
-                authRepo.chosenCollege.value = value;
-              },
+            Container(
+              width: 180, // Set the desired width
+              height: 370, // Set the desired height
+              child: RadioGroup(
+                radioList: college,
+                selectedItem: 1,
+                onChanged: (value) {
+                  authRepo.chosenCollege.value = value;
+                },
+              ),
             ),
             const SizedBox(height: tFormHeight + 5),
             TextFormField(
@@ -176,16 +177,6 @@ class SignUpFormWidget extends StatelessWidget {
                   label: Text("Block"), prefixIcon: Icon(Icons.house)),
             ),
             const SizedBox(height: tFormHeight),
-            // TextFormField(
-            //   controller: controller.college,
-            //   validator: (value) {
-            //     if (value == null || value.isEmpty) return 'Field is required.';
-            //     return null;
-            //   },
-            //   decoration: const InputDecoration(
-            //       label: Text("College"), prefixIcon: Icon(Icons.house)),
-            // ),
-
             SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -197,19 +188,14 @@ class SignUpFormWidget extends StatelessWidget {
                         controller.fullName.text.trim(),
                         controller.email.text.trim(),
                         controller.matricNo.text.trim(),
-                        // controller.gender.text.trim(),
                         authRepo.chosenGender.value,
                         controller.phoneNo.text.trim(),
                         controller.password.text.trim(),
                         controller.block.text.trim(),
-                        // controller.college.text.trim(),
                         authRepo.chosenCollege.value,
                         "General",
                         // image: authRepo.profilePhoto,
                       );
-                    } else {
-                      Get.snackbar(
-                          "Error", "Please fill all fields and radio buttons");
                     }
                   },
                   child: Text(tSignUp.toUpperCase()),
