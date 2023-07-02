@@ -47,8 +47,12 @@ class FormCardState extends State<FormCard> {
             return Container(
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-                color: Colors.primaries[widget.index % Colors.primaries.length],
+                border: Border.all(
+                  color: tPrimaryColor, // Set the border color here
+                  width: 2.0, // Set the border width
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: Colors.white,
               ),
               child: Padding(
                 padding: const EdgeInsets.all(18.0),
@@ -62,6 +66,11 @@ class FormCardState extends State<FormCard> {
                           Container(
                             padding: const EdgeInsets.all(5),
                             decoration: BoxDecoration(
+                              border: Border.all(
+                                color:
+                                    tPrimaryColor, // Set the border color here
+                                width: 2.0, // Set the border width
+                              ),
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(50),
                             ),
@@ -124,7 +133,7 @@ class FormCardState extends State<FormCard> {
                                   ),
                                   Text(
                                     "${widget.blockSelling.toUpperCase()},${widget.collegeSelling.toUpperCase()}",
-                                    style: const TextStyle(color: Colors.white),
+                                    style: const TextStyle(color: Colors.black),
                                   ),
                                 ],
                               ),
@@ -147,7 +156,7 @@ class FormCardState extends State<FormCard> {
                                     child: Text(
                                       widget.descriptionRF,
                                       style:
-                                          const TextStyle(color: Colors.white),
+                                          const TextStyle(color: Colors.black),
                                       overflow: TextOverflow.visible,
                                     ),
                                   ),
@@ -170,7 +179,7 @@ class FormCardState extends State<FormCard> {
                                   ),
                                   Text(
                                     widget.itemSelling,
-                                    style: const TextStyle(color: Colors.white),
+                                    style: const TextStyle(color: Colors.black),
                                   ),
                                 ],
                               ),

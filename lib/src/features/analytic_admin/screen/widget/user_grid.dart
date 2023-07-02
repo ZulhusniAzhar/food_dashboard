@@ -72,7 +72,7 @@ class UserGrid extends StatelessWidget {
                             animation: true,
                             animationDuration: 1500,
                             circularStrokeCap: CircularStrokeCap.round,
-                            percent: sellerRatio,
+                            percent: sellerRatio.toPrecision(2),
                             progressColor: Colors.white,
                             center: Text(
                               "${sellerRatioPercent.toStringAsFixed(2)}%",
@@ -126,10 +126,10 @@ class UserGrid extends StatelessWidget {
                             animation: true,
                             animationDuration: 1500,
                             circularStrokeCap: CircularStrokeCap.round,
-                            percent: studentRatio,
+                            percent: studentRatio.toPrecision(2),
                             progressColor: Colors.white,
                             center: Text(
-                              "${studentRatioPercent.toString()}%",
+                              "${studentRatioPercent.toStringAsFixed(2)}%",
                               style: const TextStyle(color: Colors.white),
                             ),
                           )
@@ -181,10 +181,10 @@ class UserGrid extends StatelessWidget {
                             animation: true,
                             animationDuration: 1500,
                             circularStrokeCap: CircularStrokeCap.round,
-                            percent: administratorRatio,
+                            percent: administratorRatio.toPrecision(2),
                             progressColor: Colors.white,
                             center: Text(
-                              "${adminRatioPercent.toString()}%",
+                              "${adminRatioPercent.toStringAsFixed(2)}%",
                               style: const TextStyle(color: Colors.white),
                             ),
                           )

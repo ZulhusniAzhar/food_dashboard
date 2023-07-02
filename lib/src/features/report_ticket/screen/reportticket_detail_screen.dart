@@ -83,9 +83,9 @@ class ReportTicketDetailScreen extends StatelessWidget {
                   String formattedDateTime = DateFormat('d MMM, hh:mm a')
                       .format(snapshot.data!.createdAt);
                   return Container(
-                    padding: const EdgeInsets.all(tDefaultSize),
+                    padding: const EdgeInsets.all(16.0),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Center(
                           child: FormHeaderWidget(
@@ -444,7 +444,7 @@ class ReportTicketDetailScreen extends StatelessWidget {
                                                         const StadiumBorder(),
                                                   ),
                                                   child: const Text(
-                                                    "WhatsApp Buyer",
+                                                    "WhatsApp Seller",
                                                     style: TextStyle(
                                                         color: tWhiteColor),
                                                   ),
@@ -470,7 +470,7 @@ class ReportTicketDetailScreen extends StatelessWidget {
                                                         const StadiumBorder(),
                                                   ),
                                                   child: const Text(
-                                                    "WhatsApp Seller",
+                                                    "WhatsApp Buyer",
                                                     style: TextStyle(
                                                         color: tWhiteColor),
                                                   ),

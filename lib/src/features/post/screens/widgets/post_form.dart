@@ -228,13 +228,18 @@ class AddPostForm extends StatelessWidget {
                 color: Colors.black.withOpacity(0.7),
               ),
             ),
-            RadioGroup(
-              radioList: college,
-              selectedItem: 1,
-              onChanged: (value) {
-                postController.collegeChosen.value = value;
-              },
+            Container(
+              width: 180, // Set the desired width
+              height: 370, // Set the desired height
+              child: RadioGroup(
+                radioList: college,
+                selectedItem: 1,
+                onChanged: (value) {
+                  postController.collegeChosen.value = value;
+                },
+              ),
             ),
+
             const SizedBox(height: tFormHeight),
             Text(
               "Sale Time",

@@ -91,7 +91,7 @@ class ReportTicketListScreen extends StatelessWidget {
                       height: tDashboardPadding,
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(12.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: SingleChildScrollView(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,7 +167,7 @@ class ReportTicketListScreen extends StatelessWidget {
                       height: tDashboardPadding,
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(12.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: SingleChildScrollView(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -420,9 +420,9 @@ class TransactionCard extends StatelessWidget {
                                       ),
                       ],
                     ),
-                    const Spacer(),
+                    // const Spacer(),
                     SizedBox(
-                      width: 95,
+                      width: 60,
                       child: Text(
                         "${ticketforMonths.problemCat}",
                         overflow: TextOverflow.ellipsis,

@@ -81,8 +81,8 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
                       Get.to(
                         () => QrResultScreen(
                           // closeScreen: closeScanner,
-                          postID: postID,
-                          sellerID: sellerID,
+                          widgetpostID: postID,
+                          widgetsellerID: sellerID,
                         ),
                       );
                     }

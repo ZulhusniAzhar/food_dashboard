@@ -80,7 +80,7 @@ final List<Statistics> statistics = [
   ),
   Statistics(
     title: "Item Listed (Drink)",
-    number: "250",
+    number: "1",
   ),
   Statistics(
     title: "Amount of Purchase",

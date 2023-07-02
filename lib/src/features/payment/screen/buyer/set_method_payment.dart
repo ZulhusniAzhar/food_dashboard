@@ -27,9 +27,9 @@ class SetPaymentMethod extends StatelessWidget {
   final String postID;
   final List<PaymentMethod> paymentMethods = [
     PaymentMethod(name: 'PayPal', icon: Icons.payment),
-    PaymentMethod(name: 'Visa', icon: Icons.credit_card),
+    // PaymentMethod(name: 'Visa', icon: Icons.credit_card),
     PaymentMethod(name: 'MasterCard', icon: Icons.credit_card),
-    PaymentMethod(name: 'American Express', icon: Icons.credit_card),
+    // PaymentMethod(name: 'American Express', icon: Icons.credit_card),
     PaymentMethod(name: 'Online Banking', icon: LineAwesomeIcons.piggy_bank),
     PaymentMethod(name: 'Cash', icon: LineAwesomeIcons.money_bill),
   ];

@@ -376,9 +376,9 @@ class TransactionCard extends StatelessWidget {
                                       ),
                       ],
                     ),
-                    const Spacer(),
+                    // const Spacer(),
                     SizedBox(
-                      width: 95,
+                      width: 60,
                       child: Text(
                         "${ticketforMonths.problemCat}",
                         overflow: TextOverflow.ellipsis,

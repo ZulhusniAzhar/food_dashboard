@@ -27,8 +27,10 @@ class _DashboardState extends State<Dashboard> {
 
     return GetBuilder<ProfileController>(builder: (controller) {
       final profileController = Get.put(ProfileController());
+      String roleCurrent = 'General';
       final AuthenticationRepository authRepo =
           Get.put(AuthenticationRepository());
+      roleCurrent = controller.currentRole.value;
       return Obx(
         () => Scaffold(
           appBar: DashboardAppBar(
@@ -85,11 +87,11 @@ class _DashboardState extends State<Dashboard> {
                       label: "Dashboard",
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.home_filled, size: 30),
+                      icon: Icon(Icons.assignment_ind_rounded, size: 30),
                       label: "Role Change",
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.home_filled, size: 30),
+                      icon: Icon(Icons.assignment_late_rounded, size: 30),
                       label: "Issue Ticket",
                     ),
                     BottomNavigationBarItem(

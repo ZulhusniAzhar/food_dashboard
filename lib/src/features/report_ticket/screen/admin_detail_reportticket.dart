@@ -126,388 +126,415 @@ class AdminReportTicketDetailScreen extends StatelessWidget {
                                             builder: (context,
                                                 AsyncSnapshot<UserModel?>
                                                     sellersnapshot) {
-                                              return Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                        "Reporter Name:",
-                                                        style:
-                                                            txtTheme.headline6,
-                                                      ),
-                                                      const SizedBox(width: 5),
-                                                      Text(
-                                                        reportersnapshot
-                                                            .data!.fullName,
-                                                        style:
-                                                            txtTheme.bodyText2,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                        "Reporter Phone Number:",
-                                                        style:
-                                                            txtTheme.headline6,
-                                                      ),
-                                                      const SizedBox(width: 5),
-                                                      Text(
-                                                        reportersnapshot
-                                                            .data!.phoneNo,
-                                                        style:
-                                                            txtTheme.bodyText2,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Divider(color: tDarkColor),
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                        "Seller Name:",
-                                                        style:
-                                                            txtTheme.headline6,
-                                                      ),
-                                                      const SizedBox(width: 5),
-                                                      Text(
-                                                        sellersnapshot
-                                                            .data!.fullName,
-                                                        style:
-                                                            txtTheme.bodyText2,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                        "Reporter Phone Number:",
-                                                        style:
-                                                            txtTheme.headline6,
-                                                      ),
-                                                      const SizedBox(width: 5),
-                                                      Text(
-                                                        sellersnapshot
-                                                            .data!.phoneNo,
-                                                        style:
-                                                            txtTheme.bodyText2,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Divider(color: tDarkColor),
-                                                  FutureBuilder<ItemModel?>(
-                                                      future: rtController
-                                                          .getItemDetail(
-                                                              postsnapshot.data!
-                                                                  .itemID),
-                                                      builder: (context,
-                                                          AsyncSnapshot<
-                                                                  ItemModel?>
-                                                              itemsnapshot) {
-                                                        if (itemsnapshot
-                                                            .hasError) {
-                                                          return Text(
-                                                              'Error: ${itemsnapshot.error}');
-                                                        } else if (itemsnapshot
-                                                            .hasData) {
-                                                          return Row(
-                                                            children: [
-                                                              Text(
-                                                                "Item Name:",
-                                                                style: txtTheme
-                                                                    .headline6,
-                                                              ),
-                                                              const SizedBox(
-                                                                  width: 5),
-                                                              Text(
-                                                                itemsnapshot
+                                              if (sellersnapshot.hasError) {
+                                                return Text(
+                                                    'Error: ${sellersnapshot.error}');
+                                              } else if (sellersnapshot
+                                                  .hasData) {
+                                                return Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          "Reporter Name:",
+                                                          style: txtTheme
+                                                              .headline6,
+                                                        ),
+                                                        const SizedBox(
+                                                            width: 5),
+                                                        Text(
+                                                          reportersnapshot
+                                                              .data!.fullName,
+                                                          style: txtTheme
+                                                              .bodyText2,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          "Reporter Phone Number:",
+                                                          style: txtTheme
+                                                              .headline6,
+                                                        ),
+                                                        const SizedBox(
+                                                            width: 5),
+                                                        Text(
+                                                          reportersnapshot
+                                                              .data!.phoneNo,
+                                                          style: txtTheme
+                                                              .bodyText2,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Divider(color: tDarkColor),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          "Seller Name:",
+                                                          style: txtTheme
+                                                              .headline6,
+                                                        ),
+                                                        const SizedBox(
+                                                            width: 5),
+                                                        Text(
+                                                          sellersnapshot
+                                                              .data!.fullName,
+                                                          style: txtTheme
+                                                              .bodyText2,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          "Reporter Phone Number:",
+                                                          style: txtTheme
+                                                              .headline6,
+                                                        ),
+                                                        const SizedBox(
+                                                            width: 5),
+                                                        Text(
+                                                          sellersnapshot
+                                                              .data!.phoneNo,
+                                                          style: txtTheme
+                                                              .bodyText2,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Divider(color: tDarkColor),
+                                                    FutureBuilder<ItemModel?>(
+                                                        future: rtController
+                                                            .getItemDetail(
+                                                                postsnapshot
                                                                     .data!
-                                                                    .itemName,
-                                                                style: txtTheme
-                                                                    .bodyText2,
-                                                              ),
-                                                            ],
-                                                          );
-                                                        } else {
-                                                          return const Center(
-                                                              child:
-                                                                  CircularProgressIndicator());
-                                                        }
-                                                      }),
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                        "Date Post:",
-                                                        style:
-                                                            txtTheme.headline6,
-                                                      ),
-                                                      const SizedBox(width: 5),
-                                                      Container(
-                                                        width: 250,
-                                                        child: Text(
-                                                          "$postStartformattedDateTime - $postEndformattedDateTime",
-                                                          style: txtTheme
-                                                              .bodyText2,
-                                                          textAlign:
-                                                              TextAlign.start,
-                                                          overflow:
-                                                              TextOverflow.fade,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                        "Comment:",
-                                                        style:
-                                                            txtTheme.headline6,
-                                                      ),
-                                                      const SizedBox(width: 5),
-                                                      SizedBox(
-                                                        width: 250,
-                                                        child: Text(
-                                                          snapshot
-                                                              .data!.comment,
-                                                          style: txtTheme
-                                                              .bodyText2,
-                                                          textAlign:
-                                                              TextAlign.start,
-                                                          overflow:
-                                                              TextOverflow.fade,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                  snapshot.data!.statusTicket ==
-                                                          0
-                                                      ? Container(
-                                                          width: 80,
-                                                          height: 20,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            shape: BoxShape
-                                                                .rectangle,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10),
-                                                            color: Colors.grey,
-                                                          ),
-                                                          child: const Center(
-                                                            child: Text(
-                                                              "Ongoing",
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 12,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        )
-                                                      : snapshot.data!
-                                                                  .statusTicket ==
-                                                              1
-                                                          ? Container(
-                                                              width: 80,
-                                                              height: 20,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                shape: BoxShape
-                                                                    .rectangle,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10),
-                                                                color: Colors
-                                                                    .green,
-                                                              ),
-                                                              child:
-                                                                  const Center(
-                                                                child: Text(
-                                                                  "Completed",
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        12,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
+                                                                    .itemID),
+                                                        builder: (context,
+                                                            AsyncSnapshot<
+                                                                    ItemModel?>
+                                                                itemsnapshot) {
+                                                          if (itemsnapshot
+                                                              .hasError) {
+                                                            return Text(
+                                                                'Error: ${itemsnapshot.error}');
+                                                          } else if (itemsnapshot
+                                                              .hasData) {
+                                                            return Row(
+                                                              children: [
+                                                                Text(
+                                                                  "Item Name:",
+                                                                  style: txtTheme
+                                                                      .headline6,
                                                                 ),
-                                                              ),
-                                                            )
-                                                          : snapshot.data!
-                                                                      .statusTicket ==
-                                                                  2
-                                                              ? Container(
-                                                                  width: 120,
-                                                                  height: 20,
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    shape: BoxShape
-                                                                        .rectangle,
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            10),
-                                                                    color: Colors
-                                                                        .red,
-                                                                  ),
-                                                                  child:
-                                                                      const Center(
-                                                                    child: Text(
-                                                                      "Admin Intervention",
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontSize:
-                                                                            12,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                )
-                                                              : Container(
-                                                                  width: 80,
-                                                                  height: 20,
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    shape: BoxShape
-                                                                        .rectangle,
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            10),
-                                                                    color: Colors
-                                                                        .grey,
-                                                                  ),
-                                                                  child:
-                                                                      const Center(
-                                                                    child: Text(
-                                                                      "Null",
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontSize:
-                                                                            12,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                      ),
-                                                                    ),
-                                                                  ),
+                                                                const SizedBox(
+                                                                    width: 5),
+                                                                Text(
+                                                                  itemsnapshot
+                                                                      .data!
+                                                                      .itemName,
+                                                                  style: txtTheme
+                                                                      .bodyText2,
                                                                 ),
-                                                  const SizedBox(
-                                                    height: 40,
-                                                  ),
-                                                  snapshot.data!.statusTicket ==
-                                                              0 ||
-                                                          snapshot.data!
-                                                                  .statusTicket ==
-                                                              2
-                                                      ? SizedBox(
+                                                              ],
+                                                            );
+                                                          } else {
+                                                            return const Center(
+                                                                child:
+                                                                    CircularProgressIndicator());
+                                                          }
+                                                        }),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          "Date Post:",
+                                                          style: txtTheme
+                                                              .headline6,
+                                                        ),
+                                                        const SizedBox(
+                                                            width: 5),
+                                                        Container(
                                                           width: 200,
-                                                          child: ElevatedButton(
-                                                            onPressed: () {
-                                                              rtController
-                                                                  .changeStatusTicket(
-                                                                      reportId,
-                                                                      1);
-                                                            },
-                                                            style:
-                                                                ElevatedButton
-                                                                    .styleFrom(
-                                                              backgroundColor:
-                                                                  tPrimaryColor,
-                                                              side: BorderSide
-                                                                  .none,
-                                                              shape:
-                                                                  const StadiumBorder(),
-                                                            ),
-                                                            child: const Text(
-                                                              "Problem Resolved",
-                                                              style: TextStyle(
-                                                                  color:
-                                                                      tDarkColor),
-                                                            ),
+                                                          child: Text(
+                                                            "$postStartformattedDateTime - $postEndformattedDateTime",
+                                                            style: txtTheme
+                                                                .bodyText2,
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .fade,
                                                           ),
-                                                        )
-                                                      : const SizedBox(
-                                                          height: 1),
-                                                  const SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 200,
-                                                    child: ElevatedButton(
-                                                      onPressed: () {
-                                                        openWhatsapp(
-                                                            number:
-                                                                sellersnapshot
-                                                                    .data!
-                                                                    .phoneNo,
-                                                            text:
-                                                                'Hello, Im the representative of the Administrator.\n Issue Ticket Details\n Category:${snapshot.data!.problemCat} \n Comment: ${snapshot.data!.comment}');
-                                                      },
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                        backgroundColor:
-                                                            tDarkColor,
-                                                        side: BorderSide.none,
-                                                        shape:
-                                                            const StadiumBorder(),
-                                                      ),
-                                                      child: const Text(
-                                                        "WhatsApp Seller",
-                                                        style: TextStyle(
-                                                            color: tWhiteColor),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          "Comment:",
+                                                          style: txtTheme
+                                                              .headline6,
+                                                        ),
+                                                        const SizedBox(
+                                                            width: 5),
+                                                        SizedBox(
+                                                          width: 200,
+                                                          child: Text(
+                                                            snapshot
+                                                                .data!.comment,
+                                                            style: txtTheme
+                                                                .bodyText2,
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .fade,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 20,
+                                                    ),
+                                                    snapshot.data!
+                                                                .statusTicket ==
+                                                            0
+                                                        ? Container(
+                                                            width: 80,
+                                                            height: 20,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              shape: BoxShape
+                                                                  .rectangle,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                            child: const Center(
+                                                              child: Text(
+                                                                "Ongoing",
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 12,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        : snapshot.data!
+                                                                    .statusTicket ==
+                                                                1
+                                                            ? Container(
+                                                                width: 80,
+                                                                height: 20,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  shape: BoxShape
+                                                                      .rectangle,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10),
+                                                                  color: Colors
+                                                                      .green,
+                                                                ),
+                                                                child:
+                                                                    const Center(
+                                                                  child: Text(
+                                                                    "Completed",
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          12,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            : snapshot.data!
+                                                                        .statusTicket ==
+                                                                    2
+                                                                ? Container(
+                                                                    width: 120,
+                                                                    height: 20,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      shape: BoxShape
+                                                                          .rectangle,
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              10),
+                                                                      color: Colors
+                                                                          .red,
+                                                                    ),
+                                                                    child:
+                                                                        const Center(
+                                                                      child:
+                                                                          Text(
+                                                                        "Admin Intervention",
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              Colors.white,
+                                                                          fontSize:
+                                                                              12,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  )
+                                                                : Container(
+                                                                    width: 80,
+                                                                    height: 20,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      shape: BoxShape
+                                                                          .rectangle,
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              10),
+                                                                      color: Colors
+                                                                          .grey,
+                                                                    ),
+                                                                    child:
+                                                                        const Center(
+                                                                      child:
+                                                                          Text(
+                                                                        "Null",
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              Colors.white,
+                                                                          fontSize:
+                                                                              12,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                    const SizedBox(
+                                                      height: 40,
+                                                    ),
+                                                    snapshot.data!.statusTicket ==
+                                                                0 ||
+                                                            snapshot.data!
+                                                                    .statusTicket ==
+                                                                2
+                                                        ? SizedBox(
+                                                            width: 200,
+                                                            child:
+                                                                ElevatedButton(
+                                                              onPressed: () {
+                                                                rtController
+                                                                    .changeStatusTicket(
+                                                                        reportId,
+                                                                        1);
+                                                              },
+                                                              style:
+                                                                  ElevatedButton
+                                                                      .styleFrom(
+                                                                backgroundColor:
+                                                                    tPrimaryColor,
+                                                                side: BorderSide
+                                                                    .none,
+                                                                shape:
+                                                                    const StadiumBorder(),
+                                                              ),
+                                                              child: const Text(
+                                                                "Problem Resolved",
+                                                                style: TextStyle(
+                                                                    color:
+                                                                        tDarkColor),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        : const SizedBox(
+                                                            height: 1),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 200,
+                                                      child: ElevatedButton(
+                                                        onPressed: () {
+                                                          openWhatsapp(
+                                                              number:
+                                                                  sellersnapshot
+                                                                      .data!
+                                                                      .phoneNo,
+                                                              text:
+                                                                  'Hello, Im the representative of the Administrator.\n Issue Ticket Details\n Category:${snapshot.data!.problemCat} \n Comment: ${snapshot.data!.comment}');
+                                                        },
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          backgroundColor:
+                                                              tDarkColor,
+                                                          side: BorderSide.none,
+                                                          shape:
+                                                              const StadiumBorder(),
+                                                        ),
+                                                        child: const Text(
+                                                          "WhatsApp Seller",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  tWhiteColor),
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 200,
-                                                    child: ElevatedButton(
-                                                      onPressed: () {
-                                                        openWhatsapp(
-                                                            number:
-                                                                reportersnapshot
-                                                                    .data!
-                                                                    .phoneNo,
-                                                            text:
-                                                                'Hello, Im the representative of the Administrator.\n Issue Ticket Details\n Category:${snapshot.data!.problemCat} \n Comment: ${snapshot.data!.comment}');
-                                                      },
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                        backgroundColor:
-                                                            tDarkColor,
-                                                        side: BorderSide.none,
-                                                        shape:
-                                                            const StadiumBorder(),
-                                                      ),
-                                                      child: const Text(
-                                                        "WhatsApp Reporter",
-                                                        style: TextStyle(
-                                                            color: tWhiteColor),
-                                                      ),
+                                                    const SizedBox(
+                                                      height: 10,
                                                     ),
-                                                  )
-                                                ],
-                                              );
+                                                    SizedBox(
+                                                      width: 200,
+                                                      child: ElevatedButton(
+                                                        onPressed: () {
+                                                          openWhatsapp(
+                                                              number:
+                                                                  reportersnapshot
+                                                                      .data!
+                                                                      .phoneNo,
+                                                              text:
+                                                                  'Hello, Im the representative of the Administrator.\n Issue Ticket Details\n Category:${snapshot.data!.problemCat} \n Comment: ${snapshot.data!.comment}');
+                                                        },
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          backgroundColor:
+                                                              tDarkColor,
+                                                          side: BorderSide.none,
+                                                          shape:
+                                                              const StadiumBorder(),
+                                                        ),
+                                                        child: const Text(
+                                                          "WhatsApp Buyer",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  tWhiteColor),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                );
+                                              } else {
+                                                return const Center(
+                                                    child:
+                                                        CircularProgressIndicator());
+                                              }
                                             });
                                       } else {
                                         return const Center(
