@@ -140,7 +140,7 @@ class AdminReportTicketDetailScreen extends StatelessWidget {
                                                     Row(
                                                       children: [
                                                         Text(
-                                                          "Reporter Name:",
+                                                          "Buyer Name:",
                                                           style: txtTheme
                                                               .headline6,
                                                         ),
@@ -157,7 +157,7 @@ class AdminReportTicketDetailScreen extends StatelessWidget {
                                                     Row(
                                                       children: [
                                                         Text(
-                                                          "Reporter Phone Number:",
+                                                          "Buyer Phone Number:",
                                                           style: txtTheme
                                                               .headline6,
                                                         ),
@@ -192,7 +192,7 @@ class AdminReportTicketDetailScreen extends StatelessWidget {
                                                     Row(
                                                       children: [
                                                         Text(
-                                                          "Reporter Phone Number:",
+                                                          "Seller Phone Number:",
                                                           style: txtTheme
                                                               .headline6,
                                                         ),

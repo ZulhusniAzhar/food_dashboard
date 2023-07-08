@@ -1,4 +1,4 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
+// ignore_for_file: no_leading_underscores_for_local_identifiers, deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:food_dashboard/src/constants/colors.dart';
@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 class SetAmountItemStockScreen extends StatefulWidget {
-  const SetAmountItemStockScreen({
+  SetAmountItemStockScreen({
     super.key,
     required this.itemPhoto,
     required this.price,
@@ -35,11 +35,10 @@ class SetAmountItemStockScreen extends StatefulWidget {
 class _SetAmountItemStockScreenState extends State<SetAmountItemStockScreen> {
   int quantity = 0;
   double price = 0;
-  int limit = 0;
+  // int limit = 0;
 
   void increaseQuantity() {
-    limit += widget.itemStock;
-    if (quantity < limit) {
+    if (quantity < widget.itemStock) {
       setState(() {
         quantity++;
         calculatePrice();

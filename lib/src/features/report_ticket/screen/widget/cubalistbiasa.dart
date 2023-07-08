@@ -7,12 +7,12 @@ import 'package:food_dashboard/src/features/report_ticket/screen/admin_detail_re
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../../constants/colors.dart';
-import '../../../constants/sizes.dart';
-import '../controller/report_ticket_controller.dart';
+import '../../../../constants/colors.dart';
+import '../../../../constants/sizes.dart';
+import '../../controller/report_ticket_controller.dart';
 
-class ReportAdminTicketListScreen extends StatelessWidget {
-  ReportAdminTicketListScreen({
+class ReportAdminTicketListScreen2 extends StatelessWidget {
+  ReportAdminTicketListScreen2({
     super.key,
   });
 
@@ -77,21 +77,19 @@ class ReportAdminTicketListScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // Display payments by month
-                            StreamBuilder<List<ReportTicketModel>>(
-                              stream: reportController
-                                  .streamfetchTicketReportAdmin(),
-                              builder: (context, reportAdminsnapshot) {
-                                if (reportAdminsnapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return CircularProgressIndicator();
-                                } else if (reportAdminsnapshot.hasError) {
-                                  return Text(
-                                      'Error: ${reportAdminsnapshot.error}');
-                                } else if (reportAdminsnapshot.hasData) {
-                                  List<ReportTicketModel> reportList =
-                                      reportAdminsnapshot.data!;
-
-                                  if (reportList.isNotEmpty) {
+                            StreamBuilder(
+                                stream: reportController
+                                    .streamfetchTicketReportAdmin(),
+                                builder: (context, reportAdminsnapshot) {
+                                  if (reportAdminsnapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return CircularProgressIndicator();
+                                  } else if (reportAdminsnapshot.hasError) {
+                                    return Text(
+                                        'Error: ${reportAdminsnapshot.error}');
+                                  } else {
+                                    List<ReportTicketModel> reportList =
+                                        reportAdminsnapshot.data!;
                                     return Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -110,22 +108,15 @@ class ReportAdminTicketListScreen extends StatelessWidget {
                                             ReportTicketModel report =
                                                 reportList[index];
                                             return TransactionCard(
-                                              ticketforMonths:
-                                                  reportList[index],
-                                              role: "Admin",
-                                            );
+                                                ticketforMonths:
+                                                    reportList[index],
+                                                role: "Admin");
                                           },
                                         ),
                                       ],
                                     );
-                                  } else {
-                                    return Center(child: Text("No data"));
                                   }
-                                } else {
-                                  return Center(child: Text("No data"));
-                                }
-                              },
-                            )
+                                }),
                           ],
                         ),
                       ),

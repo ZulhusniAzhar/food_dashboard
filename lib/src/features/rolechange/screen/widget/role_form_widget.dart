@@ -1,6 +1,9 @@
+import 'package:custom_radio_group_list/custom_radio_group_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../constants/auth.dart';
+import '../../../../constants/college.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../controller/roleform_controller.dart';
@@ -50,16 +53,33 @@ class RoleFormWidget extends StatelessWidget {
                   prefixIcon: Icon(Icons.description_rounded)),
             ),
             const SizedBox(height: tFormHeight),
-            TextFormField(
-              controller: roleFormcontroller.collegeSelling,
-              validator: (value) {
-                if (value == null || value.isEmpty) return 'Field is required.';
-                return null;
-              },
-              decoration: const InputDecoration(
-                  label: Text("College for selling"),
-                  prefixIcon: Icon(Icons.house_rounded)),
+            Text(
+              "College for Selling",
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.7),
+              ),
             ),
+            Container(
+              width: 180, // Set the desired width
+              height: 370, // Set the desired height
+              child: RadioGroup(
+                radioList: college,
+                selectedItem: null,
+                onChanged: (value) {
+                  roleFormcontroller.chosenCollege.value = value;
+                },
+              ),
+            ),
+            // TextFormField(
+            //   controller: roleFormcontroller.collegeSelling,
+            //   validator: (value) {
+            //     if (value == null || value.isEmpty) return 'Field is required.';
+            //     return null;
+            //   },
+            //   decoration: const InputDecoration(
+            //       label: Text("College for selling"),
+            //       prefixIcon: Icon(Icons.house_rounded)),
+            // ),
             const SizedBox(height: tFormHeight),
             TextFormField(
               controller: roleFormcontroller.blockSelling,
@@ -84,7 +104,7 @@ class RoleFormWidget extends StatelessWidget {
                           .toList(),
                       roleFormcontroller.descriptionRF.text.trim(),
                       roleFormcontroller.blockSelling.text.trim(),
-                      roleFormcontroller.collegeSelling.text.trim(),
+                      roleFormcontroller.chosenCollege.value,
                     );
                   } catch (e) {
                     Get.snackbar(

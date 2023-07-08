@@ -31,6 +31,7 @@ class RoleFormController extends GetxController {
       FirebaseFirestore.instance.collection('Users');
   Rx<String> currentStatus = Rx<String>('');
   late RxInt documentExistence = 0.obs;
+  final RxString chosenCollege = ''.obs;
   int get docExistent => documentExistence.value;
   String rfIDHolder = '';
   // @override
@@ -88,7 +89,6 @@ class RoleFormController extends GetxController {
     DocumentReference documentReferencess = collectionReferencess.doc();
     try {
       if (status.isNotEmpty &&
-          collegeSelling.isNotEmpty &&
           blockSelling.isNotEmpty &&
           itemsSelling.isNotEmpty) {
         model.RoleFormModel post = model.RoleFormModel(

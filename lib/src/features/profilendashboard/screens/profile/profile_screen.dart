@@ -22,6 +22,7 @@ class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key});
 
   final ProfileController controller = Get.put(ProfileController());
+  final AuthenticationRepository authRepo = Get.put(AuthenticationRepository());
   // final ProfileController roleController = Get.find<ProfileController>();
   showOptionsDialog(BuildContext context) {
     return showDialog(
@@ -102,10 +103,10 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     final profileController = Get.put(ProfileController());
-    String roleCurrent = 'General';
+    final AuthenticationRepository authRepo =
+        Get.put(AuthenticationRepository());
     return Scaffold(
       body: GetBuilder<ProfileController>(builder: (controller) {
-        roleCurrent = controller.currentRole.value;
         return SafeArea(
           child: SingleChildScrollView(
             child: Container(
@@ -120,7 +121,7 @@ class ProfileScreen extends StatelessWidget {
                         children: [
                           Stack(
                             children: [
-                              if (roleCurrent == 'Admin')
+                              if (authRepo.userRole.value == 'Admin')
                                 SizedBox(
                                   width: 120,
                                   height: 120,
@@ -131,7 +132,7 @@ class ProfileScreen extends StatelessWidget {
                                         fit: BoxFit.cover),
                                   ),
                                 ),
-                              if (roleCurrent != 'Admin')
+                              if (authRepo.userRole.value != 'Admin')
                                 SizedBox(
                                   width: 120,
                                   height: 120,
@@ -145,7 +146,7 @@ class ProfileScreen extends StatelessWidget {
                                           : const Image(
                                               image: AssetImage(tImageBlank))),
                                 ),
-                              if (roleCurrent != 'Admin')
+                              if (authRepo.userRole.value != 'Admin')
                                 Positioned(
                                   bottom: 0,
                                   right: 0,
@@ -175,17 +176,17 @@ class ProfileScreen extends StatelessWidget {
                           const SizedBox(
                             height: 10,
                           ),
-                          if (roleCurrent != 'Admin')
+                          if (authRepo.userRole.value != 'Admin')
                             Text(
                               '${snapshot.data?.fullName} (${snapshot.data?.role})',
                               style: Theme.of(context).textTheme.headline4,
                             ),
-                          if (roleCurrent == 'Admin')
+                          if (authRepo.userRole.value == 'Admin')
                             Text(
                               'College : ${snapshot.data?.college}',
                               style: Theme.of(context).textTheme.headline4,
                             ),
-                          if (roleCurrent != 'Admin')
+                          if (authRepo.userRole.value != 'Admin')
                             Text(
                               '${snapshot.data?.phoneNo}',
                               style: Theme.of(context).textTheme.bodyText2,
@@ -195,7 +196,7 @@ class ProfileScreen extends StatelessWidget {
                             style: Theme.of(context).textTheme.bodyText2,
                           ),
                           const SizedBox(height: 20),
-                          if (roleCurrent != 'Admin')
+                          if (authRepo.userRole.value != 'Admin')
                             SizedBox(
                               width: 200,
                               child: ElevatedButton(
@@ -244,7 +245,7 @@ class ProfileScreen extends StatelessWidget {
                                 Get.to(() => const ItemListScreen());
                               },
                             ),
-                          if (roleCurrent == 'Seller')
+                          if (controller.currentRole.value == 'Seller')
                             ProfileMenuWidget(
                               title: tMenu3,
                               icon: LineAwesomeIcons.sticky_note_1,
@@ -252,7 +253,7 @@ class ProfileScreen extends StatelessWidget {
                                 Get.to(() => const PostListScreen());
                               },
                             ),
-                          if (roleCurrent != 'Admin')
+                          if (controller.currentRole.value != 'Admin')
                             ProfileMenuWidget(
                               title: "My Issue Ticket",
                               icon: Icons.notification_important_rounded,
@@ -267,7 +268,8 @@ class ProfileScreen extends StatelessWidget {
                           const SizedBox(
                             height: 10,
                           ),
-                          if (roleCurrent == 'General')
+                          if (controller.currentRole.value != 'Seller' &&
+                              controller.currentRole.value != 'Admin')
                             ProfileMenuWidget(
                               title: tMenu4,
                               icon: LineAwesomeIcons.info,

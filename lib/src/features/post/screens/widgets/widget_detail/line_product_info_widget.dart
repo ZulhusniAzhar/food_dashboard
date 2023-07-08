@@ -36,12 +36,15 @@ class LineProductInfoWidget extends StatelessWidget {
           ],
         ),
         const SizedBox(width: 22),
-        Text(
-          description,
-          style: GoogleFonts.poppins(
-            fontSize: 14,
-            fontWeight: FontWeight.normal,
-            color: tSecondaryColor,
+        Expanded(
+          child: Text(
+            description,
+            style: GoogleFonts.poppins(
+              fontSize: 14,
+              fontWeight: FontWeight.normal,
+              color: tSecondaryColor,
+            ),
+            overflow: TextOverflow.clip,
           ),
         ),
       ],

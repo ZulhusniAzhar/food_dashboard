@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:food_dashboard/src/features/analytic_admin/screen/widget/statistic_rf_grid.dart';
+import 'package:get/get.dart';
+import '../controller/analytic_controller.dart';
 import 'widget/activity_header.dart';
 import 'widget/bar_chart.dart';
 import 'widget/chart_container.dart';
@@ -46,13 +49,21 @@ class DashboardAnalytics extends StatelessWidget {
               height: 15,
             ),
             const Text(
-              "Business Info",
+              "Item Info",
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(
               height: 15,
             ),
             const StatisticsGrid(),
+            const Text(
+              "Issue Ticket Info",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            const StatisticsRFGrid(),
             const SizedBox(
               height: 15,
             ),

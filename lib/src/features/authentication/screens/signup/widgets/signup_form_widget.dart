@@ -108,7 +108,7 @@ class SignUpFormWidget extends StatelessWidget {
               child: RadioGroup(
                 scrollDirection: Axis.vertical,
                 radioList: gender,
-                selectedItem: 1,
+                selectedItem: null,
                 onChanged: (value) {
                   authRepo.chosenGender.value = value;
                 },
@@ -160,7 +160,7 @@ class SignUpFormWidget extends StatelessWidget {
               height: 370, // Set the desired height
               child: RadioGroup(
                 radioList: college,
-                selectedItem: 1,
+                selectedItem: null,
                 onChanged: (value) {
                   authRepo.chosenCollege.value = value;
                 },

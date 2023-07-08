@@ -26,12 +26,12 @@ class SetPaymentMethod extends StatelessWidget {
   final String sellerID;
   final String postID;
   final List<PaymentMethod> paymentMethods = [
-    PaymentMethod(name: 'PayPal', icon: Icons.payment),
+    PaymentMethod(name: 'Boost', icon: LineAwesomeIcons.fingerprint),
     // PaymentMethod(name: 'Visa', icon: Icons.credit_card),
-    PaymentMethod(name: 'MasterCard', icon: Icons.credit_card),
-    // PaymentMethod(name: 'American Express', icon: Icons.credit_card),
+    PaymentMethod(name: 'Touch n Go', icon: Icons.fingerprint_rounded),
+    PaymentMethod(name: 'Credit/Debit Card', icon: Icons.credit_card),
     PaymentMethod(name: 'Online Banking', icon: LineAwesomeIcons.piggy_bank),
-    PaymentMethod(name: 'Cash', icon: LineAwesomeIcons.money_bill),
+    // PaymentMethod(name: 'Cash', icon: LineAwesomeIcons.money_bill),
   ];
 
   @override

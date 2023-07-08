@@ -15,6 +15,8 @@ import 'package:food_dashboard/src/features/authentication/models/user_model.dar
 import 'package:image_picker/image_picker.dart';
 
 import '../../features/authentication/models/user_model.dart';
+import '../../features/profilendashboard/screens/dashboard/dashboard_admin.dart';
+import '../../features/profilendashboard/screens/dashboard/dashboard_seller.dart';
 
 class AuthenticationRepository extends GetxController {
   static AuthenticationRepository get instance => Get.find();
@@ -41,14 +43,24 @@ class AuthenticationRepository extends GetxController {
     ever(_firebaseUser, _setInitialScreen);
   }
 
-  _setInitialScreen(User? user) {
-    //check user dah logout ke, kalau ya, bawa ke welcomescreen
+  Rx<String?> userRole = Rx<String?>(null);
+
+  _setInitialScreen(User? user) async {
     if (user == null) {
       Get.offAll(() => const WelcomeScreen());
     } else {
-      Get.offAll(() => Dashboard(
-            pageIdx: 0,
-          ));
+      // Check the user's role
+      final userDoc = await collection.doc(user.uid).get();
+      final userData = userDoc.data() as Map<String, dynamic>?;
+      userRole.value = userData?['role'] as String?;
+
+      if (userRole.value == 'Seller') {
+        Get.offAll(() => DashboardSeller(pageIdx: 0));
+      } else if (userRole.value == 'Admin') {
+        Get.offAll(() => DashboardAdmin(pageIdx: 0));
+      } else {
+        Get.offAll(() => DashboardSeller(pageIdx: 0));
+      }
     }
   }
 

@@ -233,7 +233,7 @@ class AddPostForm extends StatelessWidget {
               height: 370, // Set the desired height
               child: RadioGroup(
                 radioList: college,
-                selectedItem: 1,
+                selectedItem: null,
                 onChanged: (value) {
                   postController.collegeChosen.value = value;
                 },

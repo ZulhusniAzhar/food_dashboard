@@ -193,7 +193,9 @@ class _UpdatePostScreenState extends State<UpdatePostScreen> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          if (_formKey.currentState!.validate()) {
+                          if (captionController.text.isNotEmpty &&
+                              venueBlockController.text.isNotEmpty &&
+                              venueCollegeController.text.isNotEmpty) {
                             try {
                               int? parsedStock =
                                   int.tryParse(stockItemController.text.trim());
@@ -218,7 +220,7 @@ class _UpdatePostScreenState extends State<UpdatePostScreen> {
                             } catch (e) {
                               Get.snackbar(
                                 'Error',
-                                e.toString(),
+                                "Please fill in all the field",
                               );
                             }
                           } else {

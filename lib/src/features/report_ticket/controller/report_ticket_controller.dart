@@ -39,8 +39,6 @@ class ReportTicketController extends GetxController {
     super.onInit();
     fetchTicketReportBuyer(getCurrentUserId());
     fetchTicketReportSeller(getCurrentUserId());
-    fetchTicketReportAdminIntervention();
-    fetchTicketReportOngoing();
 
     // print(reportforBuyer);
   }
@@ -51,76 +49,6 @@ class ReportTicketController extends GetxController {
       return user.uid;
     } else {
       return "";
-    }
-  }
-
-  Future<void> fetchTicketReportAdminIntervention() async {
-    try {
-      QuerySnapshot querySnapshot = await reportticketCollection
-          .where('statusTicket', isEqualTo: 2)
-          .get();
-
-      reportforAdminIntervention.value = querySnapshot.docs.map((doc) {
-        Timestamp? createdAtTS = doc['createdAt'] as Timestamp?;
-        Timestamp? deletedAtTS = doc['deletedAt'] as Timestamp?;
-
-        DateTime? createdAtDT = createdAtTS?.toDate();
-        DateTime? deletedAtDT = deletedAtTS?.toDate();
-
-        return ReportTicketModel(
-          reporterID: doc['reporterID'],
-          reportID: doc['reportID'],
-          sellerID: doc['sellerID'],
-          postID: doc['postID'],
-          problemCat: doc['problemCat'],
-          comment: doc['comment'],
-          statusTicket: doc['statusTicket'],
-          createdAt: createdAtDT ?? DateTime.now(),
-          deletedAt: deletedAtDT,
-        );
-      }).toList();
-    } catch (e) {
-      Get.snackbar(
-        'Error',
-        e.toString(),
-        backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
-      );
-    }
-  }
-
-  Future<void> fetchTicketReportOngoing() async {
-    try {
-      QuerySnapshot querySnapshot = await reportticketCollection
-          .where('statusTicket', isEqualTo: 0)
-          .get();
-
-      reportforOngoing.value = querySnapshot.docs.map((doc) {
-        Timestamp? createdAtTS = doc['createdAt'] as Timestamp?;
-        Timestamp? deletedAtTS = doc['deletedAt'] as Timestamp?;
-
-        DateTime? createdAtDT = createdAtTS?.toDate();
-        DateTime? deletedAtDT = deletedAtTS?.toDate();
-
-        return ReportTicketModel(
-          reporterID: doc['reporterID'],
-          reportID: doc['reportID'],
-          sellerID: doc['sellerID'],
-          postID: doc['postID'],
-          problemCat: doc['problemCat'],
-          comment: doc['comment'],
-          statusTicket: doc['statusTicket'],
-          createdAt: createdAtDT ?? DateTime.now(),
-          deletedAt: deletedAtDT,
-        );
-      }).toList();
-    } catch (e) {
-      Get.snackbar(
-        'Error',
-        e.toString(),
-        backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
-      );
     }
   }
 
@@ -194,6 +122,60 @@ class ReportTicketController extends GetxController {
     }
   }
 
+  Stream<List<ReportTicketModel>> streamfetchTicketReportOngoing() {
+    return reportticketCollection
+        .where('statusTicket', isEqualTo: 0)
+        .snapshots()
+        .map((querySnapshot) {
+      return querySnapshot.docs.map((doc) {
+        Timestamp? createdAtTS = doc['createdAt'] as Timestamp?;
+        Timestamp? deletedAtTS = doc['deletedAt'] as Timestamp?;
+
+        DateTime? createdAtDT = createdAtTS?.toDate();
+        DateTime? deletedAtDT = deletedAtTS?.toDate();
+
+        return ReportTicketModel(
+          reporterID: doc['reporterID'],
+          reportID: doc['reportID'],
+          sellerID: doc['sellerID'],
+          postID: doc['postID'],
+          problemCat: doc['problemCat'],
+          comment: doc['comment'],
+          statusTicket: doc['statusTicket'],
+          createdAt: createdAtDT ?? DateTime.now(),
+          deletedAt: deletedAtDT,
+        );
+      }).toList();
+    });
+  }
+
+  Stream<List<ReportTicketModel>> streamfetchTicketReportAdmin() {
+    return reportticketCollection
+        .where('statusTicket', isEqualTo: 2)
+        .snapshots()
+        .map((querySnapshot) {
+      return querySnapshot.docs.map((doc) {
+        Timestamp? createdAtTS = doc['createdAt'] as Timestamp?;
+        Timestamp? deletedAtTS = doc['deletedAt'] as Timestamp?;
+
+        DateTime? createdAtDT = createdAtTS?.toDate();
+        DateTime? deletedAtDT = deletedAtTS?.toDate();
+
+        return ReportTicketModel(
+          reporterID: doc['reporterID'],
+          reportID: doc['reportID'],
+          sellerID: doc['sellerID'],
+          postID: doc['postID'],
+          problemCat: doc['problemCat'],
+          comment: doc['comment'],
+          statusTicket: doc['statusTicket'],
+          createdAt: createdAtDT ?? DateTime.now(),
+          deletedAt: deletedAtDT,
+        );
+      }).toList();
+    });
+  }
+
   List<String> getUniqueMonthsBuyer() {
     List<String> uniqueMonths = [];
     reportforBuyer.forEach((payment) {
@@ -219,34 +201,6 @@ class ReportTicketController extends GetxController {
     return uniqueMonths;
   }
 
-  List<String> getUniqueMonthsAdmin() {
-    List<String> uniqueMonths = [];
-    // print(paymentsasSeller);
-
-    reportforAdminIntervention.forEach((payment) {
-      String monthYear = DateFormat('MMM yyyy').format(payment.createdAt);
-      if (!uniqueMonths.contains(monthYear)) {
-        uniqueMonths.add(monthYear);
-      }
-    });
-
-    return uniqueMonths;
-  }
-
-  List<String> getUniqueMonthsOngoing() {
-    List<String> uniqueMonths = [];
-    // print(paymentsasSeller);
-
-    reportforOngoing.forEach((payment) {
-      String monthYear = DateFormat('MMM yyyy').format(payment.createdAt);
-      if (!uniqueMonths.contains(monthYear)) {
-        uniqueMonths.add(monthYear);
-      }
-    });
-
-    return uniqueMonths;
-  }
-
   List<ReportTicketModel> getReportsByMonthBuyer(String monthYear) {
     return reportforBuyer
         .where((payment) =>
@@ -256,20 +210,6 @@ class ReportTicketController extends GetxController {
 
   List<ReportTicketModel> getReportsByMonthSeller(String monthYear) {
     return reportforSeller
-        .where((payment) =>
-            DateFormat('MMM yyyy').format(payment.createdAt) == monthYear)
-        .toList();
-  }
-
-  List<ReportTicketModel> getReportsByMonthAdminIntervention(String monthYear) {
-    return reportforAdminIntervention
-        .where((payment) =>
-            DateFormat('MMM yyyy').format(payment.createdAt) == monthYear)
-        .toList();
-  }
-
-  List<ReportTicketModel> getReportsByMonthOngoing(String monthYear) {
-    return reportforOngoing
         .where((payment) =>
             DateFormat('MMM yyyy').format(payment.createdAt) == monthYear)
         .toList();

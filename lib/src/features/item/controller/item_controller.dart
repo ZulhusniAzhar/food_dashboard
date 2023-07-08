@@ -16,6 +16,8 @@ class ItemController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final CollectionReference itemCollection =
       FirebaseFirestore.instance.collection('items');
+  final CollectionReference postCollection =
+      FirebaseFirestore.instance.collection('posts');
   Rx<File?> _pickedImage = Rx<File?>(null);
   File? get itemImage => _pickedImage.value;
   final RxString itemIDCurrent = ''.obs;
@@ -62,7 +64,7 @@ class ItemController extends GetxController {
     } catch (e) {
       Get.snackbar(
         'Error',
-        'Fail adding image for item, ${e.toString()}',
+        'Image upload failed',
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
@@ -239,15 +241,22 @@ class ItemController extends GetxController {
   }
 
   Future<void> deleteItem(String docID) async {
-    //kena del skali post yang berkaitan ngn item
     try {
-      // final docRef = await itemCollection.doc(docID).delete();
+      // Delete the item document
       await itemCollection.doc(docID).delete();
+
+      // Delete the related posts
+      final QuerySnapshot snapshot =
+          await postCollection.where('itemID', isEqualTo: docID).get();
+      for (final DocumentSnapshot doc in snapshot.docs) {
+        await doc.reference.delete();
+      }
+
       Get.until((route) => route.isFirst);
       Get.to(() => const ItemListScreen());
       Get.snackbar(
         'Success',
-        'Successfully deleted item',
+        'Successfully deleted item and related posts',
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );

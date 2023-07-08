@@ -7,6 +7,7 @@ class DashboardCategoriesModel {
   DashboardCategoriesModel(this.title, this.onPress);
 
   static List<DashboardCategoriesModel> list = [
+    DashboardCategoriesModel("ALL", null),
     DashboardCategoriesModel("KTDI", null),
     DashboardCategoriesModel("KTR", null),
     DashboardCategoriesModel("KTHO", null),

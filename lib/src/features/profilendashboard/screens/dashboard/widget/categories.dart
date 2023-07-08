@@ -50,8 +50,8 @@ class DashboardCategories extends StatelessWidget {
                             style: txtTheme.headline6?.apply(
                               color: category ==
                                       postController.selectedCategory.value
-                                  ? Colors.white
-                                  : Colors.yellow,
+                                  ? Colors.yellow
+                                  : Colors.white,
                             ),
                           ),
                         ),

@@ -25,7 +25,7 @@ class _ProductInfoSectionComponentState
     // return Row(
     //   children: [
     return Padding(
-      padding: const EdgeInsets.only(left: 52),
+      padding: const EdgeInsets.only(left: 30),
       child: FutureBuilder(
           future: postController.getPostNItemDetails(widget.postID),
           builder: (context, AsyncSnapshot<DocumentSnapshot> postsnapshot) {

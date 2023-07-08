@@ -40,10 +40,10 @@ class DashboardPostCard1 extends StatelessWidget {
           builder: (context, AsyncSnapshot<DocumentSnapshot> itemsnapshot) {
             if (itemsnapshot.hasError) {
               return Text('Error: ${itemsnapshot.error}');
-            } else if (!itemsnapshot.hasData) {
-              return Center(
-                child: Text("No Data"),
-              );
+              // } else if (!itemsnapshot.hasData) {
+              //   return Center(
+              //     child: Text("No Data"),
+              //   );
             } else if (itemsnapshot.hasData) {
               return Container(
                 color: tWhiteColor,

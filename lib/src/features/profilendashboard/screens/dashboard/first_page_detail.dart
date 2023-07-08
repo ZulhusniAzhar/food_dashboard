@@ -343,7 +343,7 @@ class _FirstPageState extends State<FirstPage> {
 
     widgetList.add(
       SliverFixedExtentList(
-        itemExtent: 200,
+        itemExtent: 225,
         delegate: SliverChildBuilderDelegate(
           childCount: sliverChildCount,
           (context, index) {

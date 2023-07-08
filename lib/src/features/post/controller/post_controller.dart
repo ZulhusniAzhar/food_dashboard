@@ -114,14 +114,40 @@ class PostController extends GetxController {
       String? venueCollege) {
     Query postQuery = postCollection.orderBy('createdAt', descending: true);
 
-    return postCollection
-        .where('venueCollege', isEqualTo: venueCollege)
-        .snapshots()
-        .map((querySnapshot) {
-      return querySnapshot.docs
-          .map((doc) => doc.data() as Map<String, dynamic>)
-          .toList();
-    });
+    if (venueCollege == 'ALL') {
+      // Return all posts without filtering by venueCollege
+      return postQuery.snapshots().map((querySnapshot) {
+        return querySnapshot.docs
+            .map((doc) => doc.data() as Map<String, dynamic>)
+            .toList();
+      });
+    } else {
+      // Delete posts with timeEnd in the past
+      deletePostsBeforeToday();
+
+      // Return filtered posts by venueCollege
+      return postCollection
+          .where('venueCollege', isEqualTo: venueCollege)
+          .snapshots()
+          .map((querySnapshot) {
+        return querySnapshot.docs
+            .map((doc) => doc.data() as Map<String, dynamic>)
+            .toList();
+      });
+    }
+  }
+
+  void deletePostsBeforeToday() async {
+    DateTime today = DateTime.now();
+
+    // Query posts with timeEnd in the past
+    final QuerySnapshot snapshot =
+        await postCollection.where('timeEnd', isLessThan: today).get();
+
+    // Delete the posts
+    for (final DocumentSnapshot doc in snapshot.docs) {
+      await doc.reference.delete();
+    }
   }
 
   //functions
@@ -292,26 +318,26 @@ class PostController extends GetxController {
   }
 
   Future<void> updatePost(PostModel post) async {
-    final postCollection = FirebaseFirestore.instance.collection("posts");
-    final docRef = postCollection.doc(post.postID);
-
-    final newPost = PostModel(
-            uid: post.uid,
-            postID: post.postID,
-            itemID: post.itemID,
-            caption: post.caption,
-            stockItem: post.stockItem,
-            saleTimeStart: post.saleTimeStart,
-            saleTimeEnd: post.saleTimeEnd,
-            timeStart: startDate,
-            timeEnd: endDate,
-            venueBlock: post.venueBlock,
-            venueCollege: post.venueCollege,
-            createdAt: post.createdAt,
-            deletedAt: post.deletedAt)
-        .toJson();
-
     try {
+      final postCollection = FirebaseFirestore.instance.collection("posts");
+      final docRef = postCollection.doc(post.postID);
+
+      final newPost = PostModel(
+              uid: post.uid,
+              postID: post.postID,
+              itemID: post.itemID,
+              caption: post.caption,
+              stockItem: post.stockItem,
+              saleTimeStart: post.saleTimeStart,
+              saleTimeEnd: post.saleTimeEnd,
+              timeStart: startDate,
+              timeEnd: endDate,
+              venueBlock: post.venueBlock,
+              venueCollege: post.venueCollege,
+              createdAt: post.createdAt,
+              deletedAt: post.deletedAt)
+          .toJson();
+
       await docRef.update(newPost);
       Get.until((route) => route.isFirst);
       Get.to(() => const PostListScreen());

@@ -66,7 +66,7 @@ class ReportTicketDetailScreen extends StatelessWidget {
             ),
           ),
           title: Text(
-            "Report Ticket Details",
+            "Issue Ticket Details",
             style: Theme.of(context).textTheme.headline4,
           ),
           centerTitle: true,
@@ -91,7 +91,7 @@ class ReportTicketDetailScreen extends StatelessWidget {
                           child: FormHeaderWidget(
                             image: tProblemSolve,
                             title: snapshot.data!.problemCat,
-                            subTitle: "Report Date: $formattedDateTime",
+                            subTitle: "Issue Ticket Date: $formattedDateTime",
                           ),
                         ),
                         const SizedBox(
@@ -217,17 +217,21 @@ class ReportTicketDetailScreen extends StatelessWidget {
                                             Row(
                                               children: [
                                                 Text(
-                                                  "Date Post:",
+                                                  "Post Date Range:",
                                                   style: txtTheme.headline6,
                                                 ),
                                                 const SizedBox(width: 5),
-                                                Container(
-                                                  width: 250,
-                                                  child: Text(
-                                                    "$postStartformattedDateTime - $postEndformattedDateTime",
-                                                    style: txtTheme.bodyText2,
-                                                    textAlign: TextAlign.start,
-                                                    overflow: TextOverflow.fade,
+                                                Flexible(
+                                                  child: Container(
+                                                    width: 250,
+                                                    child: Text(
+                                                      "$postStartformattedDateTime - $postEndformattedDateTime",
+                                                      style: txtTheme.bodyText2,
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      overflow:
+                                                          TextOverflow.fade,
+                                                    ),
                                                   ),
                                                 ),
                                               ],

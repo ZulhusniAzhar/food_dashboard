@@ -27,12 +27,12 @@ class AddItemForm extends StatelessWidget {
             onPressed: () {
               controller.pickImage(ImageSource.gallery);
               Navigator.of(context).pop();
-              Future.delayed(
-                const Duration(seconds: 2),
-                () {
-                  controller.chooseImage.value = true;
-                },
-              );
+              // Future.delayed(
+              //   const Duration(seconds: 2),
+              //   () {
+              //     controller.chooseImage.value = true;
+              //   },
+              // );
             },
             child: Row(
               children: const [
@@ -51,12 +51,12 @@ class AddItemForm extends StatelessWidget {
             onPressed: () {
               controller.pickImage(ImageSource.camera);
               Navigator.of(context).pop();
-              Future.delayed(
-                const Duration(seconds: 2),
-                () {
-                  controller.chooseImage.value = true;
-                },
-              );
+              // Future.delayed(
+              //   const Duration(seconds: 2),
+              //   () {
+              //     controller.chooseImage.value = true;
+              //   },
+              // );
             },
             child: Row(
               children: const [
@@ -137,7 +137,7 @@ class AddItemForm extends StatelessWidget {
                         ),
                         child: Obx(
                           () => Text(
-                            controller.chooseImage.value
+                            controller.chooseImage.value == true
                                 ? "Image Added"
                                 : "Add Item's Image",
                             style: const TextStyle(color: tDarkColor),
@@ -187,19 +187,6 @@ class AddItemForm extends StatelessWidget {
               ),
             ),
             const SizedBox(height: tFormHeight),
-            // TextFormField(
-            //   controller: controller.category,
-            //   validator: (value) {
-            //     if (value == null || value.isEmpty) {
-            //       return 'Field is required.';
-            //     }
-            //     return null;
-            //   },
-            //   decoration: const InputDecoration(
-            //     label: Text("Category (Food/Drink)"),
-            //     // prefixIcon: Icon(Icons.boy_rounded)
-            //   ),
-            // ),
             Text(
               "Category",
               style: TextStyle(
@@ -208,7 +195,7 @@ class AddItemForm extends StatelessWidget {
             ),
             RadioGroup(
               radioList: category,
-              selectedItem: 1,
+              selectedItem: null,
               onChanged: (value) {
                 controller.categoryItem.value = value;
               },

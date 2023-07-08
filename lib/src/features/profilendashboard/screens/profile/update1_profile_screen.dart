@@ -130,6 +130,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
               //Form fields
               Form(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextFormField(
                       controller: fullNameController,
@@ -161,12 +162,16 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         color: Colors.black.withOpacity(0.7),
                       ),
                     ),
-                    RadioGroup(
-                      radioList: gender,
-                      selectedItem: selectedIndexGender,
-                      onChanged: (value) {
-                        genderController.text = value;
-                      },
+                    Container(
+                      width: 180, // Set the desired width
+                      height: 97,
+                      child: RadioGroup(
+                        radioList: gender,
+                        selectedItem: selectedIndexGender,
+                        onChanged: (value) {
+                          genderController.text = value;
+                        },
+                      ),
                     ),
                     const SizedBox(
                       height: tFormHeight,
@@ -194,27 +199,22 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     const SizedBox(
                       height: tFormHeight,
                     ),
-                    // TextFormField(
-                    //   controller: passController,
-                    //   decoration: const InputDecoration(
-                    //       label: Text(tPassword),
-                    //       prefixIcon: Icon(Icons.password_rounded)),
-                    // ),
-                    // const SizedBox(
-                    //   height: tFormHeight,
-                    // ),
                     Text(
                       "College",
                       style: TextStyle(
                         color: Colors.black.withOpacity(0.7),
                       ),
                     ),
-                    RadioGroup(
-                      radioList: college,
-                      selectedItem: selectedIndexCollege,
-                      onChanged: (value) {
-                        collegeController.text = value;
-                      },
+                    Container(
+                      width: 180, // Set the desired width
+                      height: 360,
+                      child: RadioGroup(
+                        radioList: college,
+                        selectedItem: selectedIndexCollege,
+                        onChanged: (value) {
+                          collegeController.text = value;
+                        },
+                      ),
                     ),
                     TextFormField(
                       controller: blockController,
@@ -241,11 +241,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       child: ElevatedButton(
                         onPressed: () {
                           try {
-                            if (fullNameController.text != "" ||
-                                matricNoController.text != "" ||
-                                emailController.text != "" ||
-                                phoneNoController.text != "" ||
-                                blockController.text != "" ||
+                            if (fullNameController.text != "" &&
+                                matricNoController.text != "" &&
+                                emailController.text != "" &&
+                                phoneNoController.text != "" &&
+                                blockController.text != "" &&
                                 passwordController.text != "") {
                               ProfileController.updateUser(UserModel(
                                       uid: widget.user.uid,
@@ -265,7 +265,18 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               // Get.back());
 
                               Get.snackbar(
-                                  "Success", "Data Successfully updated");
+                                "Success",
+                                "Data Successfully updated",
+                                backgroundColor: Colors.green,
+                                colorText: tWhiteColor,
+                              );
+                            } else {
+                              Get.snackbar(
+                                'Error',
+                                "Please Fill All Field",
+                                backgroundColor: Colors.red,
+                                colorText: tWhiteColor,
+                              );
                             }
                           } catch (e) {
                             Get.snackbar(

@@ -5,8 +5,8 @@ import '../../../../constants/colors.dart';
 import '../../controller/analytic_controller.dart';
 import '../../model/data.dart';
 
-class StatisticsGrid extends StatelessWidget {
-  const StatisticsGrid({Key? key}) : super(key: key);
+class StatisticsRFGrid extends StatelessWidget {
+  const StatisticsRFGrid({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,19 +14,18 @@ class StatisticsGrid extends StatelessWidget {
         Get.put(AnalyticDashboardController());
 
     return StreamBuilder(
-      stream: analyticDashboardController.getAllItemsList(),
+      stream: analyticDashboardController.getAllIssueTicketList(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final List<Map<String, dynamic>> combinedList = snapshot.data!;
 
-          final drinkList = combinedList
-              .where((item) => item['category'] == "Drink")
-              .toList();
-          final foodList =
-              combinedList.where((item) => item['category'] == "Food").toList();
+          final issueOngoingList =
+              combinedList.where((item) => item['statusTicket'] == 0).toList();
+          final issueAdminList =
+              combinedList.where((item) => item['statusTicket'] == 2).toList();
 
-          final drinkCount = drinkList.length;
-          final foodCount = foodList.length;
+          final ongoingCount = issueOngoingList.length;
+          final adminIntrCount = issueAdminList.length;
 
           return Container(
             child: GridView.builder(
@@ -41,9 +40,10 @@ class StatisticsGrid extends StatelessWidget {
               ),
               itemBuilder: (context, index) {
                 if (index == 0) {
-                  return StatisticBox(count: drinkCount, title: "Drink");
+                  return StatisticBox(count: ongoingCount, title: "Ongoing");
                 } else {
-                  return StatisticBox(count: foodCount, title: "Food");
+                  return StatisticBox(
+                      count: adminIntrCount, title: "Admin Intervention");
                 }
               },
             ),
@@ -82,7 +82,7 @@ class StatisticBox extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Item: $title category",
+              "$title",
               maxLines: 2,
               softWrap: true,
               style: const TextStyle(
