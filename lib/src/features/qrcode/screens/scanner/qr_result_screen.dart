@@ -155,18 +155,17 @@ class QrResultScreen extends StatelessWidget {
                       const SizedBox(
                         height: tDashboardCardPadding,
                       ),
-                      // qrController.existPost.value == true
-                      // ?
-                      const SizedBox(
-                        height: tDashboardCardPadding,
-                      ),
-                      // : const Text(
-                      //     "The post you scanned is no longer available!",
-                      //     style: TextStyle(
-                      //       color: Colors.red,
-                      //       fontWeight: FontWeight.bold,
-                      //     ),
-                      //   ),
+                      qrController.existPost.value == true
+                          ? const SizedBox(
+                              height: tDashboardCardPadding,
+                            )
+                          : const Text(
+                              "The post you scanned is no longer available!",
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                       const SizedBox(
                         height: tDashboardCardPadding,
                       ),

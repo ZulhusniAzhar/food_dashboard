@@ -1,10 +1,13 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:food_dashboard/src/features/analytic_admin/screen/widget/statistic_rf_grid.dart';
 import 'package:get/get.dart';
+import '../../../constants/colors.dart';
 import '../controller/analytic_controller.dart';
 import 'widget/activity_header.dart';
 import 'widget/bar_chart.dart';
 import 'widget/chart_container.dart';
+import 'widget/statistic_payment_grid.dart';
 import 'widget/statistics_grid.dart';
 import 'widget/user_grid.dart';
 
@@ -13,6 +16,7 @@ class DashboardAnalytics extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // controller.fetchCategorizedLists();
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: Padding(
@@ -67,6 +71,14 @@ class DashboardAnalytics extends StatelessWidget {
             const SizedBox(
               height: 15,
             ),
+            const Text(
+              "Transactions Info",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            const StatisticsPaymentGrid(),
             const ActivityHeader(),
             const ChartContainer(chart: BarChartContent())
           ],

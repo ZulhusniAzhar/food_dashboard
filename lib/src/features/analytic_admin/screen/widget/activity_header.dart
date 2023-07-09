@@ -17,23 +17,23 @@ class ActivityHeader extends StatelessWidget {
         Row(
           children: const [
             Text(
-              "Day",
+              "Daily",
               style: TextStyle(color: Colors.grey),
             ),
-            SizedBox(
-              width: 7,
-            ),
-            Text(
-              "Week",
-              style: TextStyle(color: kDarkBlue),
-            ),
-            SizedBox(
-              width: 7,
-            ),
-            Text(
-              "Month",
-              style: TextStyle(color: Colors.grey),
-            )
+            // SizedBox(
+            //   width: 7,
+            // ),
+            // Text(
+            //   "Week",
+            //   style: TextStyle(color: kDarkBlue),
+            // ),
+            // SizedBox(
+            //   width: 7,
+            // ),
+            // Text(
+            //   "Month",
+            //   style: TextStyle(color: Colors.grey),
+            // )
           ],
         )
       ],

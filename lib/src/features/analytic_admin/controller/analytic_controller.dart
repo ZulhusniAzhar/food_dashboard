@@ -13,8 +13,11 @@ class AnalyticDashboardController extends GetxController {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final ChartModel chartModel = ChartModel();
+
+  RxList<List<Map<String, dynamic>>> categorizedLists =
+      <List<Map<String, dynamic>>>[].obs;
+  List<BarChartGroupData> barChartGroupData = [];
   RxList<BarChartGroupData> barChartGroupDatass = <BarChartGroupData>[].obs;
-  List<List<Map<String, dynamic>>> categorizedLists = [];
 
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection('Users');
@@ -35,7 +38,8 @@ class AnalyticDashboardController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    categorizePosts();
+    // categorizePosts();
+    // fetchCategorizedLists();
   }
 
   // Function to get the number of users for each role
@@ -117,15 +121,42 @@ class AnalyticDashboardController extends GetxController {
         (list) => list.reduce((a, b) => a + b));
   }
 
-  Stream<List<List<Map<String, dynamic>>>> categorizePosts() async* {
-    print('Categorized Lists: $categorizedLists');
+  Stream<List<Map<String, dynamic>>> getAllPaymentList() {
+    final allPaymentList = paymentCollection.snapshots().map((querySnapshot) {
+      return querySnapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
+    });
+    return allPaymentList;
+  }
+
+  Stream<List<Map<String, dynamic>>> getTodayPaymentList() {
+    final today = DateTime.now();
+    final startOfToday = DateTime(today.year, today.month, today.day);
+    final endOfToday = DateTime(today.year, today.month, today.day + 1);
+
+    final todayPaymentList = paymentCollection
+        .where('createdAt', isGreaterThanOrEqualTo: startOfToday)
+        .where('createdAt', isLessThan: endOfToday)
+        .snapshots()
+        .map((querySnapshot) {
+      return querySnapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
+    });
+
+    return todayPaymentList;
+  }
+
+  Future<void> categorizePosts() async {
+    // print('Categorized Lists: $categorizedLists');
     final postList = postsCollection.snapshots().map((querySnapshot) {
       return querySnapshot.docs
           .map((doc) => doc.data() as Map<String, dynamic>)
           .toList();
     });
 
-    categorizedLists = List.generate(7, (_) => []);
+    categorizedLists.value = List.generate(7, (_) => []);
 
     await for (List<Map<String, dynamic>> posts in postList) {
       for (Map<String, dynamic> post in posts) {
@@ -134,23 +165,33 @@ class AnalyticDashboardController extends GetxController {
         categorizedLists[dayOfWeek].add(post);
       }
     }
-    fetchCategorizedLists();
+    print('Categorized Lists: $categorizedLists');
+    // fetchCategorizedLists();
   }
 
   void fetchCategorizedLists() {
-    for (int i = 0; i < categorizedLists.length; i++) {
-      barChartGroupDatass.add(
-        BarChartGroupData(
-          x: i + 1,
-          barRods: [
-            BarChartRodData(
-              y: categorizedLists[i].length.toDouble(),
-              width: 25,
-              colors: [kLightBlue],
-            ),
-          ],
-        ),
+    barChartGroupData = List.generate(7, (index) {
+      int yValue = categorizedLists[index].length;
+      return BarChartGroupData(
+        x: index + 1,
+        barRods: [
+          BarChartRodData(
+            y: yValue.toDouble(),
+            width: 25,
+            colors: [kLightBlue],
+          ),
+        ],
       );
-    }
+    });
+    print("Updated barChartGroupData: $barChartGroupData");
+  }
+
+  Stream<List<Map<String, dynamic>>> getAllPostList() {
+    final allPostList = postsCollection.snapshots().map((querySnapshot) {
+      return querySnapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
+    });
+    return allPostList;
   }
 }

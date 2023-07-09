@@ -82,7 +82,7 @@ class StatisticBox extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Item: $title category",
+              "$title category",
               maxLines: 2,
               softWrap: true,
               style: const TextStyle(
