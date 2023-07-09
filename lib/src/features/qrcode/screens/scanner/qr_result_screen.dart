@@ -29,6 +29,7 @@ class QrResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final RxInt postExistence = RxInt(0);
     final QRCodeController qrController = Get.put(QRCodeController());
 
     void openWhatsapp({required String text, required String number}) async {
@@ -88,7 +89,8 @@ class QrResultScreen extends StatelessWidget {
                 return Text('Error: ${sellersnapshot.error}');
               } else if (!sellersnapshot.hasData) {
                 return const Center(
-                  child: Text('No Data'),
+                  child: Text('No User Data'),
+                  // child: CircularProgressIndicator(),
                 );
               } else if (sellersnapshot.hasData) {
                 return SafeArea(
@@ -113,7 +115,7 @@ class QrResultScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        sellersnapshot.data!.college,
+                        sellersnapshot.data!.college.toUpperCase(),
                         style: const TextStyle(
                             fontFamily: 'Source Sans Pro',
                             color: Colors.white,
@@ -155,17 +157,21 @@ class QrResultScreen extends StatelessWidget {
                       const SizedBox(
                         height: tDashboardCardPadding,
                       ),
-                      qrController.existPost.value == true
-                          ? const SizedBox(
-                              height: tDashboardCardPadding,
-                            )
-                          : const Text(
-                              "The post you scanned is no longer available!",
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                      // postExistence.value == 1
+                      //     ? SizedBox(
+                      //         height: tDashboardCardPadding,
+                      //       )
+                      //     :
+                      const Center(
+                        child: Text(
+                          "Scanned QR Code's post is the yellow ones",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                       const SizedBox(
                         height: tDashboardCardPadding,
                       ),
@@ -177,9 +183,15 @@ class QrResultScreen extends StatelessWidget {
                             return const Center(
                               child: Text("Error while fetching list"),
                             );
-                          } else if (postsnapshot.data!.isEmpty) {
+                          } else if (!postsnapshot.hasData) {
                             return const Center(
-                              child: Text("No Data"),
+                              child: Text(
+                                "No Post List",
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             );
                           } else if (postsnapshot.hasData) {
                             final postDocs = postsnapshot.data!;
@@ -196,8 +208,8 @@ class QrResultScreen extends StatelessWidget {
                                   final venueCollege =
                                       postData['venueCollege'].toString();
 
-                                  if (postId == widgetpostID) {
-                                    qrController.existPost.value = true;
+                                  if (widgetpostID == postId.toString()) {
+                                    postExistence.value = 1;
                                   }
 
                                   return FutureBuilder(
@@ -209,9 +221,18 @@ class QrResultScreen extends StatelessWidget {
                                             child: Text(
                                                 "Error while fetching list"),
                                           );
-                                        } else if (itemsnapshot.data!.isNull) {
+                                        } else if (!itemsnapshot.hasData) {
+                                          // return const Center(
+                                          //   child: Text(
+                                          //     "No Post List",
+                                          //     style: TextStyle(
+                                          //       color: Colors.red,
+                                          //       fontWeight: FontWeight.bold,
+                                          //     ),
+                                          //   ),
+                                          // );
                                           return const Center(
-                                            child: Text("No Post List"),
+                                            child: CircularProgressIndicator(),
                                           );
                                         } else if (itemsnapshot.hasData) {
                                           return CardQRCodePost(
@@ -277,7 +298,9 @@ class CardQRCodePost extends StatelessWidget {
         );
       },
       child: Card(
-        color: widgetpostId != postId ? tWhiteColor : tPrimaryColor,
+        color: widgetpostId != null && widgetpostId != postId
+            ? tWhiteColor
+            : tPrimaryColor,
         margin: const EdgeInsets.symmetric(
           vertical: 10.0,
           horizontal: 35.0,

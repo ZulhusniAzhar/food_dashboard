@@ -12,8 +12,8 @@ import '../features/report_ticket/screen/widget/cubalistbiasa.dart';
 var pages = [
   const HomeScreen(),
   // QrResultScreen(
-  //     widgetpostID: "tE99wlwvXfnuiPEDWLmP",
-  //     widgetsellerID: "7aZeiidgMIXY0grledXvLqyS1Gw2"),
+  //     widgetpostID: "fc1Vv5VLC0b29SsJGLgW",
+  //     widgetsellerID: "bo8welLe4tY4YV9z1QDHjmjXbQx1"),
   PaymentListSellerScreen(),
   // MyTabbedScreen(),
   const QRCodeScreen(),

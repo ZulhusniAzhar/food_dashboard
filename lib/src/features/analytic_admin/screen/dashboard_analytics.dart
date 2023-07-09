@@ -79,8 +79,8 @@ class DashboardAnalytics extends StatelessWidget {
               height: 15,
             ),
             const StatisticsPaymentGrid(),
-            const ActivityHeader(),
-            const ChartContainer(chart: BarChartContent())
+            // const ActivityHeader(),
+            // const ChartContainer(chart: BarChartContent())
           ],
         ),
       ),
