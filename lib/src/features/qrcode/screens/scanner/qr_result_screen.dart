@@ -1,21 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:food_dashboard/src/features/post/controller/post_controller.dart';
-import 'package:food_dashboard/src/features/profilendashboard/screens/dashboard/first_page_detail%20copy.dart';
 import 'package:food_dashboard/src/features/qrcode/controllers/qr_code_controller.dart';
 import 'package:food_dashboard/src/repository/authentication_repository/authentication_repository.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../profilendashboard/screens/dashboard/first_page_detail.dart';
-import '../Widgets/tool.dart';
 
 class QrResultScreen extends StatelessWidget {
   QrResultScreen({
@@ -31,6 +26,7 @@ class QrResultScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final RxInt postExistence = RxInt(0);
     final QRCodeController qrController = Get.put(QRCodeController());
+    print("Ni awal:$postExistence");
 
     void openWhatsapp({required String text, required String number}) async {
       var whatsapp = number; //+92xx enter like this
@@ -93,6 +89,7 @@ class QrResultScreen extends StatelessWidget {
                   // child: CircularProgressIndicator(),
                 );
               } else if (sellersnapshot.hasData) {
+                print("ni dalam ayat:$postExistence");
                 return SafeArea(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -157,11 +154,18 @@ class QrResultScreen extends StatelessWidget {
                       const SizedBox(
                         height: tDashboardCardPadding,
                       ),
-                      // postExistence.value == 1
-                      //     ? SizedBox(
-                      //         height: tDashboardCardPadding,
-                      //       )
-                      //     :
+                      // Center(
+                      //   child: Text(
+                      //     "Scanned Post Not Exist",
+                      //     style: TextStyle(
+                      //       color: postExistence.value == 1
+                      //           ? Colors.transparent
+                      //           : Colors.red,
+                      //       fontWeight: FontWeight.bold,
+                      //     ),
+                      //     textAlign: TextAlign.center,
+                      //   ),
+                      // ),
                       const Center(
                         child: Text(
                           "Scanned QR Code's post is the yellow ones",
@@ -195,6 +199,7 @@ class QrResultScreen extends StatelessWidget {
                             );
                           } else if (postsnapshot.hasData) {
                             final postDocs = postsnapshot.data!;
+
                             return Expanded(
                               // Wrap the ListView.builder with Expanded
                               child: ListView.builder(
@@ -207,9 +212,33 @@ class QrResultScreen extends StatelessWidget {
                                       postData['venueBlock'].toString();
                                   final venueCollege =
                                       postData['venueCollege'].toString();
-
-                                  if (widgetpostID == postId.toString()) {
-                                    postExistence.value = 1;
+                                  postExistence.value += 1;
+                                  if (widgetpostID == postId) {
+                                    postExistence.value = 1000;
+                                  }
+                                  if (postExistence.value == postDocs.length) {
+                                    //kalau dia nye value tk sama besar ngn length, mksudnya ada skali tu postExcistence jadi 1000
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('QR Code'),
+                                            content: const Text(
+                                                'The scanned Post does not exist anymore.'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text('Close'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    });
                                   }
 
                                   return FutureBuilder(
