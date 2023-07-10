@@ -53,10 +53,7 @@ class RoleFormListScreen extends StatelessWidget {
                           rfData['collegeSelling'].toString();
                       final blockSelling = rfData['blockSelling'].toString();
                       final createdAt = formattedDateCreated;
-                      var itemSelling = "";
-                      rfData['itemSelling'] == null
-                          ? itemSelling = "No Item"
-                          : itemSelling = rfData['itemSelling'].join(", ");
+                      String itemSelling = rfData['itemsSelling'].join(", ");
                       return Padding(
                         padding: const EdgeInsets.all(10),
                         child: SizedBox(

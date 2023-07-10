@@ -167,7 +167,7 @@ class AuthenticationRepository extends GetxController {
           gender: gender,
           email: email,
           phoneNo: phoneNo,
-          password: password,
+          // password: password,
           block: block,
           college: college,
           role: role,

@@ -116,7 +116,11 @@ class PostController extends GetxController {
 
     if (venueCollege == 'ALL') {
       // Return all posts without filtering by venueCollege
-      return postQuery.snapshots().map((querySnapshot) {
+      return postCollection
+          .where('deletedAt',
+              isNull: true) // Add the condition to check for deletedAt is null
+          .snapshots()
+          .map((querySnapshot) {
         return querySnapshot.docs
             .map((doc) => doc.data() as Map<String, dynamic>)
             .toList();
@@ -125,9 +129,11 @@ class PostController extends GetxController {
       // Delete posts with timeEnd in the past
       deletePostsBeforeToday();
 
-      // Return filtered posts by venueCollege
+      // Return filtered posts by venueCollege where deletedAt is null
       return postCollection
           .where('venueCollege', isEqualTo: venueCollege)
+          .where('deletedAt',
+              isNull: true) // Add the condition to check for deletedAt is null
           .snapshots()
           .map((querySnapshot) {
         return querySnapshot.docs
@@ -208,6 +214,7 @@ class PostController extends GetxController {
   Stream<List<Map<String, dynamic>>> getPostListwithUid() {
     return postCollection
         .where('uid', isEqualTo: getCurrentUserId())
+        .where('deletedAt', isNull: true)
         // .orderBy('createdAt', descending: true)
         .snapshots()
         .map((querySnapshot) {
@@ -220,7 +227,7 @@ class PostController extends GetxController {
   Stream<List<Map<String, dynamic>>> getPostListSeller(String sellerID) {
     return postCollection
         .where('uid', isEqualTo: sellerID)
-        // .orderBy('createdAt', descending: true)
+        .where('deletedAt', isNull: true)
         .snapshots()
         .map((querySnapshot) {
       return querySnapshot.docs
@@ -393,7 +400,8 @@ class PostController extends GetxController {
 
   Future<void> deletePost(String docID) async {
     try {
-      final docRef = await postCollection.doc(docID).delete();
+      final docRef = await postCollection.doc(docID);
+      await docRef.update({'deletedAt': Timestamp.now()});
       Get.until((route) => route.isFirst);
       Get.to(() => const PostListScreen());
       Get.snackbar(

@@ -124,6 +124,7 @@ class ReportTicketDetailScreen extends StatelessWidget {
                                         String postEndformattedDateTime =
                                             DateFormat('d MMM').format(
                                                 postsnapshot.data!.timeEnd);
+
                                         return Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
@@ -226,6 +227,7 @@ class ReportTicketDetailScreen extends StatelessWidget {
                                                     width: 250,
                                                     child: Text(
                                                       "$postStartformattedDateTime - $postEndformattedDateTime",
+                                                      // "da",
                                                       style: txtTheme.bodyText2,
                                                       textAlign:
                                                           TextAlign.start,

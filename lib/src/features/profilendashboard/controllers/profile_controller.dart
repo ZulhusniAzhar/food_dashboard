@@ -78,7 +78,7 @@ class ProfileController extends GetxController {
       phoneNo: user.phoneNo,
       block: user.block,
       college: user.college,
-      password: user.password,
+      // password: user.password,
       profilePhoto: user.profilePhoto,
       role: user.role,
     ).toJson();
@@ -114,16 +114,6 @@ class ProfileController extends GetxController {
 
   void pickImage(ImageSource src) async {
     final pickedImage = await ImagePicker().pickImage(source: src);
-    if (pickedImage != null) {
-      // Get.snackbar(
-      //   'Success',
-      //   'Successfully picked the image.',
-      //   backgroundColor: Colors.green,
-      //   colorText: Colors.white,
-      // );
-
-      // Navigator.pop(context);
-    }
     _pickedImage = Rx<File?>(File(pickedImage!.path));
     updateUserImage(profileImage);
   }

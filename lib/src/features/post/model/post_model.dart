@@ -64,6 +64,10 @@ class PostModel {
     Timestamp createdAtTimestamp = snapshot['createdAt'];
     DateTime createdAt = createdAtTimestamp.toDate();
 
+    Timestamp? deletedAtTimestamp = snapshot['deletedAt'];
+    DateTime? deletedAt =
+        deletedAtTimestamp != null ? deletedAtTimestamp.toDate() : null;
+
     return PostModel(
       uid: snapshot['uid'],
       postID: snapshot['postID'],
@@ -78,7 +82,7 @@ class PostModel {
       venueBlock: snapshot['venueBlock'],
       venueCollege: snapshot['venueCollege'],
       createdAt: createdAt,
-      deletedAt: snapshot['deletedAt'],
+      deletedAt: deletedAt,
     );
   }
 

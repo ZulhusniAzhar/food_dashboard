@@ -92,25 +92,29 @@ class RoleFormWidget extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  try {
-                    DateTime now = DateTime.now();
-                    roleFormcontroller.createRoleForm(
-                      now,
-                      "For Review",
-                      roleFormcontroller.itemSelling.text
-                          .trim()
-                          .split(',')
-                          .map((e) => (e.trim()))
-                          .toList(),
-                      roleFormcontroller.descriptionRF.text.trim(),
-                      roleFormcontroller.blockSelling.text.trim(),
-                      roleFormcontroller.chosenCollege.value,
-                    );
-                  } catch (e) {
-                    Get.snackbar(
-                      'Error',
-                      e.toString(),
-                    );
+                  if (_formKey.currentState!.validate() &&
+                      roleFormcontroller.itemSelling.text != null &&
+                      roleFormcontroller.blockSelling.text != null) {
+                    try {
+                      DateTime now = DateTime.now();
+                      roleFormcontroller.createRoleForm(
+                        now,
+                        "For Review",
+                        roleFormcontroller.itemSelling.text
+                            .trim()
+                            .split(',')
+                            .map((e) => (e.trim()))
+                            .toList(),
+                        roleFormcontroller.descriptionRF.text.trim(),
+                        roleFormcontroller.blockSelling.text.trim(),
+                        roleFormcontroller.chosenCollege.value,
+                      );
+                    } catch (e) {
+                      Get.snackbar(
+                        'Error',
+                        e.toString(),
+                      );
+                    }
                   }
                 },
                 style: ElevatedButton.styleFrom(

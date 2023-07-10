@@ -96,7 +96,7 @@ class CreateReportScreen extends StatelessWidget {
               const Text("Report Category"),
               RadioGroup(
                 radioList: reportList,
-                selectedItem: 1,
+                selectedItem: null,
                 onChanged: (value) {
                   controller.chosenCategory.value = value;
                 },
@@ -155,6 +155,54 @@ class CreateReportScreen extends StatelessWidget {
                         deletedAt: null,
                       );
                       controller.addTicket(newTicketReport);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.black, // Change background color to red
+                  ),
+                  child: const Text(
+                    "Create Issue Ticket",
+                    style: TextStyle(
+                      color: Colors.white, // Change text color to white
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: tFormHeight),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (controller.comment.text.trim().isEmpty) {
+                      // Display snackbar if the comment field is empty
+                      Get.snackbar(
+                        "Error",
+                        "Please fill in the report description.",
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                      );
+                    } else if (controller.chosenCategory.value.isEmpty) {
+                      // Display snackbar if the category is not chosen
+                      Get.snackbar(
+                        "Error",
+                        "Please choose a report category.",
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                      );
+                    } else {
+                      // All fields are filled, proceed with ticket creation and opening WhatsApp
+                      final newTicketReport = ReportTicketModel(
+                        reporterID: controller.getCurrentUserId(),
+                        sellerID: sellerID,
+                        reportID: '',
+                        postID: postId,
+                        problemCat: controller.chosenCategory.value,
+                        comment: controller.comment.text.trim(),
+                        statusTicket: 0,
+                        createdAt: DateTime.now(),
+                        deletedAt: null,
+                      );
+                      controller.addTicket(newTicketReport);
                       openWhatsapp(
                         number: sellerPhoneNo,
                         text:
@@ -162,7 +210,18 @@ class CreateReportScreen extends StatelessWidget {
                       );
                     }
                   },
-                  child: const Text("Proceed to Seller"),
+                  style: ElevatedButton.styleFrom(
+                    primary: tPrimaryColor, // Change background color to red
+                    side: const BorderSide(
+                        color: tPrimaryColor,
+                        width: 2), // Add border color and width
+                  ),
+                  child: const Text(
+                    "Create and Proceed to Seller",
+                    style: TextStyle(
+                      color: tDarkColor, // Change text color to white
+                    ),
+                  ),
                 ),
               ),
             ],

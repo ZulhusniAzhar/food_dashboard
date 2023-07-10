@@ -42,7 +42,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   @override
   void initState() {
     emailController = TextEditingController(text: widget.user.email);
-    passwordController = TextEditingController(text: widget.user.password);
+    // passwordController = TextEditingController(text: widget.user.password);
     fullNameController = TextEditingController(text: widget.user.fullName);
     phoneNoController = TextEditingController(text: widget.user.phoneNo);
     matricNoController = TextEditingController(text: widget.user.matricNo);
@@ -254,7 +254,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                       gender: genderController.text.trim(),
                                       email: emailController.text.trim(),
                                       phoneNo: phoneNoController.text.trim(),
-                                      password: passwordController.text.trim(),
+                                      // password: passwordController.text.trim(),
                                       block: blockController.text.trim(),
                                       college: collegeController.text.trim(),
                                       profilePhoto: widget.user.profilePhoto,

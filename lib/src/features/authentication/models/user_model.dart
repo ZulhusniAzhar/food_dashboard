@@ -7,7 +7,7 @@ class UserModel {
   final String gender;
   final String email;
   final String phoneNo;
-  final String password;
+  // final String password;
   final String block;
   final String college;
   final String profilePhoto;
@@ -20,7 +20,7 @@ class UserModel {
     required this.gender,
     required this.email,
     required this.phoneNo,
-    required this.password,
+    // required this.password,
     required this.block,
     required this.college,
     required this.profilePhoto,
@@ -36,7 +36,7 @@ class UserModel {
       "gender": gender,
       "email": email,
       "phoneNo": phoneNo,
-      "password": password,
+      // "password": password,
       "block": block,
       "college": college,
       "role": role,
@@ -54,7 +54,7 @@ class UserModel {
         gender: snapshot['gender'],
         email: snapshot['email'],
         phoneNo: snapshot['phoneNo'],
-        password: snapshot['password'],
+        // password: snapshot['password'],
         block: snapshot['block'],
         college: snapshot['college']);
   }
@@ -70,7 +70,7 @@ class UserModel {
         gender: map['gender'],
         email: map['email'],
         phoneNo: map['profilePhoto'],
-        password: map['password'],
+        // password: map['password'],
         block: map['block'],
         college: map['college']);
   }
@@ -83,7 +83,7 @@ class UserModel {
       "gender": gender,
       "email": email,
       "phoneNo": phoneNo,
-      "password": password,
+      // "password": password,
       "block": block,
       "college": college,
       "role": role,

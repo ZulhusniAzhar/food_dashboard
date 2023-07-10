@@ -478,7 +478,7 @@ class _FirstPageState extends State<FirstPage> {
                                         shape: const StadiumBorder(),
                                       ),
                                       child: Text(
-                                        'BUY',
+                                        'Purchase',
                                         style: GoogleFonts.poppins(
                                           fontSize: 14,
                                           color: tDarkColor,

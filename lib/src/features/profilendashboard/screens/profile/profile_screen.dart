@@ -210,7 +210,7 @@ class ProfileScreen extends StatelessWidget {
                                             gender: snapshot.data!.gender,
                                             email: snapshot.data!.email,
                                             phoneNo: snapshot.data!.phoneNo,
-                                            password: snapshot.data!.password,
+                                            // password: snapshot.data!.password,
                                             block: snapshot.data!.block,
                                             college: snapshot.data!.college,
                                             profilePhoto:
