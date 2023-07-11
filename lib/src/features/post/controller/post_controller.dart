@@ -42,12 +42,12 @@ class PostController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   //textcontroller
-  final caption = TextEditingController();
-  final itemStock = TextEditingController();
-  final timeStart = TextEditingController();
-  final timeEnd = TextEditingController();
-  final venueBlock = TextEditingController();
-  final venueCollege = TextEditingController();
+  final captionCtrl = TextEditingController();
+  final itemStockCtrl = TextEditingController();
+  final timeStartCtrl = TextEditingController();
+  final timeEndCtrl = TextEditingController();
+  final venueBlockCtrl = TextEditingController();
+  final venueCollegeCtrl = TextEditingController();
 
   // @override
   // void onInit() {
@@ -143,16 +143,30 @@ class PostController extends GetxController {
     }
   }
 
-  void deletePostsBeforeToday() async {
+  // void deletePostsBeforeToday() async {
+  //   DateTime today = DateTime.now();
+
+  //   // Query posts with timeEnd in the past
+  //   final QuerySnapshot snapshot =
+  //       await postCollection.where('timeEnd', isLessThan: today).get();
+
+  //   // Delete the posts
+  //   for (final DocumentSnapshot doc in snapshot.docs) {
+  //     await doc.reference.delete();
+  //   }
+  // }
+
+  Future<void> deletePostsBeforeToday() async {
     DateTime today = DateTime.now();
 
     // Query posts with timeEnd in the past
     final QuerySnapshot snapshot =
         await postCollection.where('timeEnd', isLessThan: today).get();
 
-    // Delete the posts
+    // Update the posts with deletedAt field
     for (final DocumentSnapshot doc in snapshot.docs) {
-      await doc.reference.delete();
+      final docRef = postCollection.doc(doc.id);
+      await docRef.update({'deletedAt': Timestamp.now()});
     }
   }
 
@@ -313,6 +327,7 @@ class PostController extends GetxController {
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
+        clearFormFields();
       } else {
         Get.snackbar("Error", "Please enter all the fields");
       }
@@ -322,6 +337,15 @@ class PostController extends GetxController {
         "Theres a problem",
       );
     }
+  }
+
+  void clearFormFields() {
+    captionCtrl.text = '';
+    itemStockCtrl.text = '';
+    timeStartCtrl.text = '';
+    timeEndCtrl.text = '';
+    venueBlockCtrl.text = '';
+    venueCollegeCtrl.text = '';
   }
 
   Future<void> updatePost(PostModel post) async {

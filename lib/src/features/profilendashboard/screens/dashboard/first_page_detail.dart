@@ -343,7 +343,7 @@ class _FirstPageState extends State<FirstPage> {
 
     widgetList.add(
       SliverFixedExtentList(
-        itemExtent: 225,
+        itemExtent: 235,
         delegate: SliverChildBuilderDelegate(
           childCount: sliverChildCount,
           (context, index) {
@@ -354,7 +354,7 @@ class _FirstPageState extends State<FirstPage> {
     );
     widgetList.add(
       SliverFixedExtentList(
-        itemExtent: 80,
+        itemExtent: 60,
         delegate: SliverChildBuilderDelegate(
           childCount: sliverChildCount,
           (context, index) {
@@ -390,6 +390,43 @@ class _FirstPageState extends State<FirstPage> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
+                                  SizedBox(
+                                    width: 100,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        // BuyItemStockScreen
+                                        //     .buildShowModalBottomSheet(context);
+                                        Get.to(() => SetAmountItemStockScreen(
+                                              itemPhoto: itemsnapshot
+                                                  .data!['itemPhoto'],
+                                              price:
+                                                  itemsnapshot.data!['price'],
+                                              caption:
+                                                  postsnapshot.data!['caption'],
+                                              itemName: itemsnapshot
+                                                  .data!['itemName'],
+                                              itemStock: postsnapshot
+                                                  .data!['stockItem'],
+                                              sellerID:
+                                                  postsnapshot.data!['uid'],
+                                              postID:
+                                                  postsnapshot.data!['postID'],
+                                            ));
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: tPrimaryColor,
+                                        side: BorderSide.none,
+                                        shape: const StadiumBorder(),
+                                      ),
+                                      child: Text(
+                                        'Purchase',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14,
+                                          color: tDarkColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                   FutureBuilder(
                                       future: postController
                                           .getSellerPhoneNo(userID),
@@ -449,43 +486,6 @@ class _FirstPageState extends State<FirstPage> {
                                                   CircularProgressIndicator());
                                         }
                                       }),
-                                  SizedBox(
-                                    width: 100,
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        // BuyItemStockScreen
-                                        //     .buildShowModalBottomSheet(context);
-                                        Get.to(() => SetAmountItemStockScreen(
-                                              itemPhoto: itemsnapshot
-                                                  .data!['itemPhoto'],
-                                              price:
-                                                  itemsnapshot.data!['price'],
-                                              caption:
-                                                  postsnapshot.data!['caption'],
-                                              itemName: itemsnapshot
-                                                  .data!['itemName'],
-                                              itemStock: postsnapshot
-                                                  .data!['stockItem'],
-                                              sellerID:
-                                                  postsnapshot.data!['uid'],
-                                              postID:
-                                                  postsnapshot.data!['postID'],
-                                            ));
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: tPrimaryColor,
-                                        side: BorderSide.none,
-                                        shape: const StadiumBorder(),
-                                      ),
-                                      child: Text(
-                                        'Purchase',
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 14,
-                                          color: tDarkColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
                                 ]);
                           } else {
                             return const Center(

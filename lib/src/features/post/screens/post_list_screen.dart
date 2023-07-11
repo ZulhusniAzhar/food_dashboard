@@ -54,7 +54,9 @@ class PostListScreen extends StatelessWidget {
               child: Text("No Data"),
             );
           } else if (snapshot.hasData) {
-            final postDocs = snapshot.data!;
+            // final postDocs = snapshot.data!;
+            List<Map<String, dynamic>> postDocs = snapshot.data!;
+            postDocs.sort((a, b) => b['createdAt'].compareTo(a['createdAt']));
             return ListView.builder(
               itemCount: postDocs.length,
               itemBuilder: ((context, index) {

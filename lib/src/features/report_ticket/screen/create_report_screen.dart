@@ -93,7 +93,7 @@ class CreateReportScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("Report Category"),
+              const Text("Issue Ticket Category"),
               RadioGroup(
                 radioList: reportList,
                 selectedItem: null,
@@ -113,7 +113,7 @@ class CreateReportScreen extends StatelessWidget {
                 maxLines: null,
                 keyboardType: TextInputType.multiline,
                 decoration: const InputDecoration(
-                  labelText: "Report Description",
+                  labelText: "Issue Ticket Description",
                   prefixIcon: Icon(Icons.report_rounded),
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),

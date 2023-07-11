@@ -223,7 +223,7 @@ class RoleFormController extends GetxController {
       await rfRef.update({'status': newStatus});
       await rfRef.update({'deletedAt': now});
       // Get.until((route) => route.isFirst);
-      Get.to(() => RoleFormListScreen());
+      // Get.to(() => RoleFormListScreen());
       Get.back();
       // update();
       Get.snackbar(

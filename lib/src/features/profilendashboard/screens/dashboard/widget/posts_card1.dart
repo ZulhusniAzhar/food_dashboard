@@ -114,9 +114,10 @@ class DashboardPostCard1 extends StatelessWidget {
                             ],
                           ),
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               const SizedBox(
-                                width: 150,
+                                width: 120,
                               ),
                               SizedBox(
                                 width: 60,
@@ -124,11 +125,11 @@ class DashboardPostCard1 extends StatelessWidget {
                                   onTap: () {},
                                   child: SizedBox(
                                     child: Text(
-                                      'End: ${dateEnd}',
+                                      'End:\n${dateEnd}',
                                       style: GoogleFonts.poppins(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
-                                        color: tSecondaryColor,
+                                        color: Colors.grey,
                                       ),
                                     ),
                                   ),
@@ -136,10 +137,10 @@ class DashboardPostCard1 extends StatelessWidget {
                               ),
                               const SizedBox(width: 10),
                               Padding(
-                                padding: const EdgeInsets.only(right: 30),
+                                padding: const EdgeInsets.only(right: 10),
                                 child: Row(
                                   children: [
-                                    const SizedBox(width: 4),
+                                    const SizedBox(width: 10),
                                     Text(
                                       'RM ${itemsnapshot.data!['price'].toStringAsFixed(2)}',
                                       style: GoogleFonts.poppins(

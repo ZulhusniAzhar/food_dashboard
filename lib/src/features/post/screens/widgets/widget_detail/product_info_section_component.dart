@@ -61,6 +61,12 @@ class _ProductInfoSectionComponentState
                           itemsnapshot.data!['ingredient'].join(", ");
                       String joinedDish =
                           itemsnapshot.data!['sideDish'].join(", ");
+
+                      String timeRangeStart =
+                          postsnapshot.data!['saleTimeStart'].toString();
+                      String timeRangeEnd =
+                          postsnapshot.data!['saleTimeEnd'].toString();
+
                       return Column(
                         children: [
                           LineProductInfoWidget(
@@ -80,13 +86,18 @@ class _ProductInfoSectionComponentState
                           ),
                           SizedBox(height: 14),
                           LineProductInfoWidget(
+                            title: 'TIME RANGE',
+                            description: "$timeRangeStart until $timeRangeEnd",
+                          ),
+                          SizedBox(height: 14),
+                          LineProductInfoWidget(
                             title: 'DATE START',
                             description: formattedDateStart,
                           ),
                           SizedBox(height: 14),
                           LineProductInfoWidget(
                             title: 'DATE END',
-                            description: formattedDateStart,
+                            description: formattedDateEnd,
                           ),
                           SizedBox(height: 14),
                         ],

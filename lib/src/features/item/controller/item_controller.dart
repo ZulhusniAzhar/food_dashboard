@@ -29,11 +29,11 @@ class ItemController extends GetxController {
   final RxString categoryItem = ''.obs;
   var itemPhoto = ''.obs;
 
-  final name = TextEditingController();
-  final category = TextEditingController();
-  final ingredient = TextEditingController();
-  final sideDish = TextEditingController();
-  final price = TextEditingController();
+  final nameCtrl = TextEditingController();
+  final categoryCtrl = TextEditingController();
+  final ingredientCtrl = TextEditingController();
+  final sideDishCtrl = TextEditingController();
+  final priceCtrl = TextEditingController();
 
   String? getCurrentUserId() {
     final user = _auth.currentUser;
@@ -174,6 +174,8 @@ class ItemController extends GetxController {
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
+
+        clearFormFields();
       } else {
         Get.snackbar("Error", "Please enter all the fields");
       }
@@ -183,6 +185,14 @@ class ItemController extends GetxController {
         e.toString(),
       );
     }
+  }
+
+  void clearFormFields() {
+    nameCtrl.text = '';
+    categoryCtrl.text = '';
+    ingredientCtrl.text = '';
+    sideDishCtrl.text = '';
+    priceCtrl.text = '';
   }
 
   Stream<List<Map<String, dynamic>>> getItemsListwithUid() {
@@ -249,7 +259,8 @@ class ItemController extends GetxController {
       final QuerySnapshot snapshot =
           await postCollection.where('itemID', isEqualTo: docID).get();
       for (final DocumentSnapshot doc in snapshot.docs) {
-        await doc.reference.delete();
+        final postDocRef = postCollection.doc(doc.id);
+        await postDocRef.update({'deletedAt': Timestamp.now()});
       }
 
       Get.until((route) => route.isFirst);

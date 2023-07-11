@@ -106,77 +106,11 @@ class AddPostForm extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // const SizedBox(
-            //   height: 10,
-            // ),
-            // Center(
-            //   child: SizedBox(
-            //     width: 200,
-            //     child: ElevatedButton(
-            //       onPressed: () {
-            //         showOptionsDialog(context);
-            //       },
-            //       style: ElevatedButton.styleFrom(
-            //         backgroundColor: tPrimaryColor,
-            //         side: BorderSide.none,
-            //         shape: const StadiumBorder(),
-            //       ),
-            //       child: Obx(
-            //         () => Text(
-            //           postController.chooseImage.value == false
-            //               ? "Add Venue Image"
-            //               : "Image Added",
-            //           style: const TextStyle(color: tDarkColor),
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // const SizedBox(
-            //   height: 10,
-            // ),
-            // StreamBuilder<List<Map<String, dynamic>>>(
-            //   stream: controller.getItemsListwithUid(),
-            //   builder: ((context, snapshot) {
-            //     if (snapshot.hasError) {
-            //       return const Center(
-            //         child: Text("Error while fetching list"),
-            //       );
-            //     }
-            //     if (!snapshot.hasData) {
-            //       return const Center(
-            //         child: CircularProgressIndicator(),
-            //       );
-            //     }
-            //     final itemDocs = snapshot.data!;
-            //     return DropdownButton(
-            //         value: selectedItem,
-            //         items: itemDocs.map((item) {
-            //           final itemData = item;
-            //           final itemId = itemData['id'].toString();
-
-            //           final itemName = itemData['itemName'].toString();
-            //           // final itemPhoto = itemData['itemPhoto'].toString();
-            //           // final price = itemData['price'];
-            //           // final category = itemData['category'].toString();
-            //           return DropdownMenuItem<Map<String, dynamic>>(
-            //             value: item,
-            //             child: Text(itemName),
-            //           );
-            //         }).toList(),
-            //         onChanged: (value) {
-            //           controller.addPost(value!);
-            //         });
-            //   }),
-            // ),
-            // const SizedBox(
-            //   height: 10,
-            // ),
             SizedBox(
               height: 100.0,
               child: TextFormField(
                 maxLines: 7,
-                controller: postController.caption,
+                controller: postController.captionCtrl,
                 decoration: const InputDecoration(
                   label: Text("Caption"),
                   // prefixIcon: Icon(Icons.person_outline_rounded)
@@ -195,7 +129,7 @@ class AddPostForm extends StatelessWidget {
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
               ],
-              controller: postController.itemStock,
+              controller: postController.itemStockCtrl,
               decoration: const InputDecoration(
                 label: Text("Item Stock"),
                 // prefixIcon: Icon(Icons.person_outline_rounded)
@@ -209,7 +143,7 @@ class AddPostForm extends StatelessWidget {
             ),
             const SizedBox(height: tFormHeight),
             TextFormField(
-              controller: postController.venueBlock,
+              controller: postController.venueBlockCtrl,
               decoration: const InputDecoration(
                 label: Text("Venue Block"),
                 // prefixIcon: Icon(Icons.person_outline_rounded)
@@ -239,7 +173,6 @@ class AddPostForm extends StatelessWidget {
                 },
               ),
             ),
-
             const SizedBox(height: tFormHeight),
             Text(
               "Sale Time",
@@ -247,6 +180,7 @@ class AddPostForm extends StatelessWidget {
                 color: Colors.black.withOpacity(0.7),
               ),
             ),
+            const SizedBox(height: tFormHeight),
             TimeIntervalPicker(
               endLimit: null,
               startLimit: null,
@@ -259,6 +193,13 @@ class AddPostForm extends StatelessWidget {
               },
             ),
             const SizedBox(height: tFormHeight),
+            Text(
+              "Post Availability:",
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.7),
+              ),
+            ),
+            const SizedBox(height: tFormHeight),
             DateRangePickerWidget(),
             const SizedBox(height: tFormHeight),
             SizedBox(
@@ -267,17 +208,17 @@ class AddPostForm extends StatelessWidget {
                 onPressed: () {
                   try {
                     int? parsedStock =
-                        int.tryParse(postController.itemStock.text);
+                        int.tryParse(postController.itemStockCtrl.text);
                     DateTime now = DateTime.now();
                     postController.createPost(
                       itemID,
-                      postController.caption.text.trim(),
+                      postController.captionCtrl.text.trim(),
                       parsedStock!,
                       postController.formattedSaleStart.value,
                       postController.formattedSaleEnd.value,
                       // dateController.startDate,
                       // postController.endDate,
-                      postController.venueBlock.text.trim(),
+                      postController.venueBlockCtrl.text.trim(),
                       postController.collegeChosen.value,
                       now,
                       // postController.postImage,

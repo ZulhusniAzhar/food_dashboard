@@ -94,7 +94,7 @@ class AddItemForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
-    // final controller = Get.put(ItemController());
+    // final controller = Get.put(ItemController(), permanent: false);
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: tFormHeight),
@@ -153,7 +153,7 @@ class AddItemForm extends StatelessWidget {
               height: 10,
             ),
             TextFormField(
-              controller: controller.name,
+              controller: controller.nameCtrl,
               decoration: const InputDecoration(
                 label: Text("Name"),
                 // prefixIcon: Icon(Icons.person_outline_rounded)
@@ -174,7 +174,7 @@ class AddItemForm extends StatelessWidget {
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'(^\d*\.?\d{0,2})'))
               ],
-              controller: controller.price,
+              controller: controller.priceCtrl,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Field is required.';
@@ -202,7 +202,7 @@ class AddItemForm extends StatelessWidget {
             ),
             const SizedBox(height: tFormHeight),
             TextFormField(
-              controller: controller.ingredient,
+              controller: controller.ingredientCtrl,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Field is required.';
@@ -220,7 +220,7 @@ class AddItemForm extends StatelessWidget {
             ),
             const SizedBox(height: tFormHeight),
             TextFormField(
-              controller: controller.sideDish,
+              controller: controller.sideDishCtrl,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Field is required.';
@@ -243,17 +243,17 @@ class AddItemForm extends StatelessWidget {
                 onPressed: () {
                   try {
                     double? parsedPrice =
-                        double.tryParse(controller.price.text);
+                        double.tryParse(controller.priceCtrl.text);
                     controller.createItem(
-                      controller.name.text.trim(),
+                      controller.nameCtrl.text.trim(),
                       parsedPrice,
                       controller.categoryItem.value,
-                      controller.ingredient.text
+                      controller.ingredientCtrl.text
                           .trim()
                           .split(',')
                           .map((e) => (e.trim()))
                           .toList(),
-                      controller.sideDish.text
+                      controller.sideDishCtrl.text
                           .trim()
                           .split(',')
                           .map((e) => (e.trim()))

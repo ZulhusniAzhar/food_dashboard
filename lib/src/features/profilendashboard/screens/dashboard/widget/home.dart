@@ -104,10 +104,10 @@ class HomeScreenWidget extends StatelessWidget {
                           final venueBlock = postData['venueBlock'].toString();
                           final venueCollege =
                               postData['venueCollege'].toString();
-                          DateTime dateStart = postData['timeEnd'].toDate();
+                          DateTime dateEnd = postData['timeEnd'].toDate();
 
-                          String formattedDateStart =
-                              DateFormat('MMMM d').format(dateStart);
+                          String formattedDateEnd =
+                              DateFormat('d MMMM').format(dateEnd);
 
                           return SingleChildScrollView(
                             child: Container(
@@ -122,7 +122,7 @@ class HomeScreenWidget extends StatelessWidget {
                                   // postPhoto: postPhoto,
                                   venueBlock: venueBlock,
                                   venueCollege: venueCollege,
-                                  dateEnd: formattedDateStart,
+                                  dateEnd: formattedDateEnd,
                                 ),
                               ),
                             ),
