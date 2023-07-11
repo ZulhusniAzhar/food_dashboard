@@ -140,6 +140,7 @@ class ItemController extends GetxController {
     List<String> ingredient,
     List<String> sideDishes,
     File? image,
+    DateTime createdAt,
   ) async {
     CollectionReference collectionReferencess =
         FirebaseFirestore.instance.collection('items');
@@ -147,6 +148,8 @@ class ItemController extends GetxController {
     try {
       if (itemName.isNotEmpty &&
           category.isNotEmpty &&
+          // ingredient.isNotEmpty &&
+          // sideDishes.isNotEmpty &&
           price != null &&
           image != null) {
         String downloadUrl = await _uploadToStorage(image);
@@ -159,6 +162,8 @@ class ItemController extends GetxController {
           ingredient: ingredient,
           sideDish: sideDishes,
           category: category,
+          createdAt: createdAt,
+          deletedAt: null,
           // itemId: getCurrentUserId(),
         );
 
@@ -177,7 +182,12 @@ class ItemController extends GetxController {
 
         clearFormFields();
       } else {
-        Get.snackbar("Error", "Please enter all the fields");
+        Get.snackbar(
+          "Error",
+          "Please enter all the fields",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
       }
     } catch (e) {
       Get.snackbar(
@@ -198,6 +208,7 @@ class ItemController extends GetxController {
   Stream<List<Map<String, dynamic>>> getItemsListwithUid() {
     return itemCollection
         .where('uid', isEqualTo: getCurrentUserId())
+        .where('deletedAt', isNull: true)
         .snapshots()
         .map((querySnapshot) {
       return querySnapshot.docs
@@ -218,15 +229,17 @@ class ItemController extends GetxController {
     final docRef = itemCollection.doc(item.itemID);
 
     final newItem = ItemModel(
-      uid: item.uid,
-      itemID: item.itemID,
-      itemName: item.itemName,
-      price: item.price,
-      ingredient: item.ingredient,
-      sideDish: item.sideDish,
-      itemPhoto: item.itemPhoto,
-      category: item.category,
-    ).toJson();
+            uid: item.uid,
+            itemID: item.itemID,
+            itemName: item.itemName,
+            price: item.price,
+            ingredient: item.ingredient,
+            sideDish: item.sideDish,
+            itemPhoto: item.itemPhoto,
+            category: item.category,
+            createdAt: item.createdAt,
+            deletedAt: null)
+        .toJson();
 
     try {
       await docRef.update(newItem);
@@ -252,10 +265,11 @@ class ItemController extends GetxController {
 
   Future<void> deleteItem(String docID) async {
     try {
-      // Delete the item document
-      await itemCollection.doc(docID).delete();
+      // Update the item document with deletedAt field
+      final itemDocRef = itemCollection.doc(docID);
+      await itemDocRef.update({'deletedAt': Timestamp.now()});
 
-      // Delete the related posts
+      // Update the related posts with deletedAt field
       final QuerySnapshot snapshot =
           await postCollection.where('itemID', isEqualTo: docID).get();
       for (final DocumentSnapshot doc in snapshot.docs) {

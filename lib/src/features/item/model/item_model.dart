@@ -10,6 +10,8 @@ class ItemModel {
   final String itemPhoto;
   final String category;
   // final String itemId;
+  final DateTime createdAt;
+  final DateTime? deletedAt;
 
   ItemModel({
     required this.uid,
@@ -21,6 +23,8 @@ class ItemModel {
     required this.itemPhoto,
     required this.category,
     // required this.itemId,
+    required this.createdAt,
+    required this.deletedAt,
   });
 
   Map<String, dynamic> toJson() {
@@ -34,11 +38,19 @@ class ItemModel {
       "sideDish": sideDish,
       "category": category,
       // "itemId": itemId,
+      "createdAt": createdAt,
+      "deletedAt": deletedAt,
     };
   }
 
   factory ItemModel.fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
+    Timestamp createdAtTimestamp = snapshot['createdAt'];
+    DateTime createdAt = createdAtTimestamp.toDate();
+
+    Timestamp? deletedAtTimestamp = snapshot['deletedAt'];
+    DateTime? deletedAt =
+        deletedAtTimestamp != null ? deletedAtTimestamp.toDate() : null;
     return ItemModel(
       uid: snapshot['uid'],
       itemID: snapshot['itemID'],
@@ -48,6 +60,8 @@ class ItemModel {
       ingredient: List<String>.from(snapshot['ingredient']),
       sideDish: List<String>.from(snapshot['sideDish']),
       category: snapshot['category'],
+      createdAt: createdAt,
+      deletedAt: deletedAt,
     );
   }
 
@@ -62,7 +76,8 @@ class ItemModel {
       ingredient: map['ingredient'],
       sideDish: map['sideDish'],
       category: map['category'],
-
+      createdAt: map['createdAt'],
+      deletedAt: map['deletedAt'],
       // itemId: map['itemId'],
     );
   }
@@ -77,6 +92,8 @@ class ItemModel {
       "sideDish": sideDish,
       "category": category,
       // "itemId": itemId,
+      "createdAt": createdAt,
+      "deletedAt": deletedAt,
     };
   }
 }

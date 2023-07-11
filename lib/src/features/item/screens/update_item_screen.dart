@@ -175,23 +175,24 @@ class _UpdateItemScreenState extends State<UpdateItemScreen> {
                             double? parsedPrice =
                                 double.tryParse(itemPriceController.text);
                             ItemController.updateItem(ItemModel(
-                              uid: widget.item.uid,
-                              itemID: widget.item.itemID,
-                              itemName: itemNameController.text,
-                              price: parsedPrice!,
-                              ingredient: itemIngredientController.text
-                                  .trim()
-                                  .split(',')
-                                  .map((e) => (e.trim()))
-                                  .toList(),
-                              sideDish: itemSideDishController.text
-                                  .trim()
-                                  .split(',')
-                                  .map((e) => (e.trim()))
-                                  .toList(),
-                              itemPhoto: widget.item.itemPhoto,
-                              category: itemCategoryController.text,
-                            ));
+                                uid: widget.item.uid,
+                                itemID: widget.item.itemID,
+                                itemName: itemNameController.text,
+                                price: parsedPrice!,
+                                ingredient: itemIngredientController.text
+                                    .trim()
+                                    .split(',')
+                                    .map((e) => (e.trim()))
+                                    .toList(),
+                                sideDish: itemSideDishController.text
+                                    .trim()
+                                    .split(',')
+                                    .map((e) => (e.trim()))
+                                    .toList(),
+                                itemPhoto: widget.item.itemPhoto,
+                                category: itemCategoryController.text,
+                                createdAt: widget.item.createdAt,
+                                deletedAt: widget.item.deletedAt));
                           } catch (e) {
                             Get.snackbar(
                               'Error',

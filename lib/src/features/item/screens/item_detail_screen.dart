@@ -127,9 +127,8 @@ class ItemDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ItemController itemController = Get.put(ItemController());
     itemController.itemIDCurrent.value = itemID;
-
-    // final ItemController itemController = Get.put(ItemController());
 
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Scaffold(
@@ -167,8 +166,6 @@ class ItemDetailScreen extends StatelessWidget {
                   } else if (snapshot.hasData) {
                     itemController.itemPhoto.value =
                         snapshot.data!['itemPhoto'];
-                    print(
-                        "itemID:${itemID} and the obx:${itemController.itemPhoto.value}");
                     // Map<String, dynamic> data = document as Map<String, dynamic>;
                     String joinedIngredients =
                         snapshot.data!['ingredient'].join(", ");
@@ -274,22 +271,24 @@ class ItemDetailScreen extends StatelessWidget {
                                       snapshot.data!['sideDish'];
                                   List<String> sideDish =
                                       List<String>.from(sideDishList);
+                                  DateTime now = DateTime.now();
                                   Get.to(
                                       // () => UpdateProfileScreen(uid: authRepo.user.uid)),
                                       () => UpdateItemScreen(
-                                              item: ItemModel(
-                                            uid: snapshot.data!['uid'],
-                                            itemID: itemID,
-                                            itemName:
-                                                snapshot.data!['itemName'],
-                                            price: snapshot.data!['price'],
-                                            ingredient: ingredients,
-                                            sideDish: sideDish,
-                                            itemPhoto:
-                                                snapshot.data!['itemPhoto'],
-                                            category:
-                                                snapshot.data!['category'],
-                                          )));
+                                          item: ItemModel(
+                                              uid: snapshot.data!['uid'],
+                                              itemID: itemID,
+                                              itemName:
+                                                  snapshot.data!['itemName'],
+                                              price: snapshot.data!['price'],
+                                              ingredient: ingredients,
+                                              sideDish: sideDish,
+                                              itemPhoto:
+                                                  snapshot.data!['itemPhoto'],
+                                              category:
+                                                  snapshot.data!['category'],
+                                              createdAt: now,
+                                              deletedAt: now)));
                                 },
                                 child: Container(
                                   width: double.infinity,

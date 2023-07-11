@@ -245,8 +245,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 matricNoController.text != "" &&
                                 emailController.text != "" &&
                                 phoneNoController.text != "" &&
-                                blockController.text != "" &&
-                                passwordController.text != "") {
+                                blockController.text != "") {
                               ProfileController.updateUser(UserModel(
                                       uid: widget.user.uid,
                                       fullName: fullNameController.text.trim(),

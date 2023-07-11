@@ -244,6 +244,7 @@ class AddItemForm extends StatelessWidget {
                   try {
                     double? parsedPrice =
                         double.tryParse(controller.priceCtrl.text);
+                    DateTime now = DateTime.now();
                     controller.createItem(
                       controller.nameCtrl.text.trim(),
                       parsedPrice,
@@ -259,6 +260,7 @@ class AddItemForm extends StatelessWidget {
                           .map((e) => (e.trim()))
                           .toList(),
                       controller.itemImage,
+                      now,
                     );
                   } catch (e) {
                     Get.snackbar(

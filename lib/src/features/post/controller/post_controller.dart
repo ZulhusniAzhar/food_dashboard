@@ -366,7 +366,7 @@ class PostController extends GetxController {
               venueBlock: post.venueBlock,
               venueCollege: post.venueCollege,
               createdAt: post.createdAt,
-              deletedAt: post.deletedAt)
+              deletedAt: null)
           .toJson();
 
       await docRef.update(newPost);
