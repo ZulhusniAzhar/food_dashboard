@@ -18,7 +18,7 @@ class UserGrid extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final List<Map<String, dynamic>> combinedList = snapshot.data!;
-
+//separate the list into three user roles (Admin, Seller, Student)
           final sellerList =
               combinedList.where((item) => item['role'] == "Seller").toList();
           final studentList =

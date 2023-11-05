@@ -9,10 +9,6 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'dart:core';
-import 'dart:io';
-import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
 import '../../../../constants/colors.dart';
 
 class ResultQRGeneratorScreen extends StatefulWidget {

@@ -40,6 +40,7 @@ class PaymentController extends GetxController {
     }
   }
 
+//fetch list of payment made by the current user as the buyer
   Future<void> fetchPaymentsBuyer(String userId) async {
     try {
       QuerySnapshot querySnapshot =
@@ -78,6 +79,7 @@ class PaymentController extends GetxController {
     }
   }
 
+//fetch list of payment made by the current user as the seller
   Future<void> fetchPaymentsSeller(String sellerId) async {
     try {
       QuerySnapshot querySnapshot =
@@ -115,12 +117,9 @@ class PaymentController extends GetxController {
     }
   }
 
+//fetch the month and year that the payment occured from fetchPaymentsBuyer()
   List<String> getUniqueMonthsBuyer() {
     List<String> uniqueMonths = [];
-
-    // if (paymentsasBuyer.isEmpty) {
-    //   return ['No data'];
-    // }
 
     paymentsasBuyer.forEach((payment) {
       String monthYear = DateFormat('MMM yyyy').format(payment.datePayment);
@@ -132,12 +131,9 @@ class PaymentController extends GetxController {
     return uniqueMonths;
   }
 
+//fetch the month and year that the payment occured from fetchPaymentsSeller()
   List<String> getUniqueMonthsSeller() {
     List<String> uniqueMonths = [];
-    // print(paymentsasSeller);
-    // if (paymentsasSeller.isEmpty) {
-    //   return ['No data'];
-    // }
 
     paymentsasSeller.forEach((payment) {
       String monthYear = DateFormat('MMM yyyy').format(payment.datePayment);
@@ -149,6 +145,7 @@ class PaymentController extends GetxController {
     return uniqueMonths;
   }
 
+//return the payment occured based on the month and year to be displayed under
   List<PaymentModel> getPaymentsByMonthBuyer(String monthYear) {
     return paymentsasBuyer
         .where((payment) =>
@@ -156,6 +153,7 @@ class PaymentController extends GetxController {
         .toList();
   }
 
+//return the payment occured based on the month and year to be displayed under
   List<PaymentModel> getPaymentsByMonthSeller(String monthYear) {
     return paymentsasSeller
         .where((payment) =>
@@ -183,6 +181,7 @@ class PaymentController extends GetxController {
     role.value = data['role'];
   }
 
+//create new payment
   Future<void> addPayment(PaymentModel payments, String postID) async {
     try {
       final jsonItem = payments.toJson();
@@ -190,10 +189,7 @@ class PaymentController extends GetxController {
       final docRef = await _firestore.collection('payment').add(jsonItem);
       final docId = docRef.id;
       updateItemStock(postID, payments.itemTotal);
-      // Update the payment with the document ID
-      // payments.paymentID = docId;
 
-      // Update the payment document with the document ID
       await _firestore.collection('payment').doc(docId).update({
         'paymentID': docId,
       });
@@ -210,6 +206,7 @@ class PaymentController extends GetxController {
     }
   }
 
+//update the item stock after the payment succeeded
   Future<void> updateItemStock(String postID, int quantity) async {
     final ticketRef = postCollection.doc(postID);
 

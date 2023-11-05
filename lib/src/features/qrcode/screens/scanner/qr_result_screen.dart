@@ -212,12 +212,12 @@ class QrResultScreen extends StatelessWidget {
                                       postData['venueBlock'].toString();
                                   final venueCollege =
                                       postData['venueCollege'].toString();
-                                  postExistence.value += 1;
+                                  // postExistence.value += 1;
                                   if (widgetpostID == postId) {
-                                    postExistence.value = 1000;
+                                    postExistence.value = 1;
+                                    print("ni kalau ada:$postExistence");
                                   }
-                                  if (postExistence.value == postDocs.length) {
-                                    //kalau dia nye value tk sama besar ngn length, mksudnya ada skali tu postExcistence jadi 1000
+                                  if (postExistence.value != 1) {
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((_) {
                                       showDialog(

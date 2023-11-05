@@ -37,6 +37,7 @@ class _SetAmountItemStockScreenState extends State<SetAmountItemStockScreen> {
   double price = 0;
   // int limit = 0;
 
+//when the button add quantity clicked
   void increaseQuantity() {
     if (quantity < widget.itemStock) {
       setState(() {
@@ -46,6 +47,7 @@ class _SetAmountItemStockScreenState extends State<SetAmountItemStockScreen> {
     }
   }
 
+//when the button substract quantity clicked
   void decreaseQuantity() {
     if (quantity > 0) {
       setState(() {
@@ -55,6 +57,7 @@ class _SetAmountItemStockScreenState extends State<SetAmountItemStockScreen> {
     }
   }
 
+//calcualte the total price to be paid
   void calculatePrice() {
     price = quantity * widget.price;
   }
@@ -126,40 +129,11 @@ class _SetAmountItemStockScreenState extends State<SetAmountItemStockScreen> {
                     ],
                   ),
                 ),
-                // Positioned(
-                //   top: 35.0,
-                //   left: 10.0,
-                //   right: 10.0,
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //     children: [
-                //       InkWell(
-                //         onTap: () {
-                //           Navigator.pop(context);
-                //         },
-                //         child: _container(
-                //           const Icon(
-                //             Icons.chevron_left,
-                //             size: 35.0,
-                //           ),
-                //         ),
-                //       ),
-                //       // _container(
-                //       //   const Icon(
-                //       //     Icons.favorite_border,
-                //       //     color: tPrimaryColor,
-                //       //     size: 30.0,
-                //       //   ),
-                //       // ),
-                //     ],
-                //   ),
-                // ),
                 Positioned(
                   top: _size.height * 0.05,
                   left: 10.0,
                   right: 10.0,
                   child: Column(
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         widget.itemName,
@@ -198,40 +172,6 @@ class _SetAmountItemStockScreenState extends State<SetAmountItemStockScreen> {
                     ],
                   ),
                 ),
-                // Positioned(
-                //   bottom: 40.0,
-                //   left: _size.width * 0.12,
-                //   child: _container(
-                //     const Text(
-                //       "S",
-                //       textAlign: TextAlign.center,
-                //       style: TextStyle(fontSize: 22.0),
-                //     ),
-                //   ),
-                // ),
-                // Positioned(
-                //   bottom: 0,
-                //   // bottom: -3.0,
-                //   left: _size.width * 0.45,
-                //   child: _container(
-                //     const Text(
-                //       "M",
-                //       textAlign: TextAlign.center,
-                //       style: TextStyle(fontSize: 22.0),
-                //     ),
-                //   ),
-                // ),
-                // Positioned(
-                //   bottom: 35,
-                //   right: _size.width * 0.10,
-                //   child: _container(
-                //     const Text(
-                //       "L",
-                //       textAlign: TextAlign.center,
-                //       style: TextStyle(fontSize: 22.0),
-                //     ),
-                //   ),
-                // ),
               ],
             ),
             const Spacer(),

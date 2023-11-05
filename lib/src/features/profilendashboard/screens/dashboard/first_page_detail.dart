@@ -59,6 +59,7 @@ class _FirstPageState extends State<FirstPage> {
     super.dispose();
   }
 
+// function to update the circle radius in the UI behind the item image
   void _updateCircleRadius() {
     double size = _scrollableController.size.clamp(_minSize, _maxSize);
     double normalizedSize = (size - _minSize) / (_maxSize - _minSize);
@@ -94,7 +95,6 @@ class _FirstPageState extends State<FirstPage> {
 
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      // backgroundColor: tSecondaryColor,
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
@@ -121,7 +121,6 @@ class _FirstPageState extends State<FirstPage> {
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
-
       body: FutureBuilder(
           future: postController.getPostDetail(widget.postID),
           builder: (context, AsyncSnapshot<DocumentSnapshot> postsnapshot) {
@@ -255,6 +254,7 @@ class _FirstPageState extends State<FirstPage> {
     );
   }
 
+//function to create sliver lists
   List<Widget> _sliverList(int size, int sliverChildCount) {
     String itemName = '';
     String itemIDPost = '';
@@ -504,6 +504,7 @@ class _FirstPageState extends State<FirstPage> {
     return widgetList;
   }
 
+//function to build the draggable discover drawer in the UI
   Widget _buildDiscoverDrawer() {
     return DraggableScrollableSheet(
       maxChildSize: 0.76,
