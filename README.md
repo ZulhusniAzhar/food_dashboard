@@ -1,16 +1,6 @@
 # food_dashboard
 
-A new Flutter project.
+Flutter project for final year project degree 2019-2023.
 
-## Getting Started
+Platform for UTM Student in advertising food and drink business towards the UTM community supervisded by the JKM of each colleges.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
